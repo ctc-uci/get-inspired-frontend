@@ -17,7 +17,7 @@ const LoginPage = () => {
       <p>Password</p>
       <input id="password" onChange={handleChange} type="text" placeholder="Enter password:" />
       <br /> <br /> &nbsp;
-      <button type="submit">Submit</button>
+      <button type="submit">Create Account</button>
     </div>
   );
 };
