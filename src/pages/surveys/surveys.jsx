@@ -1,6 +1,6 @@
 const surveys = () => {
    return(
-    <h1>survey</h1>
+    <h1>surveys</h1>
    ) 
 }
 
