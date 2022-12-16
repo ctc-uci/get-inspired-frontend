@@ -1,25 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './index.css';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Profile from './pages/Profile/Profile';
+import Surveys from './pages/Surveys/Surveys';
+import Data from './pages/Data/Data';
+import ImportCsv from './pages/ImportCsv/ImportCsv';
+import AddData from './pages/Data/Add/AddData';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.StrictMode>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route exact path="/Profile" element={<Profile />} />
+          <Route exact path="/ImportCsv" element={<ImportCsv />} />
+          <Route exact path="/Surveys" element={<Surveys />} />
+          <Route exact path="/Data/Add" element={<AddData />} />
+          <Route exact path="/Data" element={<Data />} />
+        </Routes>
+      </Router>
+    </React.StrictMode>
   );
 }
 
