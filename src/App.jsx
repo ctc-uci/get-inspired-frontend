@@ -14,7 +14,6 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/" element={<loginP />} />
           <Route exact path="/Profile" element={<Profile />} />
           <Route exact path="/ImportCsv" element={<ImportCsv />} />
           <Route exact path="/Surveys" element={<Surveys />} />
