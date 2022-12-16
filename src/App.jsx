@@ -2,11 +2,11 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
 import Dashboard from './pages/Dashboard/Dashboard';
-import Profile from './pages/profile/profile';
-import Surveys from './pages/surveys/surveys';
-import Data from './pages/data/data';
-import ImportCsv from './pages/importcsv/importcsv';
-import AddData from './pages/adddata/adddata';
+import Profile from './pages/Profile/Profile';
+import Surveys from './pages/Surveys/Surveys';
+import Data from './pages/Data/Data';
+import ImportCsv from './pages/ImportCsv/ImportCsv';
+import AddData from './pages/Data/Add/AddData';
 
 function App() {
   return (
@@ -15,11 +15,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/" element={<loginP />} />
-          <Route exact path="/profile" element={<Profile />} />
-          <Route exact path="/importcsv" element={<ImportCsv />} />
-          <Route exact path="/surveys" element={<Surveys />} />
-          <Route exact path="/data" element={<Data />} />
-          <Route exact path="/adddata" element={<AddData />} />
+          <Route exact path="/Profile" element={<Profile />} />
+          <Route exact path="/ImportCsv" element={<ImportCsv />} />
+          <Route exact path="/Surveys" element={<Surveys />} />
+          <Route exact path="/Data/Add" element={<AddData />} />
+          <Route exact path="/Data" element={<Data />} />
         </Routes>
       </Router>
     </React.StrictMode>
