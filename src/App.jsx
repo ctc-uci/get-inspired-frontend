@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Profile/Profile';
 import Surveys from './pages/Surveys/Surveys';
 import Data from './pages/Data/Data';
-import ImportCsv from './pages/ImportCsv/ImportCsv';
+import ImportCsv from './pages/ImportCSV/ImportCSV';
 import AddData from './pages/AddData/AddData';
 
 function App() {
@@ -14,11 +14,11 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route exact path="/Profile" element={<Profile />} />
-          <Route exact path="/ImportCsv" element={<ImportCsv />} />
-          <Route exact path="/Surveys" element={<Surveys />} />
-          <Route exact path="/AddData" element={<AddData />} />
-          <Route exact path="/Data" element={<Data />} />
+          <Route exact path="/profile" element={<Profile />} />
+          <Route exact path="/importcsv" element={<ImportCsv />} />
+          <Route exact path="/surveys" element={<Surveys />} />
+          <Route exact path="/adddata" element={<AddData />} />
+          <Route exact path="/data" element={<Data />} />
         </Routes>
       </Router>
     </React.StrictMode>
