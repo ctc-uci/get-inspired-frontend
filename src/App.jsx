@@ -6,7 +6,7 @@ import Profile from './pages/Profile/Profile';
 import Surveys from './pages/Surveys/Surveys';
 import Data from './pages/Data/Data';
 import ImportCsv from './pages/ImportCsv/ImportCsv';
-import AddData from './pages/Data/Add/AddData';
+import AddData from './pages/AddData/AddData';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
           <Route exact path="/Profile" element={<Profile />} />
           <Route exact path="/ImportCsv" element={<ImportCsv />} />
           <Route exact path="/Surveys" element={<Surveys />} />
-          <Route exact path="/Data/Add" element={<AddData />} />
+          <Route exact path="/AddData" element={<AddData />} />
           <Route exact path="/Data" element={<Data />} />
         </Routes>
       </Router>
