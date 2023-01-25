@@ -11,6 +11,7 @@ const userIsAuthenticated = async (roles, cookies) => {
       return false;
     }
     const loggedIn = await GSPBackend.get(`/auth/verifyToken/${accessToken}`);
+
     return roles.includes(cookies.get(cookieKeys.ROLE)) && loggedIn.status === 200;
   } catch (err) {
     clearCookies(cookies);

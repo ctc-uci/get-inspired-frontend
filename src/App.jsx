@@ -5,13 +5,12 @@ import HomePage from './components/HomePage';
 import Login from './components/Login';
 import Register from './components/Register';
 import Logout from './components/Logout';
-import NewUser from './components/NewUser';
 import ProtectedRoute from './utils/ProtectedRoute';
 import AUTH_ROLES from './utils/auth_config';
 
 import './App.css';
 
-const { ADMIN_ROLE, VIEWER_ROLE } = AUTH_ROLES.AUTH_ROLES;
+const { ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE } = AUTH_ROLES.AUTH_ROLES;
 
 function App() {
   return (
@@ -23,9 +22,9 @@ function App() {
           <Route exact path="/register" element={<Register />} />
           <Route
             exact
-            path="admin"
+            path="/admin"
             element={
-              <ProtectedRoute Component={Logout} redirectPath="/logout" roles={[ADMIN_ROLE]} />
+              <ProtectedRoute Component={Logout} redirectPath="/login" roles={[ADMIN_ROLE]} />
             }
           />
           <Route
@@ -35,11 +34,10 @@ function App() {
               <ProtectedRoute
                 Component={Logout}
                 redirectPath="/"
-                roles={[ADMIN_ROLE, VIEWER_ROLE]}
+                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
               />
             }
           />
-          <Route exact path="/newuser" element={<NewUser />} />
         </Routes>
       </Router>
     </CookiesProvider>

@@ -4,9 +4,6 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
-  GoogleAuthProvider,
-  signInWithPopup,
-  getAdditionalUserInfo,
   createUserWithEmailAndPassword,
   sendEmailVerification,
   sendPasswordResetEmail,
@@ -15,10 +12,7 @@ import {
 } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { cookieKeys, cookieConfig, clearCookies } from './cookie_utils';
-
-import AUTH_ROLES from './auth_config';
-
-const { USER_ROLE } = AUTH_ROLES.AUTH_ROLES;
+// import { FYABackend } from './utils';
 
 // Using Firebase Web version 9
 const firebaseConfig = {
@@ -89,8 +83,8 @@ const refreshToken = async () => {
     });
     // Sets the appropriate cookies after refreshing access token
     setCookie(cookieKeys.ACCESS_TOKEN, idToken, cookieConfig);
-    const user = await GSPBackend.get(`/users/${auth.currentUser.uid}`);
-    setCookie(cookieKeys.ROLE, user.data.user.role, cookieConfig);
+    const user = await GSPBackend.get(`/user/${auth.currentUser.uid}`);
+    setCookie(cookieKeys.ROLE, user.data[0].role, cookieConfig);
     return idToken;
   }
   return null;
@@ -99,68 +93,22 @@ const refreshToken = async () => {
 /**
  * Makes requests to add user to GSP DB. Deletes user if Firebase error
  * @param {string} email
- * @param {string} userId
+ * @param {string} id
  * @param {string} role
- * @param {bool} signUpWithGoogle true if user used Google provider to sign in
  * @param {string} password
  */
-const createUserInDB = async (email, userId, role, signUpWithGoogle, password = null) => {
+// eslint-disable-next-line no-unused-vars
+const createUserInDB = async (email, id, role, firstName, lastName, password = null) => {
   try {
-    if (signUpWithGoogle) {
-      await GSPBackend.post('/users/create', { email, userId, role, registered: false });
-    } else {
-      await GSPBackend.post('/users/create', { email, userId, role, registered: true });
-    }
+    await GSPBackend.post('/user', { email, id, role, firstName, lastName });
   } catch (err) {
     // Since this route is called after user is created in firebase, if this
     // route errors out, that means we have to discard the created firebase object
-    if (!signUpWithGoogle) {
-      await signInWithEmailAndPassword(auth, email, password);
-    }
-    const userToBeTerminated = await auth.currentUser;
-    userToBeTerminated.delete();
+    // await signInWithEmailAndPassword(auth, email, password);
+    // const userToBeTerminated = await auth.currentUser;
+    // userToBeTerminated.delete();
     throw new Error(err.message);
   }
-};
-
-/**
- * Signs a user in with Google using Firebase. Users are given USER_ROLE by default
- * @param {string} newUserRedirectPath path to redirect new users to after signing in with Google Provider for the first time
- * @param {string} defaultRedirectPath path to redirect users to after signing in with Google Provider
- * @param {hook} navigate An instance of the useNavigate hook from react-router-dom
- * @param {Cookies} cookies The user's cookies to populate
- * @returns A boolean indicating whether or not the user is new
- */
-const signInWithGoogle = async (newUserRedirectPath, defaultRedirectPath, navigate, cookies) => {
-  const provider = new GoogleAuthProvider();
-  const userCredential = await signInWithPopup(auth, provider);
-  const newUser = getAdditionalUserInfo(userCredential).isNewUser;
-  cookies.set(cookieKeys.ACCESS_TOKEN, auth.currentUser.accessToken, cookieConfig);
-  if (newUser) {
-    await createUserInDB(auth.currentUser.email, userCredential.user.uid, USER_ROLE, true);
-    cookies.set(cookieKeys.ROLE, USER_ROLE, cookieConfig);
-    navigate(newUserRedirectPath);
-  } else {
-    const user = await GSPBackend.get(`/users/${auth.currentUser.uid}`);
-    cookies.set(cookieKeys.ROLE, user.data.user.role, cookieConfig);
-    if (!user.data.user.registered) {
-      navigate(newUserRedirectPath);
-    } else {
-      navigate(defaultRedirectPath);
-    }
-  }
-};
-
-/**
- * When a user signs in with Google for the first time, they will need to add additional info
- * This is called when the user submits the additional information which will lead to the flag
- * in the backend changed so that user is not new anymore
- * @param {string} redirectPath path to redirect user
- * @param {hook} navigate used to redirect the user after submitted
- */
-const finishGoogleLoginRegistration = async (redirectPath, navigate) => {
-  await GSPBackend.put(`/users/update/${auth.currentUser.uid}`);
-  navigate(redirectPath);
 };
 
 /**
@@ -174,13 +122,10 @@ const finishGoogleLoginRegistration = async (redirectPath, navigate) => {
  */
 const logInWithEmailAndPassword = async (email, password, redirectPath, navigate, cookies) => {
   await signInWithEmailAndPassword(auth, email, password);
-  // Check if the user has verified their email.
-  if (!auth.currentUser.emailVerified) {
-    throw new Error('Please verify your email before logging in.');
-  }
+  // Set cookies
   cookies.set(cookieKeys.ACCESS_TOKEN, auth.currentUser.accessToken, cookieConfig);
-  const user = await GSPBackend.get(`/users/${auth.currentUser.uid}`);
-  cookies.set(cookieKeys.ROLE, user.data.user.role, cookieConfig);
+  const user = await GSPBackend.get(`/user/${auth.currentUser.uid}`);
+  cookies.set(cookieKeys.ROLE, user.data[0].role, cookieConfig);
   navigate(redirectPath);
 };
 
@@ -202,9 +147,9 @@ const createUserInFirebase = async (email, password) => {
  * @param {string} role
  * @returns A UserCredential object from firebase
  */
-const createUser = async (email, password, role) => {
+const createUser = async (email, password, role, firstName, lastName) => {
   const user = await createUserInFirebase(email, password);
-  await createUserInDB(email, user.uid, role, false, password);
+  await createUserInDB(email, user.uid, role, firstName, lastName, password);
   sendEmailVerification(user);
 };
 
@@ -216,8 +161,16 @@ const createUser = async (email, password, role) => {
  * @param {hook} navigate An instance of the useNavigate hook from react-router-dom
  * @param {string} redirectPath path to redirect users once logged in
  */
-const registerWithEmailAndPassword = async (email, password, role, navigate, redirectPath) => {
-  await createUser(email, password, role);
+const registerWithEmailAndPassword = async (
+  email,
+  password,
+  role,
+  firstName,
+  lastName,
+  navigate,
+  redirectPath,
+) => {
+  await createUser(email, password, role, firstName, lastName);
   navigate(redirectPath);
 };
 
@@ -330,7 +283,6 @@ export {
   GSPBackend,
   auth,
   useNavigate,
-  signInWithGoogle,
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,
   addAuthInterceptor,
@@ -341,5 +293,4 @@ export {
   sendInviteLink,
   confirmNewPassword,
   confirmVerifyEmail,
-  finishGoogleLoginRegistration,
 };
