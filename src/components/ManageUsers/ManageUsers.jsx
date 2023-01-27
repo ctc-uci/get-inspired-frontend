@@ -77,7 +77,13 @@ const ManageUsers = ({ cookies }) => {
       <Modal open={isModalOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
         <div className={styles.container}>
           <h1>Add User</h1>
-          <Form id="login-form" layout="vertical" name="login-form" onFinish={handleSubmit}>
+          <Form
+            id="login-form"
+            layout="vertical"
+            name="login-form"
+            onFinish={handleSubmit}
+            initialValues={{ role: 'viewer' }}
+          >
             <span>
               <Form.Item label="" name="role">
                 <Radio.Group defaultValue="viewer">

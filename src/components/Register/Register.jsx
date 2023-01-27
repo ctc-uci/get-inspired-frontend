@@ -76,6 +76,7 @@ const Register = ({ cookies }) => {
           name="login-form"
           onFinish={handleSubmit}
           className={styles['register-form']}
+          initialValues={{ role: 'viewer' }}
         >
           <span>
             <Form.Item
@@ -89,7 +90,7 @@ const Register = ({ cookies }) => {
                 },
               ]}
             >
-              <Radio.Group>
+              <Radio.Group defaultValue="viewer">
                 <Radio value="viewer">Viewer</Radio>
                 <Radio value="editor">Editor</Radio>
               </Radio.Group>
