@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, Radio, Typography } from 'antd';
+import { Button, Modal, Form, Input, Radio } from 'antd';
 import { instanceOf } from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { Cookies, withCookies } from '../../utils/cookie_utils';
 import { registerWithEmailAndPassword } from '../../utils/auth_utils';
 
-import GSPLogo from '../../assets/GSPLogo.svg';
-import styles from './Register.module.css';
-
-const { Title } = Typography;
-
 // eslint-disable-next-line no-unused-vars
-const Register = ({ cookies }) => {
+const ManageUsers = ({ cookies }) => {
   const [errorMessage, setErrorMessage] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const navigate = useNavigate();
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const handleSubmit = async values => {
     // e.preventDefault();
@@ -62,39 +69,28 @@ const Register = ({ cookies }) => {
 
   return (
     <>
-      <div className={styles['logo-container']}>
-        <img src={GSPLogo} alt="Get Inspired Logo" />
-        <h1>
-          Get Inspired: <br /> Pismo Clam Database
-        </h1>
-      </div>
-      <div className={styles.container}>
-        <Title>Sign Up</Title>
-        <Form
-          id="login-form"
-          layout="vertical"
-          name="login-form"
-          onFinish={handleSubmit}
-          className={styles['register-form']}
-        >
-          <span>
-            <Form.Item
-              id="roles"
-              label=""
-              name="role"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please choose a role!',
-                },
-              ]}
-            >
-              <Radio.Group>
-                <Radio value="viewer">Viewer</Radio>
-                <Radio value="editor">Editor</Radio>
-              </Radio.Group>
-            </Form.Item>
-          </span>
+      <Button type="primary" onClick={showModal}>
+        Add User
+      </Button>
+      <Modal
+        title="Add User"
+        open={isModalOpen}
+        okText="Submit"
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button type="primary" form="login-form" key="submit" htmlType="submit">
+            Submit
+          </Button>,
+        ]}
+      >
+        <Form id="login-form" layout="vertical" name="login-form" onFinish={handleSubmit}>
+          <Form.Item label="" name="role">
+            <Radio.Group>
+              <Radio value="viewer">Viewer</Radio>
+              <Radio value="editor">Editor</Radio>
+            </Radio.Group>
+          </Form.Item>
 
           <Form.Item
             label="First Name"
@@ -133,7 +129,7 @@ const Register = ({ cookies }) => {
             <Input type="email" />
           </Form.Item>
           <Form.Item
-            label="Set Password"
+            label="Password"
             name="password"
             rules={[
               {
@@ -145,7 +141,7 @@ const Register = ({ cookies }) => {
             <Input.Password type="text" />
           </Form.Item>
           <Form.Item
-            label="Confirm Password"
+            label="Check Password"
             name="checkPassword"
             rules={[
               {
@@ -158,16 +154,13 @@ const Register = ({ cookies }) => {
           </Form.Item>
         </Form>
         <p>{errorMessage}</p>
-        <Button type="primary" form="login-form" key="submit" htmlType="submit">
-          Submit
-        </Button>
-      </div>
+      </Modal>
     </>
   );
 };
 
-Register.propTypes = {
+ManageUsers.propTypes = {
   cookies: instanceOf(Cookies).isRequired,
 };
 
-export default withCookies(Register);
+export default withCookies(ManageUsers);
