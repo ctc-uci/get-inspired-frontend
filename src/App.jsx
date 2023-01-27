@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import HomePage from './components/HomePage';
-import Login from './components/Login';
+import Login from './components/Login/Login';
 import Register from './components/Register';
 import Logout from './components/Logout';
 import ProtectedRoute from './utils/ProtectedRoute';
