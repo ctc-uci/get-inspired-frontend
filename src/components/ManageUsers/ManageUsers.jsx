@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { Cookies, withCookies } from '../../utils/cookie_utils';
 import { registerWithEmailAndPassword } from '../../utils/auth_utils';
 
+import styles from './ManageUsers.module.css';
+
 // eslint-disable-next-line no-unused-vars
 const ManageUsers = ({ cookies }) => {
   const [errorMessage, setErrorMessage] = useState();
@@ -72,88 +74,85 @@ const ManageUsers = ({ cookies }) => {
       <Button type="primary" onClick={showModal}>
         Add User
       </Button>
-      <Modal
-        title="Add User"
-        open={isModalOpen}
-        okText="Submit"
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[
-          <Button type="primary" form="login-form" key="submit" htmlType="submit">
-            Submit
-          </Button>,
-        ]}
-      >
-        <Form id="login-form" layout="vertical" name="login-form" onFinish={handleSubmit}>
-          <Form.Item label="" name="role">
-            <Radio.Group>
-              <Radio value="viewer">Viewer</Radio>
-              <Radio value="editor">Editor</Radio>
-            </Radio.Group>
-          </Form.Item>
+      <Modal open={isModalOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
+        <div className={styles.container}>
+          <h1>Add User</h1>
+          <Form id="login-form" layout="vertical" name="login-form" onFinish={handleSubmit}>
+            <span>
+              <Form.Item label="" name="role">
+                <Radio.Group defaultValue="viewer">
+                  <Radio value="viewer">Viewer</Radio>
+                  <Radio value="editor">Editor</Radio>
+                </Radio.Group>
+              </Form.Item>
+            </span>
 
-          <Form.Item
-            label="First Name"
-            name="firstName"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your first name!',
-              },
-            ]}
-          >
-            <Input type="text" />
-          </Form.Item>
-          <Form.Item
-            label="Last Name"
-            name="lastName"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your last name!',
-              },
-            ]}
-          >
-            <Input type="text" />
-          </Form.Item>
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your email!',
-              },
-            ]}
-          >
-            <Input type="email" />
-          </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your password!',
-              },
-            ]}
-          >
-            <Input.Password type="text" />
-          </Form.Item>
-          <Form.Item
-            label="Check Password"
-            name="checkPassword"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your password!',
-              },
-            ]}
-          >
-            <Input.Password type="text" />
-          </Form.Item>
-        </Form>
-        <p>{errorMessage}</p>
+            <Form.Item
+              label="First Name"
+              name="firstName"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your first name!',
+                },
+              ]}
+            >
+              <Input type="text" />
+            </Form.Item>
+            <Form.Item
+              label="Last Name"
+              name="lastName"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your last name!',
+                },
+              ]}
+            >
+              <Input type="text" />
+            </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your email!',
+                },
+              ]}
+            >
+              <Input type="email" />
+            </Form.Item>
+            <Form.Item
+              label="Set Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
+            >
+              <Input.Password type="text" />
+            </Form.Item>
+            <Form.Item
+              label="Confirm Password"
+              name="checkPassword"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
+            >
+              <Input.Password type="text" />
+            </Form.Item>
+          </Form>
+          <p>{errorMessage}</p>
+          <Button type="primary" form="login-form" key="submit" htmlType="submit">
+            Sign Up
+          </Button>
+        </div>
       </Modal>
     </>
   );
