@@ -1,13 +1,14 @@
 import React from 'react';
 
-const LoginPage = () => {
-  function handleChange(e) {
+const Login = () => {
+  const handleChange = e => {
     if (e.target.id === 'email') {
       console.log('email being typed');
     } else {
       console.log('password being typed');
     }
-  }
+  };
+
   return (
     <div>
       <h1>Get Inspired</h1>
@@ -22,4 +23,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Login;
