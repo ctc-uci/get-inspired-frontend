@@ -1,5 +1,5 @@
 import { React } from 'react';
-import ManageUsers from './ManageUsers';
+import ManageUsers from '../../components/ManageUsers/ManageUsers';
 
 const ManageUsersPage = () => {
   return (

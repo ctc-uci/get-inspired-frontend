@@ -1,17 +1,21 @@
 import React from 'react';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
-import HomePage from './components/HomePage';
+import HomePage from './pages/Home/HomePage';
 import Login from './components/Login/Login';
-import Register from './components/Register/Register';
-import ManageUsers from './components/ManageUsers/ManageUsers';
 import Logout from './components/Logout';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Profile from './pages/Profile/Profile';
+import Surveys from './pages/Surveys/Surveys';
+import Data from './pages/Data/Data';
+import AddData from './pages/AddData/AddData';
+import ImportCSV from './pages/ImportCSV/ImportCSV';
 import ProtectedRoute from './utils/ProtectedRoute';
 import AUTH_ROLES from './utils/auth_config';
 
 import './App.css';
-import RegisterPage from './components/Register/RegisterPage';
-import ManageUsersPage from './components/ManageUsers/ManageUsersPage';
+import RegisterPage from './pages/Register/RegisterPage';
+import ManageUsersPage from './pages/ManageUsers/ManageUsersPage';
 
 const { ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE } = AUTH_ROLES.AUTH_ROLES;
 
@@ -20,24 +24,39 @@ function App() {
     <CookiesProvider>
       <Router>
         <Routes>
-          {/* Routes used for testing */}
-          <Route exact path="/registerPage" element={<RegisterPage />} />
-          <Route exact path="/ManageUsersPage" element={<ManageUsersPage />} />
-
           <Route exact path="/" element={<HomePage />} />
-          <Route exact path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route exact path="/profile" element={<Profile />} />
+          <Route exact path="/import-csv" element={<ImportCSV />} />
+          <Route exact path="/surveys" element={<Surveys />} />
+          <Route exact path="/data" element={<Data />} />
+          <Route exact path="/data/add" element={<AddData />} />
 
           <Route
             exact
-            path="/register"
-            element={<ProtectedRoute Component={Register} redirectPath="/" roles={[ADMIN_ROLE]} />}
+            path="/login"
+            element={
+              <ProtectedRoute
+                Component={Login}
+                redirectPath="/dashboard"
+                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+              />
+            }
           />
 
           <Route
             exact
-            path="/manageUsers"
+            path="/register"
             element={
-              <ProtectedRoute Component={ManageUsers} redirectPath="/" roles={[ADMIN_ROLE]} />
+              <ProtectedRoute Component={RegisterPage} redirectPath="/" roles={[ADMIN_ROLE]} />
+            }
+          />
+
+          <Route
+            exact
+            path="/manage-users"
+            element={
+              <ProtectedRoute Component={ManageUsersPage} redirectPath="/" roles={[ADMIN_ROLE]} />
             }
           />
           <Route

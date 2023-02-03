@@ -16,20 +16,11 @@ const Register = ({ cookies }) => {
   const navigate = useNavigate();
 
   const handleSubmit = async values => {
-    // e.preventDefault();
-
     try {
       const { role, firstName, lastName, email, password, checkPassword } = values;
       if (password !== checkPassword) {
         throw new Error("Passwords don't match");
       }
-      // console.log(
-      //   role,
-      //   email,
-      //   password,
-      //   checkPassword,
-      //   firstName,
-      //   lastName);
 
       await registerWithEmailAndPassword(
         email,
@@ -44,21 +35,6 @@ const Register = ({ cookies }) => {
       setErrorMessage(error.message);
     }
   };
-
-  // /**
-  //  * This function handles signing up with Google
-  //  * If the user logs in and is new, they are directed to a new-user path
-  //  * If the user logs in and isn't new, they are directed to the dashboard.
-  //  * If the user fails to log in, they are directed back to the login screen
-  //  */
-  // const handleGoogleSignIn = async e => {
-  //   try {
-  //     e.preventDefault();
-  //     await signInWithGoogle('/new-user', '/logout', navigate, cookies);
-  //   } catch (err) {
-  //     setErrorMessage(err.message);
-  //   }
-  // };
 
   return (
     <>
