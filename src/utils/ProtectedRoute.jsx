@@ -3,7 +3,6 @@ import { Navigate } from 'react-router-dom';
 import { PropTypes, instanceOf } from 'prop-types';
 import { withCookies, cookieKeys, Cookies, clearCookies } from './cookie_utils';
 import { GSPBackend, refreshToken } from './auth_utils';
-import Login from '../components/Login/Login';
 
 const userIsAuthenticated = async (roles, cookies) => {
   try {
@@ -42,12 +41,6 @@ const ProtectedRoute = ({ Component, redirectPath, roles, cookies }) => {
     return <h1>LOADING...</h1>;
   }
 
-  if (Component === Login) {
-    if (isAuthenticated) {
-      return <Navigate to={redirectPath} />;
-    }
-    return <Component />;
-  }
   if (isAuthenticated) {
     return <Component />;
   }

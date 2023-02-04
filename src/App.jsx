@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
-import HomePage from './pages/Home/HomePage';
 import Login from './components/Login/Login';
 import Logout from './components/Logout';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -24,21 +23,67 @@ function App() {
     <CookiesProvider>
       <Router>
         <Routes>
-          <Route exact path="/" element={<HomePage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route exact path="/profile" element={<Profile />} />
-          <Route exact path="/import-csv" element={<ImportCSV />} />
-          <Route exact path="/surveys" element={<Surveys />} />
-          <Route exact path="/data" element={<Data />} />
-          <Route exact path="/data/add" element={<AddData />} />
-
           <Route
-            exact
-            path="/login"
+            path="/"
             element={
               <ProtectedRoute
-                Component={Login}
-                redirectPath="/dashboard"
+                Component={Dashboard}
+                redirectPath="/login"
+                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/profile"
+            element={
+              <ProtectedRoute
+                Component={Profile}
+                redirectPath="/login"
+                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/import-csv"
+            element={
+              <ProtectedRoute
+                Component={ImportCSV}
+                redirectPath="/login"
+                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/surveys"
+            element={
+              <ProtectedRoute
+                Component={Surveys}
+                redirectPath="/login"
+                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/data"
+            element={
+              <ProtectedRoute
+                Component={Data}
+                redirectPath="/login"
+                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/data/add"
+            element={
+              <ProtectedRoute
+                Component={AddData}
+                redirectPath="/login"
                 roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
               />
             }
@@ -46,11 +91,11 @@ function App() {
 
           <Route
             exact
-            path="/register"
-            element={
-              <ProtectedRoute Component={RegisterPage} redirectPath="/" roles={[ADMIN_ROLE]} />
-            }
+            path="/login"
+            element={<Login roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]} />}
           />
+
+          <Route exact path="/register" element={<RegisterPage />} />
 
           <Route
             exact
@@ -72,7 +117,7 @@ function App() {
             element={
               <ProtectedRoute
                 Component={Logout}
-                redirectPath="/"
+                redirectPath="/login"
                 roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
               />
             }

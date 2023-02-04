@@ -1,17 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Typography } from 'antd';
-import { instanceOf } from 'prop-types';
-import { Cookies, withCookies } from '../../utils/cookie_utils';
-import { logInWithEmailAndPassword, useNavigate } from '../../utils/auth_utils';
+import { PropTypes, instanceOf } from 'prop-types';
+import { Navigate } from 'react-router-dom';
+import { withCookies, cookieKeys, Cookies, clearCookies } from '../../utils/cookie_utils';
+import {
+  logInWithEmailAndPassword,
+  useNavigate,
+  GSPBackend,
+  refreshToken,
+} from '../../utils/auth_utils';
 
 import GSPLogo from '../../assets/GSPLogo.svg';
 
 import styles from './Login.module.css';
 
+const userIsAuthenticated = async (roles, cookies) => {
+  try {
+    const accessToken = await refreshToken(cookies);
+    if (!accessToken) {
+      return false;
+    }
+    const loggedIn = await GSPBackend.get(`/auth/verifyToken/${accessToken}`);
+
+    return roles.includes(cookies.get(cookieKeys.ROLE)) && loggedIn.status === 200;
+  } catch (err) {
+    clearCookies(cookies);
+    return false;
+  }
+};
+
 const { Title } = Typography;
-const Login = ({ cookies }) => {
+const Login = ({ roles, cookies }) => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(async () => {
+    const authenticated = await userIsAuthenticated(roles, cookies);
+    setIsAuthenticated(authenticated);
+    setIsLoading(false);
+  }, []);
 
   /**
    * This function handles logging in with email/password (standard log in)
@@ -26,6 +55,14 @@ const Login = ({ cookies }) => {
       setErrorMessage(err.message);
     }
   };
+
+  if (isLoading) {
+    return <h1>LOADING...</h1>;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <>
@@ -76,6 +113,7 @@ const Login = ({ cookies }) => {
 };
 
 Login.propTypes = {
+  roles: PropTypes.arrayOf(PropTypes.string).isRequired,
   cookies: instanceOf(Cookies).isRequired,
 };
 
