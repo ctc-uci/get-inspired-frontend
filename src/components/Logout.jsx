@@ -8,7 +8,7 @@ const Logout = ({ cookies }) => {
   const [errorMessage, setErrorMessage] = useState();
   const handleSubmit = async () => {
     try {
-      await logout('/', navigate, cookies);
+      await logout('/login', navigate, cookies);
     } catch (err) {
       setErrorMessage(err.message);
     }
