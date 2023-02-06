@@ -12,7 +12,6 @@ import {
 } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { cookieKeys, cookieConfig, clearCookies } from './cookie_utils';
-// import { FYABackend } from './utils';
 
 // Using Firebase Web version 9
 const firebaseConfig = {
@@ -83,7 +82,7 @@ const refreshToken = async () => {
     });
     // Sets the appropriate cookies after refreshing access token
     setCookie(cookieKeys.ACCESS_TOKEN, idToken, cookieConfig);
-    const user = await GSPBackend.get(`/user/${auth.currentUser.uid}`);
+    const user = await GSPBackend.get(`/users/${auth.currentUser.uid}`);
     setCookie(cookieKeys.ROLE, user.data[0].role, cookieConfig);
     return idToken;
   }
@@ -100,7 +99,7 @@ const refreshToken = async () => {
 // eslint-disable-next-line no-unused-vars
 const createUserInDB = async (email, id, role, firstName, lastName, password = null) => {
   try {
-    await GSPBackend.post('/user', { email, id, role, firstName, lastName });
+    await GSPBackend.post('/users', { email, id, role, firstName, lastName });
   } catch (err) {
     // Since this route is called after user is created in firebase, if this
     // route errors out, that means we have to discard the created firebase object
@@ -124,7 +123,7 @@ const logInWithEmailAndPassword = async (email, password, redirectPath, navigate
   await signInWithEmailAndPassword(auth, email, password);
   // Set cookies
   cookies.set(cookieKeys.ACCESS_TOKEN, auth.currentUser.accessToken, cookieConfig);
-  const user = await GSPBackend.get(`/user/${auth.currentUser.uid}`);
+  const user = await GSPBackend.get(`/users/${auth.currentUser.uid}`);
   cookies.set(cookieKeys.ROLE, user.data[0].role, cookieConfig);
   navigate(redirectPath);
 };
