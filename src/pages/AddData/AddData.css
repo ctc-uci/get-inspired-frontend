@@ -1,0 +1,24 @@
+.app-data-heading {
+  padding: 3%;
+  /* background-color: lightpink; */
+}
+
+.survey-form-div {
+  /* background-color: lightcyan; */
+  text-align: center;
+  padding: 0 3% 3%;
+}
+
+.survey-form {
+  text-align: left;
+}
+
+
+.survey-form-entry-label {
+  /* font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px; */
+  font-weight: 400;
+}
