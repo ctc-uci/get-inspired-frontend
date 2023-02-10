@@ -1,0 +1,18 @@
+.layout {
+    margin: 0 auto;
+  
+    flex-grow: 1;
+    width: 80;
+  }
+  
+  .navbar {
+    height: 55px;
+    z-index: 100;
+    background-color: white;
+  }
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }

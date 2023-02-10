@@ -3,6 +3,9 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import Login from './components/Login/Login';
 import Logout from './components/Logout';
+import './App.css';
+import Layout from './components/Layout/Layout';
+import LoginPage from './pages/LoginPage/LoginPage';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Profile/Profile';
 import Data from './pages/Data/Data';
@@ -10,7 +13,6 @@ import AddData from './pages/AddData/AddData';
 import ProtectedRoute from './utils/ProtectedRoute';
 import AUTH_ROLES from './utils/auth_config';
 
-import './App.css';
 import RegisterPage from './pages/Register/RegisterPage';
 import ManageUsersPage from './pages/ManageUsers/ManageUsersPage';
 
@@ -106,6 +108,13 @@ function App() {
               />
             }
           />
+          <Route element={<Layout />}>
+            <Route path="/" element={<LoginPage />} />
+            <Route exact path="/Dashboard" element={<Dashboard />} />
+            <Route exact path="/profile" element={<Profile />} />
+            <Route exact path="/data/add" element={<AddData />} />
+            <Route exact path="/data" element={<Data />} />
+          </Route>
         </Routes>
       </Router>
     </CookiesProvider>
