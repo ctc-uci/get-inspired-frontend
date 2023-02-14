@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import StepsBar from '../../components/AddDataComponents/StepsBar';
-import SurveyForm from '../../components/AddDataComponents/SurveyForm';
-import ImportCSV from '../../components/AddDataComponents/ImportCSV';
+import StepsBar from '../../components/AddData/StepsBar';
+import SurveyForm from '../../components/AddData/SurveyForm';
+import ImportCSV from '../../components/AddData/ImportCSV';
 import './AddData.css';
 
 const AddData = () => {
