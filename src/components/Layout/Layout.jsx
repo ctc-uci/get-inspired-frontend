@@ -17,12 +17,12 @@ const Layout = ({ isAdmin }) => (
   </div>
 );
 
-Layout.defaultProps = {
-  isAdmin: false,
-};
-
 Layout.propTypes = {
   isAdmin: PropTypes.bool,
+};
+
+Layout.defaultProps = {
+  isAdmin: false,
 };
 
 export default Layout;
