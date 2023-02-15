@@ -4,16 +4,14 @@ import { CookiesProvider } from 'react-cookie';
 import Login from './components/Login/Login';
 import Logout from './components/Logout';
 import Layout from './components/Layout/Layout';
-import LoginPage from './pages/LoginPage/LoginPage';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Profile/Profile';
 import Data from './pages/Data/Data';
 import AddData from './pages/AddData/AddData';
 import ProtectedRoute from './utils/ProtectedRoute';
-import AUTH_ROLES from './utils/auth_config';
-
 import RegisterPage from './pages/Register/RegisterPage';
 import ManageUsersPage from './pages/ManageUsers/ManageUsersPage';
+import AUTH_ROLES from './utils/auth_config';
 import './App.css';
 
 const { ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE } = AUTH_ROLES.AUTH_ROLES;
@@ -109,7 +107,6 @@ function App() {
             }
           />
           <Route element={<Layout />}>
-            <Route path="/" element={<LoginPage />} />
             <Route exact path="/Dashboard" element={<Dashboard />} />
             <Route exact path="/profile" element={<Profile />} />
             <Route exact path="/data/add" element={<AddData />} />
