@@ -12,7 +12,7 @@ import ProtectedRoute from './utils/ProtectedRoute';
 import RegisterPage from './pages/Register/RegisterPage';
 import ManageUsersPage from './pages/ManageUsers/ManageUsersPage';
 import AUTH_ROLES from './utils/auth_config';
-import './App.css';
+import './module.css';
 
 const { ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE } = AUTH_ROLES.AUTH_ROLES;
 
