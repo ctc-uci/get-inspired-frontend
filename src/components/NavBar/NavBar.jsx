@@ -11,11 +11,13 @@ import {
   GlobalOutlined,
 } from '@ant-design/icons';
 
+const SIDER_WIDTH = 200;
+
 const { Sider } = Layout;
 
 const VerticalMenu = () => {
   return (
-    <Sider width={200}>
+    <Sider width={SIDER_WIDTH}>
       <Menu
         mode="inline"
         defaultSelectedKeys={['1']}
