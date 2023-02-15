@@ -3,7 +3,6 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import Login from './components/Login/Login';
 import Logout from './components/Logout';
-import './App.css';
 import Layout from './components/Layout/Layout';
 import LoginPage from './pages/LoginPage/LoginPage';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -15,6 +14,7 @@ import AUTH_ROLES from './utils/auth_config';
 
 import RegisterPage from './pages/Register/RegisterPage';
 import ManageUsersPage from './pages/ManageUsers/ManageUsersPage';
+import './App.css';
 
 const { ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE } = AUTH_ROLES.AUTH_ROLES;
 
