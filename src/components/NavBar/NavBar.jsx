@@ -18,12 +18,7 @@ const { Sider } = Layout;
 const VerticalMenu = () => {
   return (
     <Sider width={SIDER_WIDTH}>
-      <Menu
-        mode="inline"
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
-        style={{ height: '100%', borderRight: 0 }}
-      >
+      <Menu mode="inline" defaultSelectedKeys={['1']} style={{ height: '100%', borderRight: 0 }}>
         <Menu.Item key="1" icon={<GlobalOutlined />}>
           GetInspired
         </Menu.Item>
