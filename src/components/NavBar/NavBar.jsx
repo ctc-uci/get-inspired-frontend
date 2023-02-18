@@ -29,10 +29,10 @@ const VerticalMenu = () => {
           <Link to="/Data">View Data</Link>
         </Menu.Item>
         <Menu.Item key="certificate-logo" icon={<SafetyCertificateFilled />}>
-          <Link to="/Data/Add">Add Data</Link>
+          <Link to="/AddData">Add Data</Link>
         </Menu.Item>
         <Menu.Item key="clock-logo" icon={<ClockCircleFilled />}>
-          Query Data
+          <Link to="/Data">Query Data</Link>
         </Menu.Item>
         <Menu.Item key="bell-logo" icon={<BellFilled />}>
           Notifications
