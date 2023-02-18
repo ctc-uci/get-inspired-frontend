@@ -17,7 +17,7 @@ const { Sider } = Layout;
 
 const VerticalMenu = () => {
   return (
-    <Sider width={SIDER_WIDTH}>
+    <Sider width={SIDER_WIDTH} collapsible>
       <Menu mode="inline" defaultSelectedKeys={['1']} style={{ height: '100%', borderRight: 0 }}>
         <Menu.Item key="global-log" icon={<GlobalOutlined />}>
           GetInspired
