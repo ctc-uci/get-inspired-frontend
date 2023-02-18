@@ -23,16 +23,16 @@ const VerticalMenu = () => {
           GetInspired
         </Menu.Item>
         <Menu.Item key="home-logo" icon={<HomeFilled />}>
-          <Link to="/Dashboard">Dashboard</Link>
+          <Link to="/Dashboard">Overview</Link>
         </Menu.Item>
         <Menu.Item key="database-logo" icon={<DatabaseFilled />}>
-          <Link to="/Data">View Data</Link>
+          <Link to="/Data">Manage Attributes</Link>
         </Menu.Item>
         <Menu.Item key="certificate-logo" icon={<SafetyCertificateFilled />}>
           <Link to="/AddData">Add Data</Link>
         </Menu.Item>
         <Menu.Item key="clock-logo" icon={<ClockCircleFilled />}>
-          <Link to="/Data">Query Data</Link>
+          <Link to="/Data">Manage Data</Link>
         </Menu.Item>
         <Menu.Item key="bell-logo" icon={<BellFilled />}>
           Notifications

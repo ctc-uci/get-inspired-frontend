@@ -29,72 +29,73 @@ function App() {
           />
 
           <Route exact path="/register" element={<RegisterPage />} />
+          <Route element={<Layout />}>
+            {/* Protected routes */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute
+                  Component={Dashboard}
+                  redirectPath="/login"
+                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                />
+              }
+            />
+            <Route
+              exact
+              path="/profile"
+              element={
+                <ProtectedRoute
+                  Component={Profile}
+                  redirectPath="/login"
+                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                />
+              }
+            />
+            <Route
+              exact
+              path="/view-data"
+              element={
+                <ProtectedRoute
+                  Component={Data}
+                  redirectPath="/login"
+                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                />
+              }
+            />
 
-          {/* Protected routes */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute
-                Component={Dashboard}
-                redirectPath="/login"
-                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
-              />
-            }
-          />
-          <Route
-            exact
-            path="/profile"
-            element={
-              <ProtectedRoute
-                Component={Profile}
-                redirectPath="/login"
-                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
-              />
-            }
-          />
-          <Route
-            exact
-            path="/view-data"
-            element={
-              <ProtectedRoute
-                Component={Data}
-                redirectPath="/login"
-                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
-              />
-            }
-          />
+            <Route
+              exact
+              path="/query-data"
+              element={
+                <ProtectedRoute
+                  Component={Data}
+                  redirectPath="/login"
+                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                />
+              }
+            />
 
-          <Route
-            exact
-            path="/query-data"
-            element={
-              <ProtectedRoute
-                Component={Data}
-                redirectPath="/login"
-                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
-              />
-            }
-          />
+            <Route
+              exact
+              path="/add-data"
+              element={
+                <ProtectedRoute
+                  Component={AddData}
+                  redirectPath="/login"
+                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                />
+              }
+            />
 
-          <Route
-            exact
-            path="/add-data"
-            element={
-              <ProtectedRoute
-                Component={AddData}
-                redirectPath="/login"
-                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
-              />
-            }
-          />
-
-          <Route
-            exact
-            path="/manage-users"
-            element={
-              <ProtectedRoute Component={ManageUsersPage} redirectPath="/" roles={[ADMIN_ROLE]} />
-            }
-          />
+            <Route
+              exact
+              path="/manage-users"
+              element={
+                <ProtectedRoute Component={ManageUsersPage} redirectPath="/" roles={[ADMIN_ROLE]} />
+              }
+            />
+          </Route>
           <Route
             exact
             path="/logout"
@@ -106,12 +107,6 @@ function App() {
               />
             }
           />
-          <Route element={<Layout />}>
-            <Route exact path="/Dashboard" element={<Dashboard />} />
-            <Route exact path="/profile" element={<Profile />} />
-            <Route exact path="/data/add" element={<AddData />} />
-            <Route exact path="/data" element={<Data />} />
-          </Route>
         </Routes>
       </Router>
     </CookiesProvider>
