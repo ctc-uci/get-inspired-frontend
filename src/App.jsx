@@ -8,6 +8,7 @@ import Surveys from './pages/Surveys/Surveys';
 import Data from './pages/Data/Data';
 import AddData from './pages/AddData/AddData';
 import ImportCSV from './pages/ImportCSV/ImportCSV';
+import ManageAttributes from './pages/ManageAttributes/ManageAttributes';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route exact path="/data" element={<Data />} />
           <Route exact path="/data/add" element={<AddData />} />
           <Route exact path="/login" element={<Login />} />
+          <Route exact path="/manage-attributes" element={<ManageAttributes />} />
         </Routes>
       </Router>
     </React.StrictMode>
