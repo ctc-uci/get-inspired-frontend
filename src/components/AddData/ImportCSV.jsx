@@ -22,15 +22,15 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
         <Button type="primary">Upload File</Button>
       </Upload>
 
-      <Row gutter={16}>
+      <Row gutter={16} id="back-next-buttons">
         <Col span={12}>
-          <Button type="primary" onClick={decrStep}>
+          <Button type="primary" style={{ background: 'gray' }} onClick={decrStep}>
             Back
           </Button>
         </Col>
         <Col span={12}>
           <Button type="primary" onClick={incrStep}>
-            Next
+            Import
           </Button>
         </Col>
       </Row>

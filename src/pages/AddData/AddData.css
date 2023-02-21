@@ -1,10 +1,9 @@
 .app-data-heading {
   padding: 3%;
-  /* background-color: lightpink; */
 }
 
 .survey-form-div {
-  /* background-color: lightcyan; */
+  background-color: lightcyan;
   text-align: center;
   padding: 0 3% 3%;
 }
@@ -13,6 +12,9 @@
   text-align: left;
 }
 
+.review-form {
+  padding: 0 3% 3%;
+}
 
 .survey-form-entry-label {
   /* font-family: 'Roboto';
@@ -22,3 +24,20 @@
   line-height: 22px; */
   font-weight: 400;
 }
+
+.choose-survey-page {
+  height: 80vh;
+}
+
+.upload-complete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 60vh;
+}
+
+#back-next-buttons {
+  text-align: center;
+}
+
