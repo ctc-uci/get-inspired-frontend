@@ -6,6 +6,7 @@ import Logout from './components/Logout';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Profile/Profile';
 import Data from './pages/Data/Data';
+import QueryData from './pages/QueryData/QueryData';
 import AddData from './pages/AddData/AddData';
 import ProtectedRoute from './utils/ProtectedRoute';
 import AUTH_ROLES from './utils/auth_config';
@@ -69,7 +70,7 @@ function App() {
             path="/query-data"
             element={
               <ProtectedRoute
-                Component={Data}
+                Component={QueryData}
                 redirectPath="/login"
                 roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
               />
