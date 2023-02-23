@@ -3,40 +3,32 @@ on:
   push:
     branches:
       - cy-autodeploy-test
+env:
+  NODE_ENV: ${{ secrets.NODE_ENV }}
+  REACT_APP_HOST: ${{ secrets.REACT_APP_HOST }}
+  REACT_APP_PROD_HOST: ${{ secrets.REACT_APP_PROD_HOST }}
+  REACT_APP_PROD_PORT: ${{ secrets.REACT_APP_PROD_PORT }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_HOST: ${{ secrets.AWS_HOST }}
+  AWS_DB_NAME: ${{ secrets.AWS_DB_NAME }}
+  AWS_USER: ${{ secrets.AWS_USER }}
+  AWS_PORT: ${{ secrets.AWS_PORT }}
+  AWS_PASSWORD: ${{ secrets.AWS_PASSWORD }}
+  REACT_APP_EMAIL_FIRST_NAME: ${{ secrets.REACT_APP_EMAIL_FIRST_NAME }}
+  REACT_APP_EMAIL_LAST_NAME: ${{ secrets.REACT_APP_EMAIL_LAST_NAME }}
+  REACT_APP_EMAIL_USERNAME: ${{ secrets.REACT_APP_EMAIL_USERNAME }}
+  REACT_APP_EMAIL_PASSWORD: ${{ secrets.REACT_APP_EMAIL_PASSWORD }}
 jobs:
   run:
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      NODE_ENV: ${{ secrets.NODE_ENV }}
-      REACT_APP_HOST: ${{ secrets.REACT_APP_HOST }}
-      REACT_APP_PROD_HOST: ${{ secrets.REACT_APP_PROD_HOST }}
-      REACT_APP_PROD_PORT: ${{ secrets.REACT_APP_PROD_PORT }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_HOST: ${{ secrets.AWS_HOST }}
-      AWS_DB_NAME: ${{ secrets.AWS_DB_NAME }}
-      AWS_USER: ${{ secrets.AWS_USER }}
-      AWS_PORT: ${{ secrets.AWS_PORT }}
-      AWS_PASSWORD: ${{ secrets.AWS_PASSWORD }}
-      REACT_APP_EMAIL_FIRST_NAME: ${{ secrets.REACT_APP_EMAIL_FIRST_NAME }}
-      REACT_APP_EMAIL_LAST_NAME: ${{ secrets.REACT_APP_EMAIL_LAST_NAME }}
-      REACT_APP_EMAIL_USERNAME: ${{ secrets.REACT_APP_EMAIL_USERNAME }}
-      REACT_APP_EMAIL_PASSWORD: ${{ secrets.REACT_APP_EMAIL_PASSWORD }}
     steps:
       - uses: actions/checkout@v3
 
       - name: Install dependencies
         run: yarn
-
-      # - name: Add install-peerdeps
-      #   run: yarn global add install-peerdeps
-
-      # - name: Install peer deps for airbnb-base
-      #   run: install-peerdeps eslint-config-airbnb-base --dev --yarn
-
-      # - name: Install peer deps for airbnb
-      #   run: install-peerdeps eslint-config-airbnb@18.2.1 --dev --yarn
 
       - name: Build
         run: yarn build
