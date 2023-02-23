@@ -48,7 +48,7 @@ const AttributeGroup = ({ tableName, columns, checkedLists, setCheckedLists }) =
 AttributeGroup.propTypes = {
   tableName: PropTypes.string.isRequired,
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  checkedLists: PropTypes.objectOf(PropTypes.object()).isRequired,
+  checkedLists: PropTypes.shape({}).isRequired,
   setCheckedLists: PropTypes.func.isRequired,
 };
 

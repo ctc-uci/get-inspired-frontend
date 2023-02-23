@@ -76,7 +76,6 @@ function App() {
               />
             }
           />
-
           <Route
             exact
             path="/add-data"
