@@ -30,7 +30,7 @@ jobs:
         run: yarn
 
       - name: Patch eslint
-        run: yarn install eslint-config-airbnb
+        run: yarn add eslint-config-airbnb
 
       - name: Build
         run: yarn build
