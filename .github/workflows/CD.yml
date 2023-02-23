@@ -33,10 +33,10 @@ jobs:
         run: yarn global add install-peerdeps
 
       - name: Install peer deps for airbnb-base
-        run: install-peerdeps eslint-config-airbnb-base --dev
+        run: install-peerdeps eslint-config-airbnb-base --dev --yarn
 
       - name: Install peer deps for airbnb
-        run: install-peerdeps eslint-config-airbnb@18.2.1 --dev
+        run: install-peerdeps eslint-config-airbnb@18.2.1 --dev --yarn
 
       - name: Build
         run: yarn build
