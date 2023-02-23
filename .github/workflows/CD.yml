@@ -29,8 +29,14 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Patch eslint
-        run: yarn add eslint-config-airbnb
+      - name: Add install-peerdeps
+        run: yarn global add install-peerdeps
+
+      - name: Install peer deps for airbnb-base
+        run: install-peerdeps eslint-config-airbnb-base --dev
+
+      - name: Install peer deps for airbnb
+        run: install-peerdeps eslint-config-airbnb@18.2.1 --dev
 
       - name: Build
         run: yarn build
