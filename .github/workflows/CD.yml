@@ -1,4 +1,4 @@
-name: Example workflow for S3 Deploy
+name: S3 Deploy
 on:
   push:
     branches:
@@ -29,4 +29,4 @@ jobs:
             delete-removed: true
             no-cache: true
             private: true
-            files-to-include: ".*/*,*/*,**"
+            filesToInclude: ".*/*,*/*,**"
