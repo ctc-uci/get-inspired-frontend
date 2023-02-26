@@ -1,73 +1,50 @@
-import { React } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Space } from 'antd';
 import ManageUsers from '../../components/ManageUsers/ManageUsers';
 import EditUsers from '../../components/EditUsers/EditUsers';
-// import getUsersFromDB from '../../utils/users_utils';
+import getUsersFromDB from '../../utils/users_utils';
 
 import styles from './ManageUsersPage.module.css';
+import { GSPBackend } from '../../utils/utils';
 
 const { Column } = Table;
 
-const data = [
-  {
-    name: 'Megatron',
-    role: 'dev',
-    email: 'megatron@uci.edu',
-    key: '1',
-  },
-  {
-    name: 'Danny Phantom',
-    role: 'dev',
-    email: 'danny@uci.edu',
-    key: '2',
-  },
-  {
-    name: 'Thanos',
-    role: 'dev',
-    email: 'thanos@uci.edu',
-    key: '3',
-  },
-];
-
-/*
-will fix this later (add notification to the import antd)
-const [api, contextHolder] = notification.useNotification();
-const openNotification = (placement) => { // call this function after form submitted
-  api.info({
-    message: `Notification ${placement}`,
-    description:
-      'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-    placement,
-  });
-};
-*/
-
 const ManageUsersPage = () => {
-  // const [users, setUsers] = useState([]);
-  // useEffect(() => {
-  //   const fetchUsersFromDB = async () => {
-  //     const usersFromDB = await getUsersFromDB();
-  //     setUsers(usersFromDB);
-  //   };
-  //   fetchUsersFromDB();
-  // }, []);
-
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    const fetchUsersFromDB = async () => {
+      const usersFromDB = await getUsersFromDB();
+      setUsers(usersFromDB);
+    };
+    fetchUsersFromDB();
+  }, []);
+  const deleteUser = async userId => {
+    try {
+      await GSPBackend.delete(`/users/${userId}`);
+      // handle success, e.g. display a message or refresh the user list
+    } catch (error) {
+      // handle error, e.g. display an error message
+    }
+  };
   return (
     <>
       <ManageUsers />
       <div className={styles.container}>
         <div className={styles.page}>
-          <Table size="middle" width="10%" dataSource={data}>
-            <Column title="Name" dataIndex="name" key="name" />
+          <Table size="large" width="10%" dataSource={users} rowKey="id">
+            <Column title="Name" dataIndex="fullName" key="name" />
             <Column title="Role" dataIndex="role" key="role" />
             <Column title="Email" dataIndex="email" key="email" />
             <Column
               title="Setting"
               key="setting"
-              render={() => (
+              render={(index, record) => (
                 <Space size="middle">
-                  <EditUsers />
-                  <a href="https://www.youtube.com/watch?v=pSUydWEqKwE">Delete</a>
+                  <EditUsers record={record} />
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a href="#" onClick={() => deleteUser(record.id)}>
+                    Delete
+                  </a>
                 </Space>
               )}
             />

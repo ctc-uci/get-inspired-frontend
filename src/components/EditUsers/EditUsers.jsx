@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form, Input, Radio } from 'antd';
-import { instanceOf } from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { instanceOf, PropTypes } from 'prop-types';
+// import { useNavigate } from 'react-router-dom';
 import { Cookies, withCookies } from '../../utils/cookie_utils';
-import { registerWithEmailAndPassword } from '../../utils/auth_utils';
 
 import styles from './EditUsers.module.css';
+import { GSPBackend } from '../../utils/utils';
 
 // eslint-disable-next-line no-unused-vars
-const EditUsers = ({ cookies }) => {
+const EditUsers = ({ cookies, record }) => {
   const [errorMessage, setErrorMessage] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -26,9 +26,14 @@ const EditUsers = ({ cookies }) => {
 
   const handleSubmit = async values => {
     try {
-      const { role, name, email, password } = values;
+      const { role, firstName, lastName } = values;
 
-      await registerWithEmailAndPassword(email, password, role, name, navigate, '/login');
+      GSPBackend.put(`/users/${record.id}`, {
+        role,
+        firstName,
+        lastName,
+      });
+      handleOk();
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -60,8 +65,8 @@ const EditUsers = ({ cookies }) => {
             </span>
 
             <Form.Item
-              label="Name"
-              name="name"
+              label="First Name"
+              name="firstName"
               rules={[
                 {
                   required: true,
@@ -72,28 +77,16 @@ const EditUsers = ({ cookies }) => {
               <Input type="text" />
             </Form.Item>
             <Form.Item
-              label="Email"
-              name="email"
+              label="Last Name"
+              name="lastName"
               rules={[
                 {
                   required: true,
-                  message: 'Please input your email!',
+                  message: 'Please input your last name!',
                 },
               ]}
             >
-              <Input type="email" />
-            </Form.Item>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your password!',
-                },
-              ]}
-            >
-              <Input.Password type="text" />
+              <Input type="text" />
             </Form.Item>
           </Form>
           <p>{errorMessage}</p>
@@ -108,6 +101,7 @@ const EditUsers = ({ cookies }) => {
 
 EditUsers.propTypes = {
   cookies: instanceOf(Cookies).isRequired,
+  record: PropTypes.string.isRequired,
 };
 
 export default withCookies(EditUsers);
