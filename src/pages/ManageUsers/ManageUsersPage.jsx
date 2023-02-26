@@ -15,11 +15,15 @@ const data = [
   {
     name: 'Ted',
     email: 'ted@uci.edu',
+    password: 'blahblah',
+    role: 'dev',
     key: '2',
   },
   {
     name: 'Matt',
     email: 'matt@gmail.com',
+    password: 'password',
+    role: 'dev',
     key: '3',
   },
 ];

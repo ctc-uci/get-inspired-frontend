@@ -1,6 +1,5 @@
 #wrapper {
-  display: flex;
-}
+  display: flex;}
 #div1 {
   display: inline-block;
   width: 50%;
@@ -14,6 +13,7 @@
 }
 #div2 {
   display: inline-block;
+  /* border: 2px solid red; */
   width: 50%;
   height: 2.5em;
   padding: 2rem 1rem;
