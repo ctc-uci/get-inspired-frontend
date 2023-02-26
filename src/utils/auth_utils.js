@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -10,7 +11,7 @@ import {
   confirmPasswordReset,
   applyActionCode,
 } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { GSPBackend } from './utils';
 import { cookieKeys, cookieConfig, clearCookies } from './cookie_utils';
 
 // Using Firebase Web version 9
@@ -25,12 +26,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-// TEMP: Make sure to remove
-const GSPBackend = axios.create({
-  baseURL: 'http://localhost:3001',
-  withCredentials: true,
-});
 
 const refreshUrl = `https://securetoken.googleapis.com/v1/token?key=${process.env.REACT_APP_FIREBASE_APIKEY}`;
 
@@ -275,11 +270,9 @@ const addAuthInterceptor = axiosInstance => {
   );
 };
 
-// to be moved where GSPBackend is declared
 addAuthInterceptor(GSPBackend);
 
 export {
-  GSPBackend,
   auth,
   useNavigate,
   logInWithEmailAndPassword,
