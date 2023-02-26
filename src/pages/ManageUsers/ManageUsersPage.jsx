@@ -1,29 +1,30 @@
 import { React } from 'react';
 import { Table, Space } from 'antd';
 import ManageUsers from '../../components/ManageUsers/ManageUsers';
+import EditUsers from '../../components/EditUsers/EditUsers';
+// import getUsersFromDB from '../../utils/users_utils';
+
+import styles from './ManageUsersPage.module.css';
 
 const { Column } = Table;
 
 const data = [
   {
-    name: 'John',
-    email: 'john@uci.edu',
-    password: 'testing',
+    name: 'Megatron',
     role: 'dev',
+    email: 'megatron@uci.edu',
     key: '1',
   },
   {
-    name: 'Ted',
-    email: 'ted@uci.edu',
-    password: 'blahblah',
+    name: 'Danny Phantom',
     role: 'dev',
+    email: 'danny@uci.edu',
     key: '2',
   },
   {
-    name: 'Matt',
-    email: 'matt@gmail.com',
-    password: 'password',
+    name: 'Thanos',
     role: 'dev',
+    email: 'thanos@uci.edu',
     key: '3',
   },
 ];
@@ -42,43 +43,38 @@ const openNotification = (placement) => { // call this function after form submi
 */
 
 const ManageUsersPage = () => {
+  // const [users, setUsers] = useState([]);
+  // useEffect(() => {
+  //   const fetchUsersFromDB = async () => {
+  //     const usersFromDB = await getUsersFromDB();
+  //     setUsers(usersFromDB);
+  //   };
+  //   fetchUsersFromDB();
+  // }, []);
+
   return (
-    <div>
-      <div id="wrapper">
-        <div id="div1">
-          <h1>Manage Users</h1>
-        </div>
-        <div id="div2">
-          <ManageUsers />
+    <>
+      <ManageUsers />
+      <div className={styles.container}>
+        <div className={styles.page}>
+          <Table size="middle" width="10%" dataSource={data}>
+            <Column title="Name" dataIndex="name" key="name" />
+            <Column title="Role" dataIndex="role" key="role" />
+            <Column title="Email" dataIndex="email" key="email" />
+            <Column
+              title="Setting"
+              key="setting"
+              render={() => (
+                <Space size="middle">
+                  <EditUsers />
+                  <a href="https://www.youtube.com/watch?v=pSUydWEqKwE">Delete</a>
+                </Space>
+              )}
+            />
+          </Table>
         </div>
       </div>
-      <Table dataSource={data}>
-        <Column title="Name" dataIndex="name" key="name" />
-        <Column title="Email" dataIndex="email" key="email" />
-        <Column title="Password" dataIndex="password" key="password" />
-        <Column title="Role" dataIndex="role" key="role" />
-        <Column
-          title="Account History"
-          dataIndex="history"
-          key="history"
-          render={() => (
-            <Space size="middle">
-              <a href="https://www.youtube.com/watch?v=pSUydWEqKwE">View</a>
-            </Space>
-          )}
-        />
-        <Column
-          title="Setting"
-          key="setting"
-          render={() => (
-            <Space size="middle">
-              <a href="https://www.youtube.com/watch?v=pSUydWEqKwE">Edit</a>
-              <a href="https://www.youtube.com/watch?v=pSUydWEqKwE">Delete</a>
-            </Space>
-          )}
-        />
-      </Table>
-    </div>
+    </>
   );
 };
 

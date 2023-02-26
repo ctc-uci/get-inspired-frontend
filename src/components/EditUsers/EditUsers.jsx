@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { Cookies, withCookies } from '../../utils/cookie_utils';
 import { registerWithEmailAndPassword } from '../../utils/auth_utils';
 
-import styles from './ManageUsers.module.css';
+import styles from './EditUsers.module.css';
 
 // eslint-disable-next-line no-unused-vars
-const ManageUsers = ({ cookies }) => {
+const EditUsers = ({ cookies }) => {
   const [errorMessage, setErrorMessage] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -26,20 +26,9 @@ const ManageUsers = ({ cookies }) => {
 
   const handleSubmit = async values => {
     try {
-      const { role, firstName, lastName, email, password, checkPassword } = values;
-      if (password !== checkPassword) {
-        throw new Error("Passwords don't match");
-      }
+      const { role, name, email, password } = values;
 
-      await registerWithEmailAndPassword(
-        email,
-        password,
-        role,
-        firstName,
-        lastName,
-        navigate,
-        '/login',
-      );
+      await registerWithEmailAndPassword(email, password, role, name, navigate, '/login');
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -47,15 +36,13 @@ const ManageUsers = ({ cookies }) => {
 
   return (
     <>
-      <div className={styles['header-title']}>
-        <h1>Manage Users</h1>
-        <Button type="primary" onClick={showModal}>
-          Add User
-        </Button>
-      </div>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a href="#" onClick={showModal} style={{ color: '#3689fc', textDecoration: 'none' }}>
+        Edit
+      </a>
       <Modal open={isModalOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
         <div className={styles.container}>
-          <h1>Add User</h1>
+          <h1>Edit User</h1>
           <Form
             id="login-form"
             layout="vertical"
@@ -65,7 +52,7 @@ const ManageUsers = ({ cookies }) => {
           >
             <span>
               <Form.Item label="" name="role">
-                <Radio.Group initialValues="viewer">
+                <Radio.Group defaultValue="viewer">
                   <Radio value="viewer">Viewer</Radio>
                   <Radio value="editor">Editor</Radio>
                 </Radio.Group>
@@ -73,24 +60,12 @@ const ManageUsers = ({ cookies }) => {
             </span>
 
             <Form.Item
-              label="First Name"
-              name="firstName"
+              label="Name"
+              name="name"
               rules={[
                 {
                   required: true,
                   message: 'Please input your first name!',
-                },
-              ]}
-            >
-              <Input type="text" />
-            </Form.Item>
-            <Form.Item
-              label="Last Name"
-              name="lastName"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your last name!',
                 },
               ]}
             >
@@ -109,20 +84,8 @@ const ManageUsers = ({ cookies }) => {
               <Input type="email" />
             </Form.Item>
             <Form.Item
-              label="Set Password"
+              label="Password"
               name="password"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your password!',
-                },
-              ]}
-            >
-              <Input.Password type="text" />
-            </Form.Item>
-            <Form.Item
-              label="Confirm Password"
-              name="checkPassword"
               rules={[
                 {
                   required: true,
@@ -135,7 +98,7 @@ const ManageUsers = ({ cookies }) => {
           </Form>
           <p>{errorMessage}</p>
           <Button type="primary" form="login-form" key="submit" htmlType="submit">
-            Sign Up
+            Save Edits
           </Button>
         </div>
       </Modal>
@@ -143,8 +106,8 @@ const ManageUsers = ({ cookies }) => {
   );
 };
 
-ManageUsers.propTypes = {
+EditUsers.propTypes = {
   cookies: instanceOf(Cookies).isRequired,
 };
 
-export default withCookies(ManageUsers);
+export default withCookies(EditUsers);
