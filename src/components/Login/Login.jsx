@@ -2,13 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Typography } from 'antd';
 import { PropTypes, instanceOf } from 'prop-types';
 import { Navigate } from 'react-router-dom';
+import { GSPBackend } from '../../utils/utils';
 import { withCookies, cookieKeys, Cookies, clearCookies } from '../../utils/cookie_utils';
-import {
-  logInWithEmailAndPassword,
-  useNavigate,
-  GSPBackend,
-  refreshToken,
-} from '../../utils/auth_utils';
+import { logInWithEmailAndPassword, useNavigate, refreshToken } from '../../utils/auth_utils';
 
 import GSPLogo from '../../assets/GSPLogo.svg';
 
