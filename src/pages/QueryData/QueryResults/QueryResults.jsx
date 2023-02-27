@@ -29,24 +29,6 @@ const computeColumns = data => {
 };
 
 const QueryResults = ({ data }) => {
-  // const columns = [
-  //   { title: 'Survey ID', dataIndex: 'survey_id', key: 'survey_id' },
-  //   { title: 'Raker ID', dataIndex: 'raker_id', key: 'raker_id' },
-  //   { title: 'Clam ID', dataIndex: 'clam_id', key: 'clam_id' },
-  //   {
-  //     title: '',
-  //     key: 'action',
-  //     render: () => (
-  //       <Space size="middle">
-  //         <Button>Edit</Button>
-  //         <Button danger>Delete</Button>
-  //       </Space>
-  //     ),
-  //   },
-  // ];
-
-  console.log({ data, cols: computeColumns(data) });
-
   return (
     <div>
       <Table

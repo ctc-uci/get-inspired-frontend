@@ -47,7 +47,14 @@ const SelectAttributesModal = ({
 SelectAttributesModal.propTypes = {
   tableState: PropTypes.shape({
     tableNames: PropTypes.arrayOf(PropTypes.string),
-    columnInfo: PropTypes.shape({}),
+    columnInfo: PropTypes.arrayOf(
+      PropTypes.arrayOf(
+        PropTypes.shape({
+          COLUMN_NAME: PropTypes.string,
+          DATA_TYPE: PropTypes.string,
+        }),
+      ),
+    ),
   }).isRequired,
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
