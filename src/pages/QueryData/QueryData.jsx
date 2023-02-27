@@ -27,11 +27,6 @@ class DefaultDict {
   }
 }
 
-// const config = {
-//   ...AntdConfig,
-//   fields: {},
-// };
-
 const queryValue = { id: QbUtils.uuid(), type: 'group' };
 
 const QueryData = () => {
@@ -56,13 +51,19 @@ const QueryData = () => {
   }, []);
 
   const onAdvancedSearch = async () => {
+    // get rid of prev. results (find more elegant way to do this?)
+    setQueryState(prevState => ({ ...prevState, results: [{}] }));
+
+    // get current state to make query
     const { tree: immutableTree, config: immutableConfig } = queryState;
+    console.log(QbUtils.jsonLogicFormat(immutableTree, immutableConfig));
     const results = await GSPBackend.post('/query/advanced', {
-      tree: QbUtils.getTree(immutableTree),
+      tree: QbUtils.jsonLogicFormat(immutableTree, config),
       config: immutableConfig,
       checkedFields: checkedLists,
     });
-    // console.log({ results: results.data });
+
+    // set query state
     setQueryState(prevState => ({ ...prevState, results: results.data }));
   };
 
@@ -82,6 +83,7 @@ const QueryData = () => {
     // Get all the tables
     const response = await GSPBackend.get('/tables');
     const tableNames = response.data.map(tableInformation => tableInformation.TABLE_NAME);
+
     // Get all the columns for each table
     const columnInfoRequests = tableNames.map(tableName =>
       GSPBackend.get(`/tables/${tableName}/columns`),
@@ -89,7 +91,8 @@ const QueryData = () => {
     const columnInfo = (await Promise.all(columnInfoRequests)).map(
       columnInfoResponse => columnInfoResponse.data,
     );
-    // console.log(columnInfo);
+
+    // build configs and set states accordingly
     setConfig({
       ...config,
       fields: Object.fromEntries(
