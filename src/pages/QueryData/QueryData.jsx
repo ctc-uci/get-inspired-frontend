@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState, useCallback, useEffect } from 'react';
 import { Utils as QbUtils, Query, Builder, AntdConfig } from '@react-awesome-query-builder/antd';
-import { Button } from 'antd';
+import { Alert, Button } from 'antd';
 import '@react-awesome-query-builder/antd/css/styles.css';
 
 import LoadingScreen from '../../common/LoadingScreen';
@@ -41,6 +41,7 @@ const QueryData = () => {
     config,
     results: [],
   });
+  const [errorState, setErrorState] = useState("");
   const [checkedLists, setCheckedLists] = useState(new DefaultDict(Array));
 
   const [isSelectAttributesModalOpen, setIsSelectedAttributesModalOpen] = useState(false);
@@ -51,19 +52,28 @@ const QueryData = () => {
   }, []);
 
   const onAdvancedSearch = async () => {
+    // only query if checkedLists is nonempty
+    if(Object.values(checkedLists).every((arr) => (arr.length === 0))){
+      setErrorState("Please select at least one attribute to query");
+      return;
+    }
+    setErrorState("");
+
     // get rid of prev. results (find more elegant way to do this?)
-    setQueryState(prevState => ({ ...prevState, results: [{}] }));
+    setQueryState(prevState => ({ ...prevState, results: [] }));
 
-    // get current state to make query
-    const { tree: immutableTree, config: immutableConfig } = queryState;
-    const results = await GSPBackend.post('/query/advanced', {
-      jsonLogic: QbUtils.jsonLogicFormat(immutableTree, config).logic,
-      config: immutableConfig,
-      checkedFields: checkedLists,
-    });
-
-    // set query state
-    setQueryState(prevState => ({ ...prevState, results: results.data }));
+    // get current state and make query
+    try {
+      const { tree: immutableTree, config: immutableConfig } = queryState;
+      const results = await GSPBackend.post('/query/advanced', {
+        jsonLogic: QbUtils.jsonLogicFormat(immutableTree, config).logic,
+        config: immutableConfig,
+        checkedFields: checkedLists,
+      });
+      setQueryState(prevState => ({ ...prevState, results: results.data }));
+    } catch(err){
+      setErrorState(`${err.name}: ${err.message}`);
+    }
   };
 
   const renderBuilder = useCallback(
@@ -131,6 +141,10 @@ const QueryData = () => {
       <Button type="primary" onClick={() => setIsSelectedAttributesModalOpen(true)}>
         Select Attributes
       </Button>
+      {
+        // temporary error banner
+        (errorState !== "") &&  <Alert message={errorState} type="error" showIcon />
+      }
       <QueryResults data={queryState.results} />
     </div>
   );

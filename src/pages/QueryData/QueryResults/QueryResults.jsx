@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Table, Space, Button } from 'antd';
 
 const computeColumns = data => {
@@ -28,6 +28,7 @@ const computeColumns = data => {
   ];
 };
 
+// (TODO andrew): find smarter way to come up with row keys
 const QueryResults = ({ data }) => {
   return (
     <div>
