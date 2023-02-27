@@ -8,7 +8,7 @@ import LoadingScreen from '../../common/LoadingScreen';
 import SelectAttributesModal from './SelectAttributesModal/SelectAttributesModal';
 import QueryResults from './QueryResults/QueryResults';
 import { tableToWidget } from './QueryDataUtils';
-import { GSPBackend } from '../../utils/auth_utils';
+import { GSPBackend } from '../../utils/utils';
 
 import styles from './QueryData.module.css';
 
@@ -56,9 +56,8 @@ const QueryData = () => {
 
     // get current state to make query
     const { tree: immutableTree, config: immutableConfig } = queryState;
-    console.log(QbUtils.jsonLogicFormat(immutableTree, immutableConfig));
     const results = await GSPBackend.post('/query/advanced', {
-      tree: QbUtils.jsonLogicFormat(immutableTree, config),
+      jsonLogic: QbUtils.jsonLogicFormat(immutableTree, config).logic,
       config: immutableConfig,
       checkedFields: checkedLists,
     });

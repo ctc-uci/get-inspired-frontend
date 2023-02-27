@@ -32,7 +32,7 @@ const QueryResults = ({ data }) => {
   return (
     <div>
       <Table
-        rowKey={record => [record.survey_id, record.raker_id, record.clam_id]}
+        rowKey={record => Object.entries(record)}
         dataSource={data}
         columns={computeColumns(data)}
       />
@@ -40,8 +40,8 @@ const QueryResults = ({ data }) => {
   );
 };
 
-// QueryResults.propTypes = {
-//   data: PropTypes.arrayOf(PropTypes.object()).isRequired,
-// };
+QueryResults.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+};
 
 export default QueryResults;
