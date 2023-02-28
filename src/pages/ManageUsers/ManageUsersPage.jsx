@@ -1,12 +1,8 @@
-import { React } from 'react';
+import React from 'react';
 import ManageUsers from '../../components/ManageUsers/ManageUsers';
 
 const ManageUsersPage = () => {
-  return (
-    <div>
-      <ManageUsers />
-    </div>
-  );
+  return <ManageUsers />;
 };
 
 export default ManageUsersPage;
