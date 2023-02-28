@@ -33,14 +33,23 @@ const AddData = () => {
       <div className="app-data-heading">
         <h3 style={{ fontFamily: 'Roboto' }}>Add Data Form</h3>
         {showChooseSurveyButtons && (
-          <Button type="primary" icon={<EditOutlined />}>
-            Add to existing survey
-          </Button>
-        )}
-        {showChooseSurveyButtons && (
-          <Button type="primary" icon={<FileAddOutlined />} onClick={() => handleCreateNewSurvey()}>
-            Create new survey
-          </Button>
+          <div className="choose-survey-btns-div">
+            {showChooseSurveyButtons && (
+              <Button className="choose-survey-btns" type="primary" icon={<EditOutlined />}>
+                Add to existing survey
+              </Button>
+            )}
+            {showChooseSurveyButtons && (
+              <Button
+                className="choose-survey-btns"
+                type="primary"
+                icon={<FileAddOutlined />}
+                onClick={() => handleCreateNewSurvey()}
+              >
+                Create new survey
+              </Button>
+            )}
+          </div>
         )}
         {showExistingSurvey && curStep < 4 && <StepsBar curStep={curStep} />}
       </div>

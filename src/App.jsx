@@ -30,6 +30,7 @@ function App() {
 
           <Route exact path="/register" element={<RegisterPage />} />
           <Route element={<Layout />}>
+            <Route exact path="/add-data" element={<AddData />} />
             {/* Protected routes */}
             <Route
               path="/"
@@ -76,7 +77,7 @@ function App() {
               }
             />
 
-            <Route
+            {/* <Route
               exact
               path="/add-data"
               element={
@@ -86,7 +87,7 @@ function App() {
                   roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
                 />
               }
-            />
+            /> */}
 
             <Route
               exact

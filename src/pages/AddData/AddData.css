@@ -1,11 +1,15 @@
 .app-data-heading {
-  padding: 3%;
+  padding: 3% 3% 2% 3%;
+  /* background-color: lightpink; */
 }
 
-.survey-form-div {
-  background-color: lightcyan;
+.add-data-div {
+  /* background-color: lightcyan; */
   text-align: center;
-  padding: 0 3% 3%;
+  padding: 0.5% 3%;
+  align-items: center;
+  justify-content: center;
+  margin-top: -1%;
 }
 
 .survey-form {
@@ -29,6 +33,20 @@
   height: 80vh;
 }
 
+/* Fix to make responsive */
+.choose-survey-btns-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 5%;
+  margin-top: 18%;
+}
+
+.choose-survey-btns {
+  margin: 0 15% 0 15%;
+}
+
 .upload-complete {
   display: flex;
   justify-content: center;
@@ -37,7 +55,10 @@
   min-height: 60vh;
 }
 
+.ant-table .ant-table-container .ant-table-content table thead.ant-table-thead .ant-table-cell {
+  background-color: #E6F7FF;
+}
+
 #back-next-buttons {
   text-align: center;
 }
-
