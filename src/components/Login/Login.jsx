@@ -46,7 +46,7 @@ const Login = ({ roles, cookies }) => {
   const handleSubmit = async values => {
     try {
       const { email, password } = values;
-      await logInWithEmailAndPassword(email, password, '/logout', navigate, cookies);
+      await logInWithEmailAndPassword(email, password, '/', navigate, cookies);
     } catch (err) {
       setErrorMessage(err.message);
     }
