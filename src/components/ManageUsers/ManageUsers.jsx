@@ -1,147 +1,96 @@
-import React, { useState } from 'react';
-import { Button, Modal, Form, Input, Radio } from 'antd';
-import { instanceOf } from 'prop-types';
-import { useNavigate } from 'react-router-dom';
-import { Cookies, withCookies } from '../../utils/cookie_utils';
-import { registerWithEmailAndPassword } from '../../utils/auth_utils';
+import React, { useState, useEffect } from 'react';
+import { Table, Space, Button } from 'antd';
+import EditUserModal from './EditUserModal/EditUserModal';
+import AddUserModal from './AddUserModal/AddUserModal';
 
 import styles from './ManageUsers.module.css';
+import { GSPBackend } from '../../utils/utils';
 
-// eslint-disable-next-line no-unused-vars
-const ManageUsers = ({ cookies }) => {
-  const [errorMessage, setErrorMessage] = useState();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const { Column } = Table;
 
-  const navigate = useNavigate();
+const ManageUsers = () => {
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
+  const [idToEdit, setIdToEdit] = useState('');
+  const [users, setUsers] = useState([]);
 
-  const showModal = () => {
-    setIsModalOpen(true);
+  const getUsersFromDB = async () => {
+    const res = (await GSPBackend.get('/users')).data.map(user => ({
+      ...user,
+      fullName: `${user.firstName} ${user.lastName}`,
+    }));
+    return res;
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
-  const handleSubmit = async values => {
+  const deleteUser = async userId => {
     try {
-      const { role, firstName, lastName, email, password, checkPassword } = values;
-      if (password !== checkPassword) {
-        throw new Error("Passwords don't match");
-      }
-
-      await registerWithEmailAndPassword(
-        email,
-        password,
-        role,
-        firstName,
-        lastName,
-        navigate,
-        '/login',
-      );
+      await GSPBackend.delete(`/users/${userId}`);
+      const usersFromDB = await getUsersFromDB();
+      setUsers(usersFromDB);
     } catch (error) {
-      setErrorMessage(error.message);
+      // handle error, e.g. display an error message
     }
   };
 
+  const editUserLabelClicked = id => {
+    setIdToEdit(id);
+    setIsEditUserModalOpen(true);
+  };
+
+  const fetchUsersFromDB = async () => {
+    const usersFromDB = await getUsersFromDB();
+    setUsers(usersFromDB);
+  };
+
+  useEffect(() => {
+    fetchUsersFromDB();
+  }, []);
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Add User
-      </Button>
-      <Modal open={isModalOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
-        <div className={styles.container}>
-          <h1>Add User</h1>
-          <Form
-            id="login-form"
-            layout="vertical"
-            name="login-form"
-            onFinish={handleSubmit}
-            initialValues={{ role: 'viewer' }}
-          >
-            <span>
-              <Form.Item label="" name="role">
-                <Radio.Group defaultValue="viewer">
-                  <Radio value="viewer">Viewer</Radio>
-                  <Radio value="editor">Editor</Radio>
-                </Radio.Group>
-              </Form.Item>
-            </span>
-
-            <Form.Item
-              label="First Name"
-              name="firstName"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your first name!',
-                },
-              ]}
-            >
-              <Input type="text" />
-            </Form.Item>
-            <Form.Item
-              label="Last Name"
-              name="lastName"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your last name!',
-                },
-              ]}
-            >
-              <Input type="text" />
-            </Form.Item>
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your email!',
-                },
-              ]}
-            >
-              <Input type="email" />
-            </Form.Item>
-            <Form.Item
-              label="Set Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your password!',
-                },
-              ]}
-            >
-              <Input.Password type="text" />
-            </Form.Item>
-            <Form.Item
-              label="Confirm Password"
-              name="checkPassword"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your password!',
-                },
-              ]}
-            >
-              <Input.Password type="text" />
-            </Form.Item>
-          </Form>
-          <p>{errorMessage}</p>
-          <Button type="primary" form="login-form" key="submit" htmlType="submit">
-            Sign Up
-          </Button>
+      <EditUserModal
+        isOpen={isEditUserModalOpen}
+        setIsOpen={setIsEditUserModalOpen}
+        id={idToEdit}
+        fetchUsersFromDB={fetchUsersFromDB}
+      />
+      <AddUserModal
+        isOpen={isAddUserModalOpen}
+        setIsOpen={setIsAddUserModalOpen}
+        fetchUsersFromDB={fetchUsersFromDB}
+      />
+      <div className={styles['header-title']}>
+        <h1>Manage Users</h1>
+        <Button type="primary" onClick={() => setIsAddUserModalOpen(true)}>
+          Add User
+        </Button>
+      </div>
+      <div className={styles.container}>
+        <div className={styles.page}>
+          <Table size="large" width="10%" dataSource={users} rowKey="id">
+            <Column title="Name" dataIndex="fullName" key="name" />
+            <Column title="Role" dataIndex="role" key="role" />
+            <Column title="Email" dataIndex="email" key="email" />
+            <Column
+              title="Setting"
+              key="setting"
+              render={(index, record) => (
+                <Space size="middle">
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a href="#" onClick={() => editUserLabelClicked(record.id)}>
+                    Edit
+                  </a>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a href="#" onClick={() => deleteUser(record.id)}>
+                    Delete
+                  </a>
+                </Space>
+              )}
+            />
+          </Table>
         </div>
-      </Modal>
+      </div>
     </>
   );
 };
 
-ManageUsers.propTypes = {
-  cookies: instanceOf(Cookies).isRequired,
-};
-
-export default withCookies(ManageUsers);
+export default ManageUsers;
