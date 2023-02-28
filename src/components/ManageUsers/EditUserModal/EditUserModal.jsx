@@ -1,38 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Input, Radio } from 'antd';
-import { instanceOf, PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 // import { useNavigate } from 'react-router-dom';
-import { Cookies, withCookies } from '../../utils/cookie_utils';
+import { withCookies } from '../../../utils/cookie_utils';
 
-import styles from './EditUsers.module.css';
-import { GSPBackend } from '../../utils/utils';
+import styles from './EditUserModal.module.css';
+import { GSPBackend } from '../../../utils/utils';
 
-// eslint-disable-next-line no-unused-vars
-const EditUsers = ({ cookies, record }) => {
+const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
+  const [form] = Form.useForm();
   const [errorMessage, setErrorMessage] = useState();
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // const navigate = useNavigate();
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
   const handleOk = () => {
-    setIsModalOpen(false);
+    setIsOpen(false);
   };
   const handleCancel = () => {
-    setIsModalOpen(false);
+    setIsOpen(false);
   };
+
+  useEffect(async () => {
+    if (id) {
+      const user = await GSPBackend.get(`/users/${id}`);
+      form.setFieldsValue({
+        role: user.data[0].role,
+        firstName: user.data[0].firstName,
+        lastName: user.data[0].lastName,
+      });
+    }
+  }, [id]);
 
   const handleSubmit = async values => {
     try {
       const { role, firstName, lastName } = values;
 
-      GSPBackend.put(`/users/${record.id}`, {
+      await GSPBackend.put(`/users/${id}`, {
         role,
         firstName,
         lastName,
       });
+      await fetchUsersFromDB();
       handleOk();
     } catch (error) {
       setErrorMessage(error.message);
@@ -41,23 +47,19 @@ const EditUsers = ({ cookies, record }) => {
 
   return (
     <>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a href="#" onClick={showModal} style={{ color: '#3689fc', textDecoration: 'none' }}>
-        Edit
-      </a>
-      <Modal open={isModalOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
+      <Modal open={isOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
         <div className={styles.container}>
           <h1>Edit User</h1>
           <Form
-            id="login-form"
+            id="edit-user-form"
             layout="vertical"
             name="login-form"
+            form={form}
             onFinish={handleSubmit}
-            initialValues={{ role: 'viewer' }}
           >
             <span>
               <Form.Item label="" name="role">
-                <Radio.Group defaultValue="viewer">
+                <Radio.Group>
                   <Radio value="viewer">Viewer</Radio>
                   <Radio value="editor">Editor</Radio>
                 </Radio.Group>
@@ -90,7 +92,7 @@ const EditUsers = ({ cookies, record }) => {
             </Form.Item>
           </Form>
           <p>{errorMessage}</p>
-          <Button type="primary" form="login-form" key="submit" htmlType="submit">
+          <Button type="primary" form="edit-user-form" key="submit" htmlType="submit">
             Save Edits
           </Button>
         </div>
@@ -99,9 +101,11 @@ const EditUsers = ({ cookies, record }) => {
   );
 };
 
-EditUsers.propTypes = {
-  cookies: instanceOf(Cookies).isRequired,
-  record: PropTypes.string.isRequired,
+EditUsersModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
+  fetchUsersFromDB: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
-export default withCookies(EditUsers);
+export default withCookies(EditUsersModal);
