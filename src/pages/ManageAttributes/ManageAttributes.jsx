@@ -1,36 +1,94 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Table, Tag, Button } from 'antd';
-import axios from 'axios';
+import { Space, Table, Button } from 'antd';
+
+import { GSPBackend } from '../../utils/utils';
 
 const tableViews = [
-  {name: "Computations", type: "t1"},
-  {name: "Survey", type: "t2"},
-  {name: "Clam", type: "t3"},
-  {name: "Raker", type: "t4"}
+  { name: 'Computations', type: 't1' },
+  { name: 'Survey', type: 't2' },
+  { name: 'Clam', type: 't3' },
+  { name: 'Raker', type: 't4' },
 ];
 
 const ManageAttributes = () => {
-  const [contentType, setContentType] = useState("t1");
+  const [contentType, setContentType] = useState('t1');
 
-  const [clams, getClams] = useState([]);
+  const [surveys, setSurveys] = useState([]);
+  const [clams, setClams] = useState([]);
+  const [rakers, setRakers] = useState([]);
 
-  const url = 'http://localhost:3001/';
+  const adjustDataType = typeString => {
+    if (typeString === 'int' || typeString === 'double') {
+      typeString = 'Numeric';
+    } else if (typeString === 'datetime') {
+      typeString = 'Datetime';
+    } else if (typeString === 'boolean') {
+      typeString = 'Boolean';
+    } else {
+      typeString = 'Text';
+    }
+
+    return typeString;
+  };
+
+  // Surveys
+  const getSurveyColsFromDB = async () => {
+    const res = (await GSPBackend.get('/tables/survey/columns')).data.map(id => ({
+      ...id,
+      attributeName: id.COLUMN_NAME,
+      dataType: adjustDataType(id.DATA_TYPE),
+    }));
+    return res;
+  };
+
+  const getAllSurveys = async () => {
+    const surveyCols = await getSurveyColsFromDB();
+    setSurveys(surveyCols);
+  };
+
+  useEffect(() => {
+    getAllSurveys();
+  }, []);
+
+  // Clams
+  const getClamsColsFromDB = async () => {
+    const res = (await GSPBackend.get('/tables/clam/columns')).data.map(id => ({
+      ...id,
+      attributeName: id.COLUMN_NAME,
+      dataType: adjustDataType(id.DATA_TYPE),
+    }));
+    return res;
+  };
+
+  const getAllClams = async () => {
+    const clamCols = await getClamsColsFromDB();
+    setClams(clamCols);
+  };
 
   useEffect(() => {
     getAllClams();
-  }, [])
+  }, []);
 
-  const getAllClams = () => {
-    console.log("running get");
-    axios.get('http://localhost:3001/clams')
-    .then((response) => {
-      const allClams = response.data;
-      console.log(allClams);
-      getClams(allClams);
-    })
-    .catch(error => console.error(`Error: ${error}`));
-  }
+  // Rakers
+  const getRakerColsFromDB = async () => {
+    const res = (await GSPBackend.get('/tables/raker/columns')).data.map(id => ({
+      ...id,
+      attributeName: id.COLUMN_NAME,
+      dataType: adjustDataType(id.DATA_TYPE),
+    }));
+    return res;
+  };
 
+  const getAllRakers = async () => {
+    const rakerCols = await getRakerColsFromDB();
+    setRakers(rakerCols);
+  };
+
+  useEffect(() => {
+    getAllRakers();
+  }, []);
+
+  // Temporary Data for Computations Table
   const dataSource = [
     {
       key: '1',
@@ -44,6 +102,7 @@ const ManageAttributes = () => {
     },
   ];
 
+  // Columns for table
   const columns = [
     {
       title: 'Attribute Name',
@@ -56,13 +115,15 @@ const ManageAttributes = () => {
       key: 'dataType',
     },
     {
-      title: 'Action',
+      title: 'Actions',
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-        <a>Edit</a>
-        <a>Delete</a>
-      </Space>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a href="#">Edit</a>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a href="#">Delete</a>
+        </Space>
       ),
     },
   ];
@@ -77,46 +138,44 @@ const ManageAttributes = () => {
   const RakerTable = () => (
     <div>
       <h1>Raker Table</h1>
-      <Table dataSource={dataSource} columns={columns} />
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={rakers} columns={columns} />
     </div>
   );
 
   const ClamTable = () => (
     <div>
       <h1>Clam Table</h1>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={clams} columns={columns} rowKey="id" />
     </div>
   );
 
   const SurveyTable = () => (
     <div>
       <h1>Survey Table</h1>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={surveys} columns={columns} />
     </div>
   );
 
   return (
     <div>
       <div>
-      <h1>Manage Attributes</h1>
-        {tableViews.map((tableView) => (
+        <h1>Manage Attributes</h1>
+        {tableViews.map(tableView => (
           <Button
             key={tableView.type}
             type="primary"
             onClick={() => setContentType(tableView.type)}
           >
-          {tableView.name} Table
+            {tableView.name} Table
           </Button>
         ))}
       </div>
       <div>
-        {contentType === "t1" && <ComputationsTable />}
-        {contentType === "t2" && <SurveyTable />}
-        {contentType === "t3" && <ClamTable />}
-        {contentType === "t4" && <RakerTable />}
+        {contentType === 't1' && <ComputationsTable />}
+        {contentType === 't2' && <SurveyTable />}
+        {contentType === 't3' && <ClamTable />}
+        {contentType === 't4' && <RakerTable />}
       </div>
-      {console.log('end')};
     </div>
   );
 };

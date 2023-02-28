@@ -10,12 +10,12 @@ import Data from './pages/Data/Data';
 import AddData from './pages/AddData/AddData';
 import ProtectedRoute from './utils/ProtectedRoute';
 import RegisterPage from './pages/Register/RegisterPage';
+import ManageAttributes from './pages/ManageAttributes/ManageAttributes';
 import ManageUsersPage from './pages/ManageUsers/ManageUsersPage';
 import AUTH_ROLES from './utils/auth_config';
 import './module.css';
 
 const { ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE } = AUTH_ROLES.AUTH_ROLES;
-import ManageAttributes from './pages/ManageAttributes/ManageAttributes';
 
 function App() {
   return (
@@ -58,7 +58,7 @@ function App() {
               path="/manage-attributes"
               element={
                 <ProtectedRoute
-                  Component={Data}
+                  Component={ManageAttributes}
                   redirectPath="/login"
                   roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
                 />
