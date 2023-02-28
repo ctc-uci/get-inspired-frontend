@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Table, Space, Button } from 'antd';
 import EditUserModal from './EditUserModal/EditUserModal';
 import AddUserModal from './AddUserModal/AddUserModal';
-import getUsersFromDB from '../../utils/users_utils';
 
 import styles from './ManageUsers.module.css';
 import { GSPBackend } from '../../utils/utils';
@@ -14,6 +13,15 @@ const ManageUsers = () => {
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
   const [idToEdit, setIdToEdit] = useState('');
   const [users, setUsers] = useState([]);
+
+  const getUsersFromDB = async () => {
+    const res = (await GSPBackend.get('/users')).data.map(user => ({
+      ...user,
+      fullName: `${user.firstName} ${user.lastName}`,
+    }));
+    return res;
+  };
+
   const deleteUser = async userId => {
     try {
       await GSPBackend.delete(`/users/${userId}`);
