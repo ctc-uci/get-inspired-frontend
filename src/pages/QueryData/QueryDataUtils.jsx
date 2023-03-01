@@ -61,3 +61,5 @@ export const tableToWidget = (table, columns) => ({
 });
 
 export const helper = () => {};
+
+export const TABLE_PRIMARY_KEYS = ['sid', 'rid', 'cid'];

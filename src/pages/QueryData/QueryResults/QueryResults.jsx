@@ -2,11 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Space, Button } from 'antd';
+import { TABLE_PRIMARY_KEYS } from '../QueryDataUtils';
 
 const computeColumns = data => {
-  if (data.length === 0 || Object.keys(data[0]).length === 0) {
+  if (data.length === 0 || data[0].length <= TABLE_PRIMARY_KEYS.length) {
     return [{}];
   }
+  const cols = Object.keys(data[0]).filter((value)=>(!TABLE_PRIMARY_KEYS.includes(value)))
 
   const actionColumn = {
     title: '',
@@ -19,7 +21,7 @@ const computeColumns = data => {
     ),
   };
   return [
-    ...Object.keys(data[0]).map(field => ({
+    ...cols.map(field => ({
       title: field,
       dataIndex: field,
       key: field,
@@ -28,12 +30,11 @@ const computeColumns = data => {
   ];
 };
 
-// (TODO andrew): find smarter way to come up with row keys
 const QueryResults = ({ data }) => {
   return (
     <div>
       <Table
-        rowKey={record => Object.entries(record)}
+        rowKey={record => {return TABLE_PRIMARY_KEYS.map((value) => record[value]);} }
         dataSource={data}
         columns={computeColumns(data)}
       />
@@ -42,7 +43,7 @@ const QueryResults = ({ data }) => {
 };
 
 QueryResults.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  data: PropTypes.array.isRequired,
 };
 
 export default QueryResults;

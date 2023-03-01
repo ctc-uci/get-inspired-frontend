@@ -70,6 +70,7 @@ const QueryData = () => {
         config: immutableConfig,
         checkedFields: checkedLists,
       });
+
       setQueryState(prevState => ({ ...prevState, results: results.data }));
     } catch(err){
       setErrorState(`${err.name}: ${err.message}`);
