@@ -137,11 +137,15 @@ const QueryData = () => {
         checkedLists={checkedLists}
         setCheckedLists={setCheckedLists}
       />
-      <h2>Query Results</h2>
-      <Button>Export as CSV</Button>
-      <Button type="primary" onClick={() => setIsSelectedAttributesModalOpen(true)}>
-        Select Attributes
-      </Button>
+      <div className={styles['query-results-header']}>
+        <h2>Query Results</h2>
+        <div>
+          <Button>Export as CSV</Button>
+          <Button type="primary" onClick={() => setIsSelectedAttributesModalOpen(true)}>
+            Select Attributes
+          </Button>
+        </div>
+      </div>
       {
         // temporary error banner
         (errorState !== "") &&  <Alert message={errorState} type="error" showIcon />

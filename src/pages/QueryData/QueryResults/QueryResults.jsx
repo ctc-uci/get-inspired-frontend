@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { Table, Space, Button } from 'antd';
 import { TABLE_PRIMARY_KEYS } from '../QueryDataUtils';
 
+import styles from "./QueryResults.module.css";
+
 const computeColumns = data => {
   if (data.length === 0 || data[0].length <= TABLE_PRIMARY_KEYS.length) {
     return [{}];
@@ -32,11 +34,13 @@ const computeColumns = data => {
 
 const QueryResults = ({ data }) => {
   return (
-    <div>
+    <div className={styles['query-results-container']}>
       <Table
         rowKey={record => {return TABLE_PRIMARY_KEYS.map((value) => record[value]);} }
         dataSource={data}
         columns={computeColumns(data)}
+        scroll={{x: true}}
+        size="middle"
       />
     </div>
   );
