@@ -22,12 +22,10 @@ const columnToSubfield = column => {
   } else if (timeTypes.includes(column.DATA_TYPE)) {
     myType = subfieldType.datetime;
   } else {
-    // console.log(myType + ' not valid type');
     myType = '';
   }
 
   const subfield = {
-    // TODO: DETERMINE TYPE
     type: myType,
     valueSources: ['value'],
   };
@@ -37,23 +35,6 @@ const columnToSubfield = column => {
 export const tableToWidget = (table, columns) => ({
   label: table,
   type: '!group',
-  //   subfields: {
-  //     product: {
-  //       type: "select",
-  //       fieldSettings: {
-  //         listValues: ["abc", "def", "xyz"],
-  //       },
-  //       valueSources: ["value"],
-  //     },
-  //     score: {
-  //       type: "number",
-  //       fieldSettings: {
-  //         min: 0,
-  //         max: 100,
-  //       },
-  //       valueSources: ["value"],
-  //     }
-  //   }
   subfields: Object.fromEntries(
     columns.map(column => [column.COLUMN_NAME, columnToSubfield(column)]),
   ),

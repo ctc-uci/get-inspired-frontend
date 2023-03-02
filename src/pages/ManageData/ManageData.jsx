@@ -47,7 +47,6 @@ const ManageData = () => {
   const [isSelectAttributesModalOpen, setIsSelectedAttributesModalOpen] = useState(false);
 
   const onChange = useCallback((immutableTree, changeConfig) => {
-    // Tip: for better performance you can apply `throttle` - see `examples/demo`
     setQueryState(prevState => ({ ...prevState, tree: immutableTree, config: changeConfig }));
   }, []);
 
