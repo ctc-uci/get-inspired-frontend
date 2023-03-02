@@ -6,7 +6,7 @@ import Logout from './components/Logout';
 import Layout from './components/Layout/Layout';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Profile/Profile';
-import Data from './pages/Data/Data';
+import ManageData from './pages/ManageData/ManageData';
 import AddData from './pages/AddData/AddData';
 import ProtectedRoute from './utils/ProtectedRoute';
 import RegisterPage from './pages/Register/RegisterPage';
@@ -57,7 +57,8 @@ function App() {
               path="/manage-attributes"
               element={
                 <ProtectedRoute
-                  Component={Data}
+                  // TODO: Replace ManageData with ManageAttributes
+                  Component={ManageData}
                   redirectPath="/login"
                   roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
                 />
@@ -69,13 +70,12 @@ function App() {
               path="/manage-data"
               element={
                 <ProtectedRoute
-                  Component={Data}
+                  Component={ManageData}
                   redirectPath="/login"
                   roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
                 />
               }
             />
-
             <Route
               exact
               path="/add-data"
