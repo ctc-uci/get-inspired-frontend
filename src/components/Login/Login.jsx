@@ -8,7 +8,7 @@ import { GSPBackend } from '../../utils/utils';
 import { withCookies, cookieKeys, Cookies, clearCookies } from '../../utils/cookie_utils';
 import { logInWithEmailAndPassword, useNavigate, refreshToken } from '../../utils/auth_utils';
 
-import GSPLogo from '../../assets/GSPLogo.svg';
+import GSPLogo from '../../assets/images/GSPLogo.svg';
 
 import styles from './Login.module.css';
 
