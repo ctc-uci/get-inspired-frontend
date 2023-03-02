@@ -4,8 +4,6 @@ import { Spin } from 'antd';
 
 import styles from './LoadingScreen.module.css';
 
-// const { Title } = Typography;
-
 const antIcon = (
   <LoadingOutlined
     style={{

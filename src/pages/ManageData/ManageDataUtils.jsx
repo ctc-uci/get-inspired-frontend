@@ -1,4 +1,3 @@
-// import React from 'react';
 // Subfield type enum
 const subfieldType = {
   number: 'number',
@@ -59,7 +58,5 @@ export const tableToWidget = (table, columns) => ({
     columns.map(column => [column.COLUMN_NAME, columnToSubfield(column)]),
   ),
 });
-
-export const helper = () => {};
 
 export const TABLE_PRIMARY_KEYS = ['sid', 'rid', 'cid'];
