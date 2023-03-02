@@ -18,17 +18,19 @@ const ManageAttributes = () => {
   const [rakers, setRakers] = useState([]);
 
   const adjustDataType = typeString => {
+    let adjustString = '';
+
     if (typeString === 'int' || typeString === 'double') {
-      typeString = 'Numeric';
+      adjustString = 'Number';
     } else if (typeString === 'datetime') {
-      typeString = 'Datetime';
+      adjustString = 'Datetime';
     } else if (typeString === 'boolean') {
-      typeString = 'Boolean';
+      adjustString = 'Boolean';
     } else {
-      typeString = 'Text';
+      adjustString = 'Text';
     }
 
-    return typeString;
+    return adjustString;
   };
 
   // Surveys
@@ -145,7 +147,7 @@ const ManageAttributes = () => {
   const ClamTable = () => (
     <div>
       <h1>Clam Table</h1>
-      <Table dataSource={clams} columns={columns} rowKey="id" />
+      <Table dataSource={clams} columns={columns} />
     </div>
   );
 

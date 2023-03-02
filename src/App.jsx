@@ -10,7 +10,7 @@ import Data from './pages/Data/Data';
 import AddData from './pages/AddData/AddData';
 import ProtectedRoute from './utils/ProtectedRoute';
 import RegisterPage from './pages/Register/RegisterPage';
-import ManageAttributes from './pages/ManageAttributes/ManageAttributes';
+import ManageAttributesPage from './pages/ManageAttributes/ManageAttributesPage';
 import ManageUsersPage from './pages/ManageUsers/ManageUsersPage';
 import AUTH_ROLES from './utils/auth_config';
 import './module.css';
@@ -58,7 +58,7 @@ function App() {
               path="/manage-attributes"
               element={
                 <ProtectedRoute
-                  Component={ManageAttributes}
+                  Component={ManageAttributesPage}
                   redirectPath="/login"
                   roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
                 />
@@ -108,7 +108,6 @@ function App() {
               />
             }
           />
-          <Route exact path="/manage-attributes" element={<ManageAttributes />} />
         </Routes>
       </Router>
     </CookiesProvider>
