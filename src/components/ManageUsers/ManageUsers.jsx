@@ -3,12 +3,15 @@ import { Table, Space, Button } from 'antd';
 import EditUserModal from './EditUserModal/EditUserModal';
 import AddUserModal from './AddUserModal/AddUserModal';
 
-import styles from './ManageUsers.module.css';
+import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 import { GSPBackend } from '../../utils/utils';
+
+import styles from './ManageUsers.module.css';
 
 const { Column } = Table;
 
 const ManageUsers = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
   const [idToEdit, setIdToEdit] = useState('');
@@ -42,9 +45,13 @@ const ManageUsers = () => {
     setUsers(usersFromDB);
   };
 
-  useEffect(() => {
-    fetchUsersFromDB();
+  useEffect(async () => {
+    await fetchUsersFromDB();
+    setIsLoading(false);
   }, []);
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
   return (
     <>
       <EditUserModal
