@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Table, Button } from 'antd';
 
+import styles from './ManageAttributes.module.css';
 import { GSPBackend } from '../../utils/utils';
 
 const tableViews = [
@@ -10,12 +11,36 @@ const tableViews = [
   { name: 'Raker', type: 't4' },
 ];
 
+// Temporary Data for Computations Table
+const dataSource = [
+  {
+    key: '1',
+    attributeName: 'People',
+    dataType: 'Number',
+  },
+  {
+    key: '2',
+    attributeName: 'Comments',
+    dataType: 'Text',
+  },
+];
+
 const ManageAttributes = () => {
   const [contentType, setContentType] = useState('t1');
 
   const [surveys, setSurveys] = useState([]);
   const [clams, setClams] = useState([]);
   const [rakers, setRakers] = useState([]);
+
+  // Retrieve Table Column Information
+  const getTableColsFromDB = async tableName => {
+    const res = (await GSPBackend.get(`/tables/${tableName}/columns`)).data.map(id => ({
+      ...id,
+      attributeName: id.COLUMN_NAME,
+      dataType: adjustDataType(id.DATA_TYPE),
+    }));
+    return res;
+  };
 
   const adjustDataType = typeString => {
     let adjustString = '';
@@ -34,75 +59,28 @@ const ManageAttributes = () => {
   };
 
   // Surveys
-  const getSurveyColsFromDB = async () => {
-    const res = (await GSPBackend.get('/tables/survey/columns')).data.map(id => ({
-      ...id,
-      attributeName: id.COLUMN_NAME,
-      dataType: adjustDataType(id.DATA_TYPE),
-    }));
-    return res;
-  };
-
   const getAllSurveys = async () => {
-    const surveyCols = await getSurveyColsFromDB();
+    const surveyCols = await getTableColsFromDB('survey');
     setSurveys(surveyCols);
   };
 
-  useEffect(() => {
-    getAllSurveys();
-  }, []);
-
   // Clams
-  const getClamsColsFromDB = async () => {
-    const res = (await GSPBackend.get('/tables/clam/columns')).data.map(id => ({
-      ...id,
-      attributeName: id.COLUMN_NAME,
-      dataType: adjustDataType(id.DATA_TYPE),
-    }));
-    return res;
-  };
-
   const getAllClams = async () => {
-    const clamCols = await getClamsColsFromDB();
+    const clamCols = await getTableColsFromDB('clam');
     setClams(clamCols);
   };
 
-  useEffect(() => {
-    getAllClams();
-  }, []);
-
   // Rakers
-  const getRakerColsFromDB = async () => {
-    const res = (await GSPBackend.get('/tables/raker/columns')).data.map(id => ({
-      ...id,
-      attributeName: id.COLUMN_NAME,
-      dataType: adjustDataType(id.DATA_TYPE),
-    }));
-    return res;
-  };
-
   const getAllRakers = async () => {
-    const rakerCols = await getRakerColsFromDB();
+    const rakerCols = await getTableColsFromDB('raker');
     setRakers(rakerCols);
   };
 
   useEffect(() => {
+    getAllClams();
+    getAllSurveys();
     getAllRakers();
   }, []);
-
-  // Temporary Data for Computations Table
-  const dataSource = [
-    {
-      key: '1',
-      attributeName: 'People',
-      dataType: 'Number',
-    },
-    {
-      key: '2',
-      attributeName: 'Comments',
-      dataType: 'Text',
-    },
-  ];
 
   // Columns for table
   const columns = [
@@ -130,30 +108,27 @@ const ManageAttributes = () => {
     },
   ];
 
+  // Tables
   const ComputationsTable = () => (
     <div>
-      <h1>Computations Table</h1>
       <Table dataSource={dataSource} columns={columns} />
     </div>
   );
 
   const RakerTable = () => (
     <div>
-      <h1>Raker Table</h1>
       <Table dataSource={rakers} columns={columns} />
     </div>
   );
 
   const ClamTable = () => (
     <div>
-      <h1>Clam Table</h1>
       <Table dataSource={clams} columns={columns} />
     </div>
   );
 
   const SurveyTable = () => (
     <div>
-      <h1>Survey Table</h1>
       <Table dataSource={surveys} columns={columns} />
     </div>
   );
@@ -161,16 +136,21 @@ const ManageAttributes = () => {
   return (
     <div>
       <div>
-        <h1>Manage Attributes</h1>
-        {tableViews.map(tableView => (
-          <Button
-            key={tableView.type}
-            type="primary"
-            onClick={() => setContentType(tableView.type)}
-          >
-            {tableView.name} Table
+        <h3>Manage Attributes</h3>
+        <div>
+          {tableViews.map(tableView => (
+            <Button
+              key={tableView.type}
+              type="primary"
+              onClick={() => setContentType(tableView.type)}
+            >
+              {tableView.name} Table
+            </Button>
+          ))}
+          <Button key="add-attribute" type="primary">
+            Add Attribute
           </Button>
-        ))}
+        </div>
       </div>
       <div>
         {contentType === 't1' && <ComputationsTable />}
