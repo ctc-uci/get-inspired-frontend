@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Cookies, withCookies } from '../../utils/cookie_utils';
 import { registerWithEmailAndPassword } from '../../utils/auth_utils';
 
-import GSPLogo from '../../assets/GSPLogo.svg';
+import GSPLogo from '../../assets/images/GSPLogo.svg';
 import styles from './Register.module.css';
 
 const { Title } = Typography;
