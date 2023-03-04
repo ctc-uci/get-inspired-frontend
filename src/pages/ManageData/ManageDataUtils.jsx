@@ -3,6 +3,8 @@ const subfieldType = {
   number: 'number',
   text: 'text',
   boolean: 'boolean',
+  date: 'date',
+  time: 'time',
   datetime: 'datetime',
 };
 
@@ -10,7 +12,9 @@ const columnToSubfield = column => {
   const numericTypes = ['int', 'double', 'decimal'];
   const textTypes = ['text', 'varchar'];
   const booleanTypes = ['boolean'];
-  const timeTypes = ['datetime', 'timestamp'];
+  const dateTypes = ['date'];
+  const timeTypes = ['time'];
+  const dateTimeTypes = ['datetime', 'timestamp'];
 
   let myType = '';
   if (numericTypes.includes(column.DATA_TYPE)) {
@@ -19,7 +23,11 @@ const columnToSubfield = column => {
     myType = subfieldType.text;
   } else if (booleanTypes.includes(column.DATA_TYPE)) {
     myType = subfieldType.boolean;
+  } else if (dateTypes.includes(column.DATA_TYPE)) {
+    myType = subfieldType.date;
   } else if (timeTypes.includes(column.DATA_TYPE)) {
+    myType = subfieldType.time;
+  } else if (dateTimeTypes.includes(column.DATA_TYPE)) {
     myType = subfieldType.datetime;
   } else {
     myType = '';
