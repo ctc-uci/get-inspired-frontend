@@ -110,46 +110,50 @@ const ManageAttributes = () => {
 
   // Tables
   const ComputationsTable = () => (
-    <div>
+    <div className={styles.table}>
       <Table dataSource={dataSource} columns={columns} />
     </div>
   );
 
   const RakerTable = () => (
-    <div>
+    <div className={styles.table}>
       <Table dataSource={rakers} columns={columns} />
     </div>
   );
 
   const ClamTable = () => (
-    <div>
+    <div className={styles.table}>
       <Table dataSource={clams} columns={columns} />
     </div>
   );
 
   const SurveyTable = () => (
-    <div>
+    <div className={styles.table}>
       <Table dataSource={surveys} columns={columns} />
     </div>
   );
 
   return (
-    <div>
+    <div className={styles.window}>
       <div>
-        <h3>Manage Attributes</h3>
+        <h3 className={styles.title}>Manage Attributes</h3>
         <div>
-          {tableViews.map(tableView => (
-            <Button
-              key={tableView.type}
-              type="primary"
-              onClick={() => setContentType(tableView.type)}
-            >
-              {tableView.name} Table
+          <div className={styles.button}>
+            {tableViews.map(tableView => (
+              <Button className={styles.divider}
+                key={tableView.type}
+                type="primary"
+                onClick={() => setContentType(tableView.type)}
+              >
+                {tableView.name} Table
+              </Button>
+            ))}
+          </div>
+          <div className={styles.addButton}>
+            <Button key="add-attribute" type="primary">
+              + Add Attribute
             </Button>
-          ))}
-          <Button key="add-attribute" type="primary">
-            Add Attribute
-          </Button>
+          </div>
         </div>
       </div>
       <div>
