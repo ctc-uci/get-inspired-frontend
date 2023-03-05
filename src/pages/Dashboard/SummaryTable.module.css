@@ -1,0 +1,27 @@
+.summaryTable{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding-left: 5%;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  padding-right: 2%;
+  grid-gap: 10px;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  padding: 30px;
+  background-color: #EAEAEA99;
+  text-align: center;
+}
+
+.dataNum{
+  font-weight: bolder;
+  font-size: x-large;
+}
+
+.dataLabel{
+  color:rgba(0, 0, 0, 0.45);
+}
