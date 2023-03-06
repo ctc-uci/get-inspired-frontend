@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import { Collapse, Table, Modal } from 'antd';
 import PropTypes from 'prop-types';
@@ -37,8 +36,8 @@ CustomHeader.propTypes = {
 //TODO: don't know how to get num of clams, using lot as temp val
 function getRowSum(panel) {
   let total = 0;
-  for(let i = 0; i < panel.data.length; i += 1){
-    total += panel.data[i].clams
+  for (let i = 0; i < panel.data.length; i += 1) {
+    total += panel.data[i].clams;
   }
   return total;
 }
@@ -48,14 +47,14 @@ const Dashboard = () => {
   const [modalData, setModalData] = useState(null);
   const [surveys, setSurveys] = useState([]);
   const [rakers, setRakers] = useState(null);
-  const [clams, setClams] = useState(null)
+  const [clams, setClams] = useState(null);
 
   // sort the surveys by last time accessed
   surveys.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const handleRowClick = record => {
-    record.panelTotal = record.clams
-    console.log(record)
+    record.panelTotal = record.clams;
+    console.log(record);
     setModalData(record);
     // Get the ID of the survey from the row
     const surveyId = record.id;
@@ -79,7 +78,7 @@ const Dashboard = () => {
     setModalVisible(false);
   };
 
-  const panels = []
+  const panels = [];
 
   const beachDict = new Object();
 
@@ -119,7 +118,6 @@ const Dashboard = () => {
     return res;
   };
 
-
   useEffect(() => {
     fetchSurveysFromDB();
     fetchRakersFromDB();
@@ -127,81 +125,90 @@ const Dashboard = () => {
   }, []);
 
   // parse the data to make it easier to put into the collapse/ recentcard elements
-  for(let i = 0; i < surveys.length; i = i + 1){
+  for (let i = 0; i < surveys.length; i = i + 1) {
     let surveyDate = new Date(surveys[i].date);
     let fixedDate = new Date(surveyDate);
-    let formattedDate = fixedDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
-    surveys[i].date = formattedDate
+    let formattedDate = fixedDate.toLocaleDateString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+    });
+    surveys[i].date = formattedDate;
 
-    if(surveys[i].location in beachDict){
-      beachDict[surveys[i].location].push(surveys[i])
-    }
-    else{
-      beachDict[surveys[i].location] = [surveys[i]]
+    if (surveys[i].location in beachDict) {
+      beachDict[surveys[i].location].push(surveys[i]);
+    } else {
+      beachDict[surveys[i].location] = [surveys[i]];
     }
   }
 
-  const getRakersFromSurvey = (surveyId) =>{
-    let res = []
-    for(let raker in rakers){
-      if(rakers[raker].surveyId === surveyId){
-        res.push(rakers[raker])
+  const getRakersFromSurvey = surveyId => {
+    let res = [];
+    for (let raker in rakers) {
+      if (rakers[raker].surveyId === surveyId) {
+        res.push(rakers[raker]);
       }
     }
-    return res
-  }
+    return res;
+  };
 
-  const getClamsFromRaker = (rakerId) => {
-    let res = []
+  const getClamsFromRaker = rakerId => {
+    let res = [];
 
-    for(let clam in clams){
-      if(clams[clam].rakerId === rakerId){
-        res.push(clams[clam])
+    for (let clam in clams) {
+      if (clams[clam].rakerId === rakerId) {
+        res.push(clams[clam]);
       }
     }
-    return res
-  }
+    return res;
+  };
 
-
-  let data = []
+  let data = [];
 
   // data: icon, zone, date, clams found in zone
-  for(let survey in surveys){
+  for (let survey in surveys) {
     const zones = new Object();
-    zones["timeWorked"] = 0
-    zones["distRaked"] = 0
-    zones["beach"] = surveys[survey].location
-    zones["date"] = surveys[survey].date
-    let rakes = getRakersFromSurvey(surveys[survey].id)
-    for(let rake in rakes){
-      zones["zone"] = rakes[rake].rakeArea
+    zones['timeWorked'] = 0;
+    zones['distRaked'] = 0;
+    zones['beach'] = surveys[survey].location;
+    zones['date'] = surveys[survey].date;
+    let rakes = getRakersFromSurvey(surveys[survey].id);
+    for (let rake in rakes) {
+      zones['zone'] = rakes[rake].rakeArea;
 
-      let clams = getClamsFromRaker(rakes[rake].id)
-      console.log(clams)
-      zones["clamList"] = clams
-      zones["clams"] = clams.length
-      zones["rakers"] = rakes
-      zones["timeWorked"] = getHoursBetween(rakes[rake].startTime, rakes[rake].endTime)
-      zones["distRaked"] +=  calculateDistance(rakes[rake].startLat, rakes[rake].startLong, rakes[rake].endLat, rakes[rake].endLong)
+      let clams = getClamsFromRaker(rakes[rake].id);
+      console.log(clams);
+      zones['clamList'] = clams;
+      zones['clams'] = clams.length;
+      zones['rakers'] = rakes;
+      zones['timeWorked'] = getHoursBetween(rakes[rake].startTime, rakes[rake].endTime);
+      zones['distRaked'] += calculateDistance(
+        rakes[rake].startLat,
+        rakes[rake].startLong,
+        rakes[rake].endLat,
+        rakes[rake].endLong,
+      );
 
-      let length = 0
-      let width = 0
-      let weight = 0
-      for(let i = 0; i< zones["clamList"].length; i++){
-        length += zones["clamList"][i].length
-        width += zones["clamList"][i].width
-        weight += zones["clamList"][i].weight
+      let length = 0;
+      let width = 0;
+      let weight = 0;
+      for (let i = 0; i < zones['clamList'].length; i++) {
+        length += zones['clamList'][i].length;
+        width += zones['clamList'][i].width;
+        weight += zones['clamList'][i].weight;
       }
 
-      zones["clamWidthsCombined"] = width
-      zones["clamLengthsCombined"] = length
-      zones["clamWeightsCombined"] = weight
-      zones["clamDensity"] = calculateClamDensity(zones["clams"], zones["distRaked"], zones["clamWidthsCombined"])
+      zones['clamWidthsCombined'] = width;
+      zones['clamLengthsCombined'] = length;
+      zones['clamWeightsCombined'] = weight;
+      zones['clamDensity'] = calculateClamDensity(
+        zones['clams'],
+        zones['distRaked'],
+        zones['clamWidthsCombined'],
+      );
     }
-    data.push(zones)
+    data.push(zones);
   }
-
-
 
   const groupedData = data.reduce((groups, zone) => {
     const beach = zone.beach;
@@ -212,16 +219,15 @@ const Dashboard = () => {
     return groups;
   }, {});
 
-
-  for(let beach in groupedData){
+  for (let beach in groupedData) {
     panels.push({
       title: beach,
       data: groupedData[beach],
-      count: 0
-    })
+      count: 0,
+    });
   }
 
-  console.log(groupedData)
+  console.log(groupedData);
 
   function getHoursBetween(start, end) {
     const startDate = new Date(start);
@@ -266,7 +272,7 @@ const Dashboard = () => {
       <h1>dashboard</h1>
       <div className="dashboard-panels">
         <div className={styles.allsections}>
-          <Collapse>
+          <Collapse accordion>
             {panels.map(panel => (
               <Collapse.Panel
                 key={panel.title}
@@ -279,7 +285,7 @@ const Dashboard = () => {
                   rowClassName={index => (index === 0 ? styles.firstRow : '')}
                   onRow={record => {
                     //eslint-disable-line
-                    const updatedRecord = { ...record, panelTotal: getRowSum(panel)};
+                    const updatedRecord = { ...record, panelTotal: getRowSum(panel) };
                     return {
                       onClick: () => {
                         handleRowClick(updatedRecord);
