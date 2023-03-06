@@ -23,7 +23,7 @@ function CustomHeader({ title, count }) {
   return (
     <div className={styles.panelheader}>
       <span>{title}</span>
-      <span>{`Total Clams: ${count}`}</span>
+      <span className={styles.totalClams}>{`Total Clams: ${count}`}</span>
     </div>
   );
 }
