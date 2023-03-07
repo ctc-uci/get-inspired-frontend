@@ -1,32 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Table, Button } from 'antd';
 
+import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
+import { dataSource, tableViews, adjustDataType } from './ManageAttributesUtils';
 import styles from './ManageAttributes.module.css';
 import { GSPBackend } from '../../utils/utils';
-
-const tableViews = [
-  { name: 'Computations', type: 't1' },
-  { name: 'Survey', type: 't2' },
-  { name: 'Clam', type: 't3' },
-  { name: 'Raker', type: 't4' },
-];
-
-// Temporary Data for Computations Table
-const dataSource = [
-  {
-    key: '1',
-    attributeName: 'People',
-    dataType: 'Number',
-  },
-  {
-    key: '2',
-    attributeName: 'Comments',
-    dataType: 'Text',
-  },
-];
+import AddAttributeModal from './AddAttributeModal/AddAttributeModal';
 
 const ManageAttributes = () => {
   const [contentType, setContentType] = useState('t1');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAddAttributeModalOpen, setIsAddAttributeModalOpen] = useState(false);
+  const [curTableName, setCurTableName] = useState('computation');
 
   const [surveys, setSurveys] = useState([]);
   const [clams, setClams] = useState([]);
@@ -42,44 +27,20 @@ const ManageAttributes = () => {
     return res;
   };
 
-  const adjustDataType = typeString => {
-    let adjustString = '';
-
-    if (typeString === 'int' || typeString === 'double') {
-      adjustString = 'Number';
-    } else if (typeString === 'datetime') {
-      adjustString = 'Datetime';
-    } else if (typeString === 'boolean') {
-      adjustString = 'Boolean';
-    } else {
-      adjustString = 'Text';
-    }
-
-    return adjustString;
-  };
-
-  // Surveys
-  const getAllSurveys = async () => {
+  useEffect(async () => {
+    // Surveys
     const surveyCols = await getTableColsFromDB('survey');
     setSurveys(surveyCols);
-  };
 
-  // Clams
-  const getAllClams = async () => {
+    // Clams
     const clamCols = await getTableColsFromDB('clam');
     setClams(clamCols);
-  };
 
-  // Rakers
-  const getAllRakers = async () => {
+    // Rakers
     const rakerCols = await getTableColsFromDB('raker');
     setRakers(rakerCols);
-  };
 
-  useEffect(() => {
-    getAllClams();
-    getAllSurveys();
-    getAllRakers();
+    setIsLoading(false);
   }, []);
 
   // Columns for table
@@ -111,58 +72,75 @@ const ManageAttributes = () => {
   // Tables
   const ComputationsTable = () => (
     <div className={styles.table}>
+      {setCurTableName('computation')}
       <Table dataSource={dataSource} columns={columns} />
     </div>
   );
 
   const RakerTable = () => (
     <div className={styles.table}>
+      {setCurTableName('raker')}
       <Table dataSource={rakers} columns={columns} />
     </div>
   );
 
   const ClamTable = () => (
     <div className={styles.table}>
+      {setCurTableName('clam')}
       <Table dataSource={clams} columns={columns} />
     </div>
   );
 
   const SurveyTable = () => (
     <div className={styles.table}>
+      {setCurTableName('survey')}
       <Table dataSource={surveys} columns={columns} />
     </div>
   );
 
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
-    <div className={styles.window}>
-      <div>
-        <h3 className={styles.title}>Manage Attributes</h3>
+    <>
+      <AddAttributeModal
+        isOpen={isAddAttributeModalOpen}
+        setIsOpen={setIsAddAttributeModalOpen}
+        tableName={curTableName}
+        getTableColsFromDB={getTableColsFromDB}
+      />
+      <div className={styles.window}>
         <div>
-          <div className={styles.button}>
-            {tableViews.map(tableView => (
-              <Button className={styles.divider}
-                key={tableView.type}
-                type="primary"
-                onClick={() => setContentType(tableView.type)}
-              >
-                {tableView.name} Table
+          <h3 className={styles.title}>Manage Attributes</h3>
+          <div>
+            <div className={styles.button}>
+              {tableViews.map(tableView => (
+                <Button
+                  className={styles.divider}
+                  key={tableView.type}
+                  type="primary"
+                  onClick={() => setContentType(tableView.type)}
+                >
+                  {tableView.name} Table
+                </Button>
+              ))}
+            </div>
+            <div className={styles.addButton}>
+              <Button type="primary" onClick={() => setIsAddAttributeModalOpen(true)}>
+                + Add Attribute
               </Button>
-            ))}
-          </div>
-          <div className={styles.addButton}>
-            <Button key="add-attribute" type="primary">
-              + Add Attribute
-            </Button>
+            </div>
           </div>
         </div>
+        <div>
+          {contentType === 't1' && <ComputationsTable />}
+          {contentType === 't2' && <SurveyTable />}
+          {contentType === 't3' && <ClamTable />}
+          {contentType === 't4' && <RakerTable />}
+        </div>
       </div>
-      <div>
-        {contentType === 't1' && <ComputationsTable />}
-        {contentType === 't2' && <SurveyTable />}
-        {contentType === 't3' && <ClamTable />}
-        {contentType === 't4' && <RakerTable />}
-      </div>
-    </div>
+    </>
   );
 };
 
