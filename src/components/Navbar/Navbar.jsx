@@ -8,6 +8,7 @@ import {
   FileAddOutlined,
   AppstoreOutlined,
   UsergroupAddOutlined,
+  SearchOutlined,
 } from '@ant-design/icons';
 
 import GSPLogo from '../../assets/images/GSPLogo.svg';
@@ -28,6 +29,7 @@ const Navbar = () => {
     ...(path === '/' ? ['dashboard'] : []),
     ...(path === '/manage-attributes' ? ['manage-attributes'] : []),
     ...(path === '/add-data' ? ['add-data'] : []),
+    ...(path === '/query-data' ? ['query-data'] : []),
     ...(path === '/manage-data' ? ['manage-data'] : []),
     ...(path === '/manage-users' ? ['manage-users'] : []),
   ];
@@ -55,6 +57,9 @@ const Navbar = () => {
         </Menu.Item>
         <Menu.Item key="manage-data" icon={<AppstoreOutlined />}>
           <Link to="/manage-data">Manage Data</Link>
+        </Menu.Item>
+        <Menu.Item key="query-data" icon={<SearchOutlined />}>
+          <Link to="/query-data">Query Data</Link>
         </Menu.Item>
         <Menu.Item key="manage-users" icon={<UsergroupAddOutlined />}>
           <Link to="/manage-users">Manage Users</Link>
