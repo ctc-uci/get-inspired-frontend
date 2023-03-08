@@ -63,7 +63,6 @@ function App() {
                 />
               }
             />
-
             <Route
               exact
               path="/manage-data"
@@ -75,7 +74,6 @@ function App() {
                 />
               }
             />
-
             <Route
               exact
               path="/add-data"
@@ -87,7 +85,6 @@ function App() {
                 />
               }
             />
-
             <Route
               exact
               path="/manage-users"

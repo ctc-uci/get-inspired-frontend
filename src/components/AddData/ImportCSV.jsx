@@ -50,7 +50,8 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
         <Alert
           style={{
             textAlign: 'left',
-            marginBottom: '2%',
+            marginTop: '1.5%',
+            marginBottom: '3%',
             width: '40%',
             left: '30%',
           }}
@@ -97,10 +98,20 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
       )}
 
       {showCSVTable && typeOfData === 'Clams' && (
-        <Table dataSource={clamsTableData} columns={clamsTableCols} pagination={{ pageSize: 6 }} />
+        <Table
+          style={{ marginTop: '2%' }}
+          dataSource={clamsTableData}
+          columns={clamsTableCols}
+          pagination={{ pageSize: 6 }}
+        />
       )}
       {showCSVTable && typeOfData === 'Raker' && (
-        <Table dataSource={rakerTableData} columns={rakerTableCols} pagination={{ pageSize: 6 }} />
+        <Table
+          style={{ marginTop: '2%' }}
+          dataSource={rakerTableData}
+          columns={rakerTableCols}
+          pagination={{ pageSize: 6 }}
+        />
       )}
 
       <Row gutter={16} id="back-next-buttons">

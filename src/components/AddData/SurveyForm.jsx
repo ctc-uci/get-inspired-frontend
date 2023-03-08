@@ -1,11 +1,17 @@
 import { React } from 'react';
-import { Form, Row, Col, Input, Button } from 'antd';
+import { Form, Row, Col, Input, Button, DatePicker, TimePicker, Space } from 'antd';
 import PropTypes from 'prop-types';
 
 function SurveyForm({ incrStep }) {
   const onFinish = values => {
     console.log('Success:', values);
     incrStep();
+  };
+
+  const onlyInputNumbers = event => {
+    if (!/[0-9]/.test(event.key)) {
+      event.preventDefault();
+    }
   };
 
   return (
@@ -23,20 +29,26 @@ function SurveyForm({ incrStep }) {
           <div style={{ marginLeft: '6.5%' }}>
             <Row>
               <Col span={12}>
-                <Form.Item label="Beach">
+                <Form.Item
+                  label="Beach"
+                  rules={[
+                    { required: true, type: 'string', message: 'Please include the beach name' },
+                  ]}
+                >
                   <Input placeholder="Newport Beach" />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="Water Depth">
-                  <Input placeholder="1.5 feet" />
+                  <Input placeholder="1.5 feet" onKeyPress={onlyInputNumbers} />
                 </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
                 <Form.Item label="Start Time">
-                  <Input placeholder="12:00 PM" />
+                  {/* <Input placeholder="12:00 PM" /> */}
+                  <TimePicker style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -53,7 +65,7 @@ function SurveyForm({ incrStep }) {
               </Col>
               <Col span={12}>
                 <Form.Item label="Duration">
-                  <Input placeholder="2 hours" />
+                  <Input placeholder="2 hours" onKeyPress={onlyInputNumbers} />
                 </Form.Item>
               </Col>
             </Row>
@@ -65,24 +77,27 @@ function SurveyForm({ incrStep }) {
               </Col>
               <Col span={12}>
                 <Form.Item label="Distance">
-                  <Input placeholder="35 feet" />
+                  <Input placeholder="35 feet" onKeyPress={onlyInputNumbers} />
                 </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
                 <Form.Item label="Date">
-                  <Input placeholder="11/13/2002" />
+                  <Space direction="vertical" style={{ width: '100%' }}>
+                    <DatePicker style={{ width: '100%' }} />
+                  </Space>
+                  {/* <Input placeholder="11/13/2002" /> */}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="Slope">
-                  <Input placeholder="5 feet" />
+                  <Input placeholder="5 feet" onKeyPress={onlyInputNumbers} />
                 </Form.Item>
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col style={{ marginLeft: '43%', marginTop: '3%' }}>
                 <Form.Item>
                   <Button type="primary" htmlType="submit">
                     Next
