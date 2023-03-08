@@ -64,7 +64,6 @@ function App() {
                 />
               }
             />
-
             <Route
               exact
               path="/manage-data"
@@ -87,7 +86,6 @@ function App() {
                 />
               }
             />
-
             <Route
               exact
               path="/manage-users"

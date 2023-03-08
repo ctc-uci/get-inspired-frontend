@@ -82,6 +82,7 @@
     "@testing-library/dom": "^7.21.4",
     "husky": "^7.0.0",
     "prettier": "^2.4.1",
-    "typescript": "^2.8.0"
+    "typescript": "^3.2.1",
+    "webpack": "^2.0.0"
   }
 }
