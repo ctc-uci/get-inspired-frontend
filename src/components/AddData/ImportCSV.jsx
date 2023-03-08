@@ -7,6 +7,7 @@ import { clamsTableData, clamsTableCols, rakerTableData, rakerTableCols } from '
 
 function ImportCSV({ incrStep, decrStep, typeOfData }) {
   const { Dragger } = Upload;
+  // eslint-disable-next-line
   const [csvData, setCSVData] = useState('');
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [showImportButton, setShowImportButton] = useState(true);
@@ -17,16 +18,6 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
     setShowImportButton(false);
   });
 
-  // function checkFileValid() {
-  //   let isValid = false;
-  //   console.log('checkFileValid Called');
-  //   const dataLine = csvData.split(' ');
-  //   const firstLine = dataLine[0].split(',');
-  //   console.log(firstLine);
-
-  //   return isValid;
-  // }
-
   const uploadProps = {
     name: 'file',
     action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
@@ -35,15 +26,11 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
     },
     onChange(info) {
       if (info.file.status !== 'uploading') {
-        console.log(info);
         const reader = new FileReader();
         reader.onload = e => {
           setCSVData(e.target.result);
         };
         reader.readAsText(info.file.originFileObj);
-        // if (!checkFileValid()) {
-        //   info.file.status === 'error';
-        // }
       }
       if (info.file.status === 'done') {
         message.info('File uploaded successfully!');
@@ -54,8 +41,6 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
       }
     },
   };
-
-  console.log(csvData);
 
   return (
     <div className="add-data-div">
@@ -73,19 +58,6 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
           closable
         />
       )}
-      {/* {!uploadSuccess && (
-        <Alert
-          style={{
-            textAlign: 'left',
-            marginBottom: '2%',
-            width: '40%',
-            left: '30%',
-          }}
-          message="Error, please try again!"
-          type="error"
-          closable
-        />
-      )} */}
       {!showCSVTable && <p style={{ fontWeight: '600' }}>Import CSV to add {typeOfData} data</p>}
       {!showCSVTable && (
         <Dragger

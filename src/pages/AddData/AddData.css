@@ -1,10 +1,8 @@
 .app-data-heading {
   padding: 3% 3% 2% 3%;
-  /* background-color: lightpink; */
 }
 
 .add-data-div {
-  /* background-color: lightcyan; */
   text-align: center;
   padding: 0.5% 3%;
   align-items: center;
@@ -21,11 +19,6 @@
 }
 
 .survey-form-entry-label {
-  /* font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 22px; */
   font-weight: 400;
 }
 
@@ -66,8 +59,14 @@
   min-height: 60vh;
 }
 
-.ant-table .ant-table-container .ant-table-content table thead.ant-table-thead .ant-table-cell {
-  background-color: #E6F7FF;
+.add-data-wrapper
+  .ant-table
+  .ant-table-container
+  .ant-table-content
+  table
+  thead.ant-table-thead
+  .ant-table-cell {
+  background-color: #e6f7ff;
 }
 
 #back-next-buttons {

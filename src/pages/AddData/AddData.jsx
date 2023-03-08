@@ -29,7 +29,7 @@ const AddData = () => {
   });
 
   return (
-    <div>
+    <div className="add-data-wrapper">
       <div className="app-data-heading">
         <h3 style={{ fontFamily: 'Roboto' }}>Add Data Form</h3>
         {showChooseSurveyButtons && (

@@ -3,8 +3,8 @@ import { Form, Row, Col, Input, InputNumber, Button, DatePicker, TimePicker, Spa
 import PropTypes from 'prop-types';
 
 function SurveyForm({ incrStep }) {
+  // eslint-disable-next-line no-unused-vars
   const onFinish = values => {
-    console.log('Success:', values);
     incrStep();
   };
 
