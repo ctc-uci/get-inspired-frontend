@@ -17,6 +17,16 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
     setShowImportButton(false);
   });
 
+  // function checkFileValid() {
+  //   let isValid = false;
+  //   console.log('checkFileValid Called');
+  //   const dataLine = csvData.split(' ');
+  //   const firstLine = dataLine[0].split(',');
+  //   console.log(firstLine);
+
+  //   return isValid;
+  // }
+
   const uploadProps = {
     name: 'file',
     action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
@@ -31,6 +41,9 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
           setCSVData(e.target.result);
         };
         reader.readAsText(info.file.originFileObj);
+        // if (!checkFileValid()) {
+        //   info.file.status === 'error';
+        // }
       }
       if (info.file.status === 'done') {
         message.info('File uploaded successfully!');

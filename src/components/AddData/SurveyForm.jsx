@@ -1,5 +1,5 @@
 import { React } from 'react';
-import { Form, Row, Col, Input, Button, DatePicker, TimePicker, Space } from 'antd';
+import { Form, Row, Col, Input, InputNumber, Button, DatePicker, TimePicker, Space } from 'antd';
 import PropTypes from 'prop-types';
 
 function SurveyForm({ incrStep }) {
@@ -19,80 +19,90 @@ function SurveyForm({ incrStep }) {
       <p style={{ fontWeight: '600' }}>Input basic information for your survey</p>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Form
+          onFinish={onFinish}
           labelCol={{ span: 16 }}
           wrapperCol={{ span: 20 }}
           className="survey-form"
-          onFinish={onFinish}
           layout="vertical"
           style={{ width: '100%' }}
         >
           <div style={{ marginLeft: '6.5%' }}>
             <Row>
               <Col span={12}>
-                <Form.Item
-                  label="Beach"
-                  rules={[
-                    { required: true, type: 'string', message: 'Please include the beach name' },
-                  ]}
-                >
+                <Form.Item label="Beach" name="beach">
                   <Input placeholder="Newport Beach" />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Water Depth">
-                  <Input placeholder="1.5 feet" onKeyPress={onlyInputNumbers} />
+                <Form.Item label="Water Depth" name="waterDepth">
+                  {/* <Input placeholder="1.5 feet" onKeyPress={onlyInputNumbers} /> */}
+                  <InputNumber
+                    placeholder="1.5 feet"
+                    onKeyPress={onlyInputNumbers}
+                    style={{ width: '100%' }}
+                  />
                 </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <Form.Item label="Start Time">
-                  {/* <Input placeholder="12:00 PM" /> */}
+                <Form.Item label="Start Time" name="startTime">
                   <TimePicker style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Tide">
+                <Form.Item label="Tide" name="tide">
                   <Input placeholder="High" />
                 </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <Form.Item label="Survey Location">
+                <Form.Item label="Survey Location" name="surveyLocation">
                   <Input placeholder="3029 Ocean Blvd, Corona Del Mar, CA" />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Duration">
-                  <Input placeholder="2 hours" onKeyPress={onlyInputNumbers} />
+                <Form.Item label="Duration" name="duration">
+                  <InputNumber
+                    placeholder="2 hours"
+                    onKeyPress={onlyInputNumbers}
+                    style={{ width: '100%' }}
+                  />
                 </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <Form.Item label="Method">
+                <Form.Item label="Method" name="method">
                   <Input placeholder="Method 1" />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Distance">
-                  <Input placeholder="35 feet" onKeyPress={onlyInputNumbers} />
+                <Form.Item label="Distance" name="distance">
+                  <InputNumber
+                    placeholder="35 feet"
+                    onKeyPress={onlyInputNumbers}
+                    style={{ width: '100%' }}
+                  />
                 </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <Form.Item label="Date">
+                <Form.Item label="Date" name="date">
                   <Space direction="vertical" style={{ width: '100%' }}>
                     <DatePicker style={{ width: '100%' }} />
                   </Space>
-                  {/* <Input placeholder="11/13/2002" /> */}
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Slope">
-                  <Input placeholder="5 feet" onKeyPress={onlyInputNumbers} />
+                <Form.Item label="Slope" name="slope">
+                  <InputNumber
+                    placeholder="5 feet"
+                    onKeyPress={onlyInputNumbers}
+                    style={{ width: '100%' }}
+                  />
                 </Form.Item>
               </Col>
             </Row>
