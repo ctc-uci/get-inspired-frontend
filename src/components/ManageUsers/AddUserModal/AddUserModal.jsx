@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, Radio, Typography } from 'antd';
-import { instanceOf } from 'prop-types';
+import PropTypes from 'prop-types';
+import { Button, Modal, Form, Input, Radio } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { Cookies, withCookies } from '../../utils/cookie_utils';
-import { registerWithEmailAndPassword } from '../../utils/auth_utils';
+import { withCookies } from '../../../utils/cookie_utils';
+import { registerWithEmailAndPassword } from '../../../utils/auth_utils';
 
-import GSPLogo from '../../assets/images/GSPLogo.svg';
-import styles from './Register.module.css';
+import styles from './AddUserModal.module.css';
 
-const { Title } = Typography;
-
-// eslint-disable-next-line no-unused-vars
-const Register = ({ cookies }) => {
+const AddUserModal = ({ isOpen, setIsOpen, fetchUsersFromDB }) => {
   const [errorMessage, setErrorMessage] = useState();
+
   const navigate = useNavigate();
+
+  const handleOk = () => {
+    setIsOpen(false);
+  };
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
 
   const handleSubmit = async values => {
     try {
@@ -29,44 +33,29 @@ const Register = ({ cookies }) => {
         firstName,
         lastName,
         navigate,
-        '/login',
+        '/manage-users',
       );
+      await fetchUsersFromDB();
+      handleOk();
     } catch (error) {
       setErrorMessage(error.message);
     }
   };
 
   return (
-    <>
-      <div className={styles['logo-container']}>
-        <img src={GSPLogo} alt="Get Inspired Logo" />
-        <h1>
-          Get Inspired: <br /> Pismo Clam Database
-        </h1>
-      </div>
+    <Modal open={isOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
       <div className={styles.container}>
-        <Title>Sign Up</Title>
+        <h1>Add User</h1>
         <Form
           id="login-form"
           layout="vertical"
           name="login-form"
           onFinish={handleSubmit}
-          className={styles['register-form']}
           initialValues={{ role: 'viewer' }}
         >
           <span>
-            <Form.Item
-              id="roles"
-              label=""
-              name="role"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please choose a role!',
-                },
-              ]}
-            >
-              <Radio.Group defaultValue="viewer">
+            <Form.Item label="" name="role">
+              <Radio.Group initialValues="viewer">
                 <Radio value="viewer">Viewer</Radio>
                 <Radio value="editor">Editor</Radio>
               </Radio.Group>
@@ -136,15 +125,17 @@ const Register = ({ cookies }) => {
         </Form>
         <p>{errorMessage}</p>
         <Button type="primary" form="login-form" key="submit" htmlType="submit">
-          Submit
+          Sign Up
         </Button>
       </div>
-    </>
+    </Modal>
   );
 };
 
-Register.propTypes = {
-  cookies: instanceOf(Cookies).isRequired,
+AddUserModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
+  fetchUsersFromDB: PropTypes.func.isRequired,
 };
 
-export default withCookies(Register);
+export default withCookies(AddUserModal);

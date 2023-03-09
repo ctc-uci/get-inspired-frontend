@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Typography } from 'antd';
 import { PropTypes, instanceOf } from 'prop-types';
 import { Navigate } from 'react-router-dom';
-import { withCookies, cookieKeys, Cookies, clearCookies } from '../../utils/cookie_utils';
-import {
-  logInWithEmailAndPassword,
-  useNavigate,
-  GSPBackend,
-  refreshToken,
-} from '../../utils/auth_utils';
 
-import GSPLogo from '../../assets/GSPLogo.svg';
+import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
+import { GSPBackend } from '../../utils/utils';
+import { withCookies, cookieKeys, Cookies, clearCookies } from '../../utils/cookie_utils';
+import { logInWithEmailAndPassword, useNavigate, refreshToken } from '../../utils/auth_utils';
+
+import GSPLogo from '../../assets/images/GSPLogo.svg';
 
 import styles from './Login.module.css';
 
@@ -50,14 +48,14 @@ const Login = ({ roles, cookies }) => {
   const handleSubmit = async values => {
     try {
       const { email, password } = values;
-      await logInWithEmailAndPassword(email, password, '/logout', navigate, cookies);
+      await logInWithEmailAndPassword(email, password, '/', navigate, cookies);
     } catch (err) {
       setErrorMessage(err.message);
     }
   };
 
   if (isLoading) {
-    return <h1>LOADING...</h1>;
+    return <LoadingScreen />;
   }
 
   if (isAuthenticated) {
