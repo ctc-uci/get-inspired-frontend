@@ -140,18 +140,6 @@ const QueryData = () => {
     [],
   );
 
-  const GenericSearchFilter = () => (
-    <>
-      <br />
-      <Search
-        placeholder="Input search text..."
-        className={styles['generic-search-bar']}
-        onSearch={onGenericSearch}
-        enterButton
-      />
-    </>
-  );
-
   // Build the config fields on page load
   useEffect(async () => {
     // Get all the tables
@@ -204,7 +192,15 @@ const QueryData = () => {
         <Radio.Button value="advanced">Advanced Search</Radio.Button>
       </Radio.Group>
       {genericSearch ? (
-        <GenericSearchFilter />
+        <>
+          <br />
+          <Search
+            placeholder="Input search text..."
+            className={styles['generic-search-bar']}
+            onSearch={onGenericSearch}
+            enterButton
+          />
+        </>
       ) : (
         <>
           <Query
