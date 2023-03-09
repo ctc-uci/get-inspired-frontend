@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Space, Button } from 'antd';
+import { Table } from 'antd';
 import LoadingScreen from '../../../common/LoadingScreen/LoadingScreen';
 import { TABLE_PRIMARY_KEYS } from '../QueryDataUtils';
 

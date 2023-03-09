@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState, useCallback, useEffect } from 'react';
 import { Utils as QbUtils, Query, Builder, AntdConfig } from '@react-awesome-query-builder/antd';
-import { Alert, Button, Input, Radio } from 'antd';
+import { Alert, Button, Input, Radio, Typography } from 'antd';
 import '@react-awesome-query-builder/antd/css/styles.css';
 
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
@@ -14,6 +14,7 @@ import { GSPBackend } from '../../utils/utils';
 import styles from './QueryData.module.css';
 
 const { Search } = Input;
+const { Text } = Typography;
 
 class DefaultDict {
   constructor(DefaultInit) {
@@ -229,7 +230,9 @@ const QueryData = () => {
         setCheckedLists={setCheckedLists}
       />
       <div className={styles['query-results-header']}>
-        <h2>Query Results</h2>
+        <h2>
+          Query Results <Text>({queryState.results.length} rows returned)</Text>
+        </h2>
         <div>
           <Button>Export as CSV</Button>
           <Button type="primary" onClick={onSelectButtonClicked}>
