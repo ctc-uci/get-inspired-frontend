@@ -1,8 +1,12 @@
 /* Entire container */
 .manage-data-container {
-  /* display: flex;
-  flex-direction: column; */
+  display: flex;
+  flex-direction: column;
   padding: 0 1rem 0 1rem;
+}
+
+.select-survey-options {
+  display: flex;
 }
 
 .cascades {

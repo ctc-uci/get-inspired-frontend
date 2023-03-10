@@ -1,31 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Radio, Button, Cascader } from 'antd';
+
+import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
+
+import { GSPBackend } from '../../utils/utils';
 import styles from './ManageData.module.css';
 
-const options = [
-  {
-    value: '2023',
-    label: '2023',
-    children: [
-      {
-        value: 'a',
-        label: '1/11/2023 - Huntington - Zone1',
-      },
-    ],
-  },
-  {
-    value: '2022',
-    label: '2022',
-    children: [
-      {
-        value: 'b',
-        label: '2/24/2022 - Huntington - Zone1',
-      },
-    ],
-  },
-];
-
 const ManageData = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [options, setOptions] = useState({});
+  useEffect(async () => {
+    const map = await GSPBackend.get('/surveys/manageDataMap');
+    setOptions(map.data);
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
   return (
     <div className={styles['manage-data-container']}>
       <h1>Manage Data</h1>
@@ -36,8 +28,14 @@ const ManageData = () => {
         <Radio.Button value="raker">Raker Table</Radio.Button>
       </Radio.Group>
       <br />
-      <Cascader className={styles['.cascades']} options={options} placeholder="Please select" />
-      <Button type="primary">Load Survey Data</Button>
+      <div className={styles['select-survey-options']}>
+        <Cascader
+          className={styles['.cascades']}
+          options={options}
+          placeholder="Please select a year"
+        />
+        <Button type="primary">Load Survey Data</Button>
+      </div>
     </div>
   );
 };
