@@ -2,8 +2,13 @@ import { React } from 'react';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { Row, Col, Button, Collapse, theme, Table } from 'antd';
 import PropTypes from 'prop-types';
-
-import { clamsTableData, clamsTableCols, rakerTableData, rakerTableCols } from './CSVTableData';
+import {
+  clamsTableData,
+  clamsTableCols,
+  rakerTableData,
+  rakerTableCols,
+} from '../CSVTableData/CSVTableData';
+import styles from './ReviewForm.module.css';
 
 const { Panel } = Collapse;
 
@@ -18,7 +23,7 @@ function ReviewForm({ incrStep, decrStep }) {
   };
 
   return (
-    <div className="review-form">
+    <div className={styles.reviewForm}>
       <Collapse
         bordered={false}
         expandIcon={({ isActive }) => <CaretDownOutlined rotate={isActive ? 180 : 0} />}
@@ -46,7 +51,7 @@ function ReviewForm({ incrStep, decrStep }) {
         </Panel>
       </Collapse>
 
-      <Row gutter={16} id="back-next-buttons">
+      <Row gutter={16} id={styles.backNextButtons}>
         <Col span={12}>
           <Button type="primary" style={{ background: 'gray' }} onClick={decrStep}>
             Back

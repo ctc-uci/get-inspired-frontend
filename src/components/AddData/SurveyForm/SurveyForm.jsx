@@ -1,6 +1,7 @@
 import { React } from 'react';
 import { Form, Row, Col, Input, InputNumber, Button, DatePicker, TimePicker, Space } from 'antd';
 import PropTypes from 'prop-types';
+import styles from './SurveyForm.module.css';
 
 function SurveyForm({ incrStep }) {
   // eslint-disable-next-line no-unused-vars
@@ -15,14 +16,14 @@ function SurveyForm({ incrStep }) {
   };
 
   return (
-    <div className="add-data-div">
+    <div className={styles.addDataDiv}>
       <p style={{ fontWeight: '600' }}>Input basic information for your survey</p>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Form
           onFinish={onFinish}
           labelCol={{ span: 16 }}
           wrapperCol={{ span: 20 }}
-          className="survey-form"
+          className={styles.surveyForm}
           layout="vertical"
           style={{ width: '100%' }}
         >
@@ -35,7 +36,6 @@ function SurveyForm({ incrStep }) {
               </Col>
               <Col span={12}>
                 <Form.Item label="Water Depth" name="waterDepth">
-                  {/* <Input placeholder="1.5 feet" onKeyPress={onlyInputNumbers} /> */}
                   <InputNumber
                     placeholder="1.5 feet"
                     onKeyPress={onlyInputNumbers}

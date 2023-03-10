@@ -3,7 +3,13 @@ import { React, useState, useCallback } from 'react';
 import { Row, Col, Upload, Button, Alert, Table, message } from 'antd';
 import PropTypes from 'prop-types';
 import { InboxOutlined } from '@ant-design/icons';
-import { clamsTableData, clamsTableCols, rakerTableData, rakerTableCols } from './CSVTableData';
+import {
+  clamsTableData,
+  clamsTableCols,
+  rakerTableData,
+  rakerTableCols,
+} from '../CSVTableData/CSVTableData';
+import styles from './ImportCSV.module.css';
 
 function ImportCSV({ incrStep, decrStep, typeOfData }) {
   const { Dragger } = Upload;
@@ -43,7 +49,7 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
   };
 
   return (
-    <div className="add-data-div">
+    <div className={styles.addDataDiv}>
       {uploadSuccess && showCSVTable && (
         <Alert
           style={{

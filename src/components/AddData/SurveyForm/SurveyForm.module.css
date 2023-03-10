@@ -1,0 +1,11 @@
+.addDataDiv {
+  text-align: center;
+  padding: 0.5% 3%;
+  align-items: center;
+  justify-content: center;
+  margin-top: -1%;
+}
+
+.surveyForm {
+  text-align: left;
+}

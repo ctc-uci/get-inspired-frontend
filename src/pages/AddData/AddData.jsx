@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from 'antd';
 import { FileAddOutlined, EditOutlined } from '@ant-design/icons';
-import StepsBar from '../../components/AddData/StepsBar';
-import SurveyForm from '../../components/AddData/SurveyForm';
-import ImportCSV from '../../components/AddData/ImportCSV';
-import ReviewForm from '../../components/AddData/ReviewForm';
-import UploadComplete from '../../components/AddData/UploadComplete';
-import './AddData.css';
+import StepsBar from '../../components/AddData/StepsBar/StepsBar';
+import SurveyForm from '../../components/AddData/SurveyForm/SurveyForm';
+import ImportCSV from '../../components/AddData/ImportCSV/ImportCSV';
+import ReviewForm from '../../components/AddData/ReviewForm/ReviewForm';
+import UploadComplete from '../../components/AddData/UploadComplete/UploadComplete';
+import styles from './AddData.module.css';
 
 const AddData = () => {
   const [curStep, setCurStep] = useState(0);
@@ -29,19 +29,19 @@ const AddData = () => {
   });
 
   return (
-    <div className="add-data-wrapper">
-      <div className="app-data-heading">
-        <h3 style={{ fontFamily: 'Roboto' }}>Add Data Form</h3>
+    <div className={styles.addDataWrapper}>
+      <div className={styles.appDataHeading}>
+        <h3 style={{ fontFamily: 'Roboto, sans-serif' }}>Add Data Form</h3>
         {showChooseSurveyButtons && (
-          <div className="choose-survey-btns-div">
+          <div className={styles.chooseSurveyBtnsDiv}>
             {showChooseSurveyButtons && (
-              <Button className="choose-survey-btns" type="primary" icon={<EditOutlined />}>
+              <Button className={styles.chooseSurveyBtns} type="primary" icon={<EditOutlined />}>
                 Add to existing survey
               </Button>
             )}
             {showChooseSurveyButtons && (
               <Button
-                className="choose-survey-btns"
+                className={styles.chooseSurveyBtns}
                 type="primary"
                 icon={<FileAddOutlined />}
                 onClick={() => handleCreateNewSurvey()}
