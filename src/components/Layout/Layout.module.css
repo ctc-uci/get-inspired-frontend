@@ -1,6 +1,5 @@
 .wrapper {
   display: flex;
-  width: 100vw;
   height: 100vh;
 }
 
@@ -11,6 +10,6 @@
 .layout {
   margin: 0 auto;
 
-  width: calc(100vw - 200px);
+  width: calc(100vw - 250px);
   height: 100vh;
 }
