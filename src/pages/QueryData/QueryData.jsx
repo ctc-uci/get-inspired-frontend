@@ -203,17 +203,21 @@ const QueryData = () => {
           />
         </>
       ) : (
-        <>
+        <div className={styles['advanced-query']}>
           <Query
             {...config}
             value={queryState.tree}
             onChange={onChange}
             renderBuilder={renderBuilder}
           />
-          <Button type="primary" onClick={onAdvancedSearch}>
+          <Button
+            type="primary"
+            onClick={onAdvancedSearch}
+            className={styles['advanced-query-button']}
+          >
             Query
           </Button>
-        </>
+        </div>
       )}
       <SelectTablesModal
         tableState={tableState}
