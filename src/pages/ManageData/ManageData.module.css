@@ -9,7 +9,6 @@
   display: flex;
 }
 
-.cascades {
-  margin-top: 20px;
-  width: 50%;
+.cascader {
+  width: 30%;
 }

@@ -8,6 +8,7 @@ import styles from './ManageData.module.css';
 
 const ManageData = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
   const [selectedTable, setSelectedTable] = useState('survey');
   const [tableState, setTableState] = useState({ rows: [], columns: [] });
   const [options, setOptions] = useState({});
@@ -19,23 +20,34 @@ const ManageData = () => {
       dataIndex: toCamel(col.COLUMN_NAME),
     }));
 
+  const onLoadSurveyDataButtonClicked = async () => {};
+
+  const onSurveyChange = ([, surveyId]) => {
+    setSelectedSurveyId(surveyId);
+  };
+
+  // Load dropdown survey options on page load
   useEffect(async () => {
     const map = await GSPBackend.get('/surveys/manageDataOptions');
     setOptions(map.data);
     setIsLoading(false);
   }, []);
 
+  // Load table data when selected table or selected survey changes
   useEffect(async () => {
+    const rowDataUrl = selectedSurveyId
+      ? `/${selectedTable}s/survey/${selectedSurveyId}`
+      : `/${selectedTable}s`;
     const requests = [
       GSPBackend.get(`/tables/${selectedTable}/columns`),
-      GSPBackend.get(`/${selectedTable}s`),
+      GSPBackend.get(rowDataUrl),
     ];
     const [{ data: columnData }, { data: rowData }] = await Promise.all(requests);
     setTableState({
       rows: keysToCamel(rowData),
       columns: computeColumns(columnData),
     });
-  }, [selectedTable]);
+  }, [selectedTable, selectedSurveyId]);
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -56,11 +68,14 @@ const ManageData = () => {
       <br />
       <div className={styles['select-survey-options']}>
         <Cascader
-          className={styles['.cascades']}
+          className={styles.cascader}
           options={options}
           placeholder="Please select a year"
+          onChange={onSurveyChange}
         />
-        <Button type="primary">Load Survey Data</Button>
+        <Button type="primary" onClick={onLoadSurveyDataButtonClicked}>
+          Load Survey Data
+        </Button>
       </div>
       <Table bordered columns={tableState.columns} dataSource={tableState.rows} />
     </div>
