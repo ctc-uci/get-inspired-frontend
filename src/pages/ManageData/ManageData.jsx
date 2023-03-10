@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Radio, Button, Cascader, Table } from 'antd';
+import { Radio, Cascader, Table } from 'antd';
 
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
@@ -20,8 +20,6 @@ const ManageData = () => {
       dataIndex: toCamel(col.COLUMN_NAME),
     }));
 
-  const onLoadSurveyDataButtonClicked = async () => {};
-
   const onSurveyChange = ([, surveyId]) => {
     setSelectedSurveyId(surveyId);
   };
@@ -29,7 +27,7 @@ const ManageData = () => {
   // Load dropdown survey options on page load
   useEffect(async () => {
     const map = await GSPBackend.get('/surveys/manageDataOptions');
-    setOptions(map.data);
+    setOptions([{ label: 'View all data' }, ...map.data]);
     setIsLoading(false);
   }, []);
 
@@ -70,12 +68,9 @@ const ManageData = () => {
         <Cascader
           className={styles.cascader}
           options={options}
-          placeholder="Please select a year"
+          placeholder="Select a survey"
           onChange={onSurveyChange}
         />
-        <Button type="primary" onClick={onLoadSurveyDataButtonClicked}>
-          Load Survey Data
-        </Button>
       </div>
       <Table bordered columns={tableState.columns} dataSource={tableState.rows} />
     </div>
