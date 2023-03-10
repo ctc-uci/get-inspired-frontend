@@ -72,7 +72,14 @@ const ManageData = () => {
           onChange={onSurveyChange}
         />
       </div>
-      <Table bordered columns={tableState.columns} dataSource={tableState.rows} />
+      <div className={styles['table-container']}>
+        <Table
+          bordered
+          columns={tableState.columns}
+          dataSource={tableState.rows}
+          scroll={{ x: true }}
+        />
+      </div>
     </div>
   );
 };
