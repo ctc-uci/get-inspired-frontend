@@ -3,6 +3,9 @@ import { Space, Table, Button } from 'antd';
 
 import styles from './ManageAttributes.module.css';
 import { GSPBackend } from '../../utils/utils';
+import AddAttributeModal from './AddAttributeModal/AddAttributeModal';
+import EditAttributeModal from './EditAttributesModal/EditAttributeModal';
+import DeleteAttributesModal from './DeleteAttributesModal/DeleteAttributesModal';
 
 const tableViews = [
   { name: 'Computations', type: 't1' },
@@ -26,17 +29,31 @@ const dataSource = [
 ];
 
 const ManageAttributes = () => {
+  const [isAddAttributeModalOpen, setIsAttributeModalOpen] = useState(false);
+  const [isEditAttributeModalOpen, setIsEditAttributeModalOpen] = useState(false);
+  const [isDeleteAttributeModalOpen, setIsDeleteAttributeModalOpen] = useState(false);
+  const [attributeNameToEdit, setAttributeNameToEdit] = useState('');
   const [contentType, setContentType] = useState('t1');
 
   const [surveys, setSurveys] = useState([]);
   const [clams, setClams] = useState([]);
   const [rakers, setRakers] = useState([]);
 
+  const editAttributeLabelClicked = id => {
+    setAttributeNameToEdit(id);
+    setIsEditAttributeModalOpen(true);
+  };
+
+  const deleteAttributeButtonClicked = id => {
+    setAttributeNameToEdit(id);
+    setIsDeleteAttributeModalOpen(true);
+  };
   // Retrieve Table Column Information
   const getTableColsFromDB = async tableName => {
     const res = (await GSPBackend.get(`/tables/${tableName}/columns`)).data.map(id => ({
       ...id,
       attributeName: id.COLUMN_NAME,
+      // eslint-disable-next-line no-use-before-define
       dataType: adjustDataType(id.DATA_TYPE),
     }));
     return res;
@@ -100,9 +117,13 @@ const ManageAttributes = () => {
       render: (_, record) => (
         <Space size="middle">
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a href="#">Edit</a>
+          <a href="#" onClick={() => editAttributeLabelClicked(record.attributeName)}>
+            Edit
+          </a>
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a href="#">Delete</a>
+          <a href="#" onClick={() => deleteAttributeButtonClicked(record.attributeName)}>
+            Delete
+          </a>
         </Space>
       ),
     },
@@ -134,35 +155,62 @@ const ManageAttributes = () => {
   );
 
   return (
-    <div className={styles.window}>
-      <div>
-        <h3 className={styles.title}>Manage Attributes</h3>
+    <>
+      <AddAttributeModal
+        isOpen={isAddAttributeModalOpen}
+        setIsOpen={setIsAttributeModalOpen}
+
+        // tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name} // need to soomehow get current table name.
+        // do i need to also pass in the get all thing for tables.
+      />
+      <EditAttributeModal
+        isOpen={isEditAttributeModalOpen}
+        setIsOpen={setIsEditAttributeModalOpen}
+        attributeName={attributeNameToEdit}
+        getTableColsFromDB={getTableColsFromDB}
+      />
+      <DeleteAttributesModal
+        isOpen={isDeleteAttributeModalOpen}
+        setIsOpen={setIsDeleteAttributeModalOpen}
+        attributeName={attributeNameToEdit}
+      />
+      <div className={styles.window}>
         <div>
-          <div className={styles.button}>
-            {tableViews.map(tableView => (
-              <Button className={styles.divider}
-                key={tableView.type}
-                type="primary"
-                onClick={() => setContentType(tableView.type)}
-              >
-                {tableView.name} Table
-              </Button>
-            ))}
-          </div>
-          <div className={styles.addButton}>
-            <Button key="add-attribute" type="primary">
-              + Add Attribute
-            </Button>
+          <h3 className={styles.title}>Manage Attributes</h3>
+          <div>
+            <div className={styles.button}>
+              {tableViews.map(tableView => (
+                <Button
+                  className={styles.divider}
+                  key={tableView.type}
+                  type="primary"
+                  onClick={() => setContentType(tableView.type)}
+                >
+                  {tableView.name} Table
+                </Button>
+              ))}
+            </div>
+            <div className={styles.addButton}>
+              <form>
+                <Button
+                  key="add-attribute"
+                  type="primary"
+                  onClick={() => setIsAttributeModalOpen(true)}
+                >
+                  + Add Attribute
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
+        <div>
+          {contentType === 't1' && <ComputationsTable />}
+          {contentType === 't2' && <SurveyTable />}
+          {contentType === 't3' && <ClamTable />}
+          {contentType === 't4' && <RakerTable />}
+        </div>
       </div>
-      <div>
-        {contentType === 't1' && <ComputationsTable />}
-        {contentType === 't2' && <SurveyTable />}
-        {contentType === 't3' && <ClamTable />}
-        {contentType === 't4' && <RakerTable />}
-      </div>
-    </div>
+    </>
   );
 };
 
