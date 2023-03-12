@@ -1,14 +1,22 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from 'antd';
 import { FileAddOutlined, EditOutlined } from '@ant-design/icons';
+
 import StepsBar from '../../components/AddData/StepsBar/StepsBar';
 import SurveyForm from '../../components/AddData/SurveyForm/SurveyForm';
 import ImportCSV from '../../components/AddData/ImportCSV/ImportCSV';
 import ReviewForm from '../../components/AddData/ReviewForm/ReviewForm';
 import UploadComplete from '../../components/AddData/UploadComplete/UploadComplete';
+import { clamsTableCols, rakerTableCols } from '../../components/AddData/CSVTableData/CSVTableData';
 import styles from './AddData.module.css';
 
 const AddData = () => {
+  const [csvData, setCsvData] = useState({
+    clam: [],
+    raker: [],
+    clamCols: clamsTableCols,
+    rakerCols: rakerTableCols,
+  });
   const [curStep, setCurStep] = useState(0);
   const [showChooseSurveyButtons, setShowChooseSurveyButtons] = useState(true);
   const [showNewSurvey, setShowNewSurvey] = useState(false);
@@ -81,10 +89,22 @@ const AddData = () => {
       </div>
       {showNewSurvey && curStep === 0 && <SurveyForm incrStep={incrStep} />}
       {showNewSurvey && curStep === 1 && (
-        <ImportCSV incrStep={incrStep} decrStep={decrStep} typeOfData="Clams" />
+        <ImportCSV
+          incrStep={incrStep}
+          decrStep={decrStep}
+          typeOfData="clam"
+          csvData={csvData}
+          setCsvData={setCsvData}
+        />
       )}
       {showNewSurvey && curStep === 2 && (
-        <ImportCSV incrStep={incrStep} decrStep={decrStep} typeOfData="Raker" />
+        <ImportCSV
+          incrStep={incrStep}
+          decrStep={decrStep}
+          typeOfData="raker"
+          csvData={csvData}
+          setCsvData={setCsvData}
+        />
       )}
       {showNewSurvey && curStep === 3 && <ReviewForm incrStep={incrStep} decrStep={decrStep} />}
       {showNewSurvey && curStep === 4 && <UploadComplete />}

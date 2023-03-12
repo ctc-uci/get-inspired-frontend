@@ -11,7 +11,13 @@
 }
 
 /* Fix heading cell color of Ant Table here */
-.addDataWrapper .ant-table .ant-table-container .ant-table-content table thead.ant-table-thead .ant-table-cell {
+.addDataWrapper
+  .ant-table
+  .ant-table-container
+  .ant-table-content
+  table
+  thead.ant-table-thead
+  .ant-table-cell {
   background-color: #e6f7ff;
 }
 

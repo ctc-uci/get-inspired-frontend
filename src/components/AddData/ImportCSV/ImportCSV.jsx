@@ -1,28 +1,15 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { React, useState, useCallback } from 'react';
+import { React, useState } from 'react';
 import { Row, Col, Upload, Button, Alert, Table, message } from 'antd';
 import PropTypes from 'prop-types';
 import { InboxOutlined } from '@ant-design/icons';
-import {
-  clamsTableData,
-  clamsTableCols,
-  rakerTableData,
-  rakerTableCols,
-} from '../CSVTableData/CSVTableData';
+import { GSPBackend } from '../../../utils/utils';
 import styles from './ImportCSV.module.css';
 
-function ImportCSV({ incrStep, decrStep, typeOfData }) {
+function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
   const { Dragger } = Upload;
   // eslint-disable-next-line
-  const [csvData, setCSVData] = useState('');
   const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [showImportButton, setShowImportButton] = useState(true);
-  const [showCSVTable, setShowCSVTable] = useState(false);
-
-  const handleImportClick = useCallback(() => {
-    setShowCSVTable(true);
-    setShowImportButton(false);
-  });
 
   const uploadProps = {
     name: 'file',
@@ -30,11 +17,15 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
     headers: {
       authorization: 'authorization-text',
     },
-    onChange(info) {
+    async onChange(info) {
       if (info.file.status !== 'uploading') {
         const reader = new FileReader();
-        reader.onload = e => {
-          setCSVData(e.target.result);
+        reader.onload = async e => {
+          // Change raw CSV data to JSON format
+          const result = await GSPBackend.post('/csv/upload', {
+            data: e.target.result,
+          });
+          setCsvData({ ...csvData, [typeOfData]: result.data });
         };
         reader.readAsText(info.file.originFileObj);
       }
@@ -47,6 +38,8 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
       }
     },
   };
+
+  const showCSVTable = csvData[typeOfData].length;
 
   return (
     <div className={styles.addDataDiv}>
@@ -88,19 +81,11 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
         </Dragger>
       )}
 
-      {showCSVTable && typeOfData === 'Clams' && (
+      {showCSVTable && (
         <Table
           style={{ marginTop: '2%' }}
-          dataSource={clamsTableData}
-          columns={clamsTableCols}
-          pagination={{ pageSize: 6 }}
-        />
-      )}
-      {showCSVTable && typeOfData === 'Raker' && (
-        <Table
-          style={{ marginTop: '2%' }}
-          dataSource={rakerTableData}
-          columns={rakerTableCols}
+          dataSource={csvData[typeOfData]}
+          columns={csvData[`${typeOfData}Cols`]}
           pagination={{ pageSize: 6 }}
         />
       )}
@@ -112,32 +97,24 @@ function ImportCSV({ incrStep, decrStep, typeOfData }) {
           </Button>
         </Col>
         <Col span={12}>
-          {showImportButton && (
-            <Button type="primary" onClick={handleImportClick}>
-              Import
-            </Button>
-          )}
-          {!showImportButton && (
-            <Button type="primary" onClick={incrStep}>
-              Next
-            </Button>
-          )}
+          <Button type="primary" onClick={incrStep}>
+            Next
+          </Button>
         </Col>
       </Row>
     </div>
   );
 }
 
-ImportCSV.defaultProps = {
-  incrStep: PropTypes.func,
-  decrStep: PropTypes.func,
-  typeOfData: PropTypes.string,
-};
-
 ImportCSV.propTypes = {
-  incrStep: PropTypes.func,
-  decrStep: PropTypes.func,
-  typeOfData: PropTypes.string,
+  incrStep: PropTypes.func.isRequired,
+  decrStep: PropTypes.func.isRequired,
+  typeOfData: PropTypes.string.isRequired,
+  csvData: PropTypes.shape({
+    clam: PropTypes.arrayOf(PropTypes.shape({})),
+    raker: PropTypes.arrayOf(PropTypes.shape({})),
+  }).isRequired,
+  setCsvData: PropTypes.func.isRequired,
 };
 
 export default ImportCSV;
