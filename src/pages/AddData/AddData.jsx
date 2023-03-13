@@ -106,7 +106,9 @@ const AddData = () => {
           setCsvData={setCsvData}
         />
       )}
-      {showNewSurvey && curStep === 3 && <ReviewForm incrStep={incrStep} decrStep={decrStep} />}
+      {showNewSurvey && curStep === 3 && (
+        <ReviewForm incrStep={incrStep} decrStep={decrStep} csvData={csvData} />
+      )}
       {showNewSurvey && curStep === 4 && <UploadComplete />}
     </div>
   );

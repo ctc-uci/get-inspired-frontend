@@ -2,12 +2,11 @@ import { React } from 'react';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { Row, Col, Button, Collapse, theme, Table } from 'antd';
 import PropTypes from 'prop-types';
-import { clamsTableCols, rakerTableCols } from '../CSVTableData/CSVTableData';
 import styles from './ReviewForm.module.css';
 
 const { Panel } = Collapse;
 
-function ReviewForm({ incrStep, decrStep }) {
+function ReviewForm({ incrStep, decrStep, csvData }) {
   const { token } = theme.useToken();
 
   const panelStyle = {
@@ -31,14 +30,16 @@ function ReviewForm({ incrStep, decrStep }) {
         <Panel header="Clams" key="2" style={panelStyle}>
           <Table
             className="review-ant-table"
-            columns={clamsTableCols}
+            dataSource={csvData.clam}
+            columns={csvData.clamCols}
             pagination={{ pageSize: 2 }}
           />
         </Panel>
         <Panel header="Raker" key="3" style={panelStyle}>
           <Table
             className="review-ant-table"
-            columns={rakerTableCols}
+            dataSource={csvData.raker}
+            columns={csvData.rakerCols}
             pagination={{ pageSize: 2 }}
           />
         </Panel>
@@ -68,6 +69,12 @@ ReviewForm.defaultProps = {
 ReviewForm.propTypes = {
   incrStep: PropTypes.func,
   decrStep: PropTypes.func,
+  csvData: PropTypes.shape({
+    clam: PropTypes.arrayOf(PropTypes.shape({})),
+    raker: PropTypes.arrayOf(PropTypes.shape({})),
+    clamCols: PropTypes.arrayOf(PropTypes.shape({})),
+    rakerCols: PropTypes.arrayOf(PropTypes.shape({})),
+  }).isRequired,
 };
 
 export default ReviewForm;

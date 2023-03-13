@@ -57,37 +57,44 @@ function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
           closable
         />
       )}
-      {!showCSVTable && <p style={{ fontWeight: '600' }}>Import CSV to add {typeOfData} data</p>}
       {!showCSVTable && (
-        <Dragger
-          style={{
-            left: '25%',
-            padding: '0 2% 2% 2%',
-            width: '50%',
-            margin: '3% 0 5% 0',
-          }}
-          {...uploadProps}
-        >
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">
-            <b>Click to import CSV file</b>
-          </p>
-          <p style={{ marginTop: '-5px' }} className="ant-upload-hint">
-            or drag and drop here
-          </p>
-          <Button type="primary">Upload File</Button>
-        </Dragger>
+        <>
+          <p style={{ fontWeight: '600' }}>Import CSV to add {typeOfData} data</p>
+          <Dragger
+            style={{
+              left: '25%',
+              padding: '0 2% 2% 2%',
+              width: '50%',
+              margin: '3% 0 5% 0',
+            }}
+            {...uploadProps}
+          >
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">
+              <b>Click to import CSV file</b>
+            </p>
+            <p style={{ marginTop: '-5px' }} className="ant-upload-hint">
+              or drag and drop here
+            </p>
+            <Button type="primary">Upload File</Button>
+          </Dragger>
+        </>
       )}
 
       {showCSVTable && (
-        <Table
-          style={{ marginTop: '2%' }}
-          dataSource={csvData[typeOfData]}
-          columns={csvData[`${typeOfData}Cols`]}
-          pagination={{ pageSize: 6 }}
-        />
+        <>
+          <Table
+            style={{ marginTop: '2%' }}
+            dataSource={csvData[typeOfData]}
+            columns={csvData[`${typeOfData}Cols`]}
+            pagination={{ pageSize: 6 }}
+          />
+          <Button type="primary" onClick={() => setCsvData({ ...csvData, [typeOfData]: [] })}>
+            Reupload data
+          </Button>
+        </>
       )}
 
       <Row gutter={16} id="back-next-buttons">
