@@ -7,7 +7,7 @@ import { withCookies } from '../../../utils/cookie_utils';
 import styles from './DeleteAttributesModal.module.css';
 import { GSPBackend } from '../../../utils/utils';
 
-const DeleteAttributesModal = ({ isOpen, setIsOpen, name }) => {
+const DeleteAttributesModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
   const handleOk = () => {
     setIsOpen(false);
   };
@@ -15,32 +15,17 @@ const DeleteAttributesModal = ({ isOpen, setIsOpen, name }) => {
     setIsOpen(false);
   };
 
-  useEffect(async () => {
-    if (name) {
-      const attribute = GSPBackend.get(`/tables/${name}/columns`).data.map(id => ({
-        ...id,
-        attributeName: id.COLUMN_NAME,
-      }));
-      form.setFieldsValue({
-        attributeName: attribute.name,
-      });
-    }
-  }, [name]);
 
   // this obviously will not work
-  const handleSubmit = async values => {
+  const handleSubmit = async () => {
     try {
-      const { role, firstName, lastName } = values;
-
-      await GSPBackend.put(`/users/${name}`, {
-        role,
-        firstName,
-        lastName,
+      await GSPBackend.delete(`/tables/${`${tableName.toLowerCase()}`}/${columnName}`, {
+        columnName,
       });
-      await getTableColsFromDB();
+      // do i need to get table after with updated info
       handleOk();
     } catch (error) {
-      setErrorMessage(error.message);
+      console.log(error.message);
     }
   };
 
@@ -48,13 +33,13 @@ const DeleteAttributesModal = ({ isOpen, setIsOpen, name }) => {
     <>
       <Modal open={isOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
         <div className={styles.container}>
-          <h1>{name}</h1>
+          <h1>{tableName}</h1>
           <Button
             type="primary"
             form="edit-user-form"
             key="submit"
             htmlType="submit"
-            onClick={handleSubmit()}
+            onClick={handleSubmit}
           >
             Delete Attribute
           </Button>
@@ -67,9 +52,8 @@ const DeleteAttributesModal = ({ isOpen, setIsOpen, name }) => {
 DeleteAttributesModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
+  tableName: PropTypes.string.isRequired,
+  columnName: PropTypes.string.isRequired,
 };
 
 export default withCookies(DeleteAttributesModal);
-
-
