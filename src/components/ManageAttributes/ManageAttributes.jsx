@@ -166,7 +166,8 @@ const ManageAttributes = () => {
       <EditAttributeModal
         isOpen={isEditAttributeModalOpen}
         setIsOpen={setIsEditAttributeModalOpen}
-        attributeName={attributeNameToEdit}
+        tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
+        columnName={attributeNameToEdit}
       />
       <DeleteAttributesModal
         isOpen={isDeleteAttributeModalOpen}

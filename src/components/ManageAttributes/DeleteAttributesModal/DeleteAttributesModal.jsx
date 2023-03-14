@@ -15,7 +15,6 @@ const DeleteAttributesModal = ({ isOpen, setIsOpen, tableName, columnName }) => 
     setIsOpen(false);
   };
 
-
   // this obviously will not work
   const handleSubmit = async () => {
     try {

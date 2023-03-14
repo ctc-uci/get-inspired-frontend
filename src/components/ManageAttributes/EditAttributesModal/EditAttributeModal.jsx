@@ -7,8 +7,7 @@ import { withCookies } from '../../../utils/cookie_utils';
 import styles from './EditAttributeModal.module.css';
 import { GSPBackend } from '../../../utils/utils';
 
-const EditAttributeModal = ({ isOpen, setIsOpen, name, getTableColsFromDB }) => {
-  const [form] = Form.useForm();
+const EditAttributeModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
   const [errorMessage, setErrorMessage] = useState();
 
   const handleOk = () => {
@@ -18,29 +17,18 @@ const EditAttributeModal = ({ isOpen, setIsOpen, name, getTableColsFromDB }) => 
     setIsOpen(false);
   };
 
-  useEffect(async () => {
-    if (name) {
-      const attribute = GSPBackend.get(`/tables/${name}/columns`).data.map(id => ({
-        ...id,
-        attributeName: id.COLUMN_NAME,
-      }));
-      form.setFieldsValue({
-        attributeName: attribute.name,
-      });
-    }
-  }, [name]);
-
   // this obviously will not work
   const handleSubmit = async values => {
     try {
-      const { role, firstName, lastName } = values;
-
-      await GSPBackend.put(`/users/${name}`, {
-        role,
-        firstName,
-        lastName,
-      });
-      await getTableColsFromDB();
+      const { attributeName } = values;
+      await GSPBackend.put(
+        `/tables/${`${tableName.toLowerCase()}`}/${columnName}/${attributeName}`,
+        {
+          tableName,
+          columnName,
+          attributeName,
+        },
+      );
       handleOk();
     } catch (error) {
       setErrorMessage(error.message);
@@ -49,14 +37,13 @@ const EditAttributeModal = ({ isOpen, setIsOpen, name, getTableColsFromDB }) => 
 
   return (
     <>
-      <Modal open={isOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
+      <Modal open={isOpen} onOk={handleOk} onCancel={handleCancel} footer={[]}>
         <div className={styles.container}>
           <h1>Edit Attribute</h1>
           <Form
             id="edit-attribute-form"
             layout="vertical"
             name="login-form"
-            form={form}
             onFinish={handleSubmit}
           >
             <Form.Item
@@ -71,11 +58,12 @@ const EditAttributeModal = ({ isOpen, setIsOpen, name, getTableColsFromDB }) => 
             >
               <Input type="text" />
             </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Save Changes
+              </Button>
+            </Form.Item>
           </Form>
-          <p>{errorMessage}</p>
-          <Button type="primary" form="edit-user-form" key="submit" htmlType="submit">
-            Save Changes
-          </Button>
         </div>
       </Modal>
     </>
@@ -85,8 +73,7 @@ const EditAttributeModal = ({ isOpen, setIsOpen, name, getTableColsFromDB }) => 
 EditAttributeModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
-  getTableColsFromDB: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
+  tableName: PropTypes.string.isRequired,
 };
 
 export default withCookies(EditAttributeModal);
