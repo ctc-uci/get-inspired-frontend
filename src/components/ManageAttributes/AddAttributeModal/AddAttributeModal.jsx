@@ -19,12 +19,13 @@ const AddAttributeModal = ({ isOpen, setIsOpen, tableName }) => {
   const adjustDataType = typeString => {
     let adjustString = '';
 
-    if (typeString === 'int' || typeString === 'double') {
-      adjustString = 'Number';
+    console.log(typeString)
+    if (typeString === 'numeric') {
+      adjustString = 'Numeric';
     } else if (typeString === 'datetime') {
       adjustString = 'Datetime';
     } else if (typeString === 'boolean') {
-      adjustString = 'Boolean';
+      adjustString = 'BOOL';
     } else {
       adjustString = 'Text';
     }
