@@ -41,7 +41,7 @@ function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
     },
   };
 
-  const showCSVTable = csvData[typeOfData].length;
+  const showCSVTable = csvData[typeOfData].length > 0;
 
   return (
     <div className={styles.addDataDiv}>
