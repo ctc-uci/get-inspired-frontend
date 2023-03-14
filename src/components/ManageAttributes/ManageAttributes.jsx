@@ -62,11 +62,12 @@ const ManageAttributes = () => {
   const adjustDataType = typeString => {
     let adjustString = '';
 
-    if (typeString === 'int' || typeString === 'double') {
+    console.log(typeString)
+    if (typeString === 'int' || typeString === 'double' || typeString === 'decimal') {
       adjustString = 'Number';
     } else if (typeString === 'datetime') {
       adjustString = 'Datetime';
-    } else if (typeString === 'boolean') {
+    } else if (typeString === 'boolean' || typeString === 'tinyint') {
       adjustString = 'Boolean';
     } else {
       adjustString = 'Text';
@@ -160,7 +161,6 @@ const ManageAttributes = () => {
         isOpen={isAddAttributeModalOpen}
         setIsOpen={setIsAttributeModalOpen}
         tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
-        getTableColsFromDB={getTableColsFromDB}
         // tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name} // need to soomehow get current table name.
         // do i need to also pass in the get all thing for tables.
       />
