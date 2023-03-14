@@ -19,7 +19,6 @@ const AddAttributeModal = ({ isOpen, setIsOpen, tableName }) => {
   const adjustDataType = typeString => {
     let adjustString = '';
 
-    console.log(typeString)
     if (typeString === 'numeric') {
       adjustString = 'Numeric';
     } else if (typeString === 'datetime') {
@@ -35,7 +34,7 @@ const AddAttributeModal = ({ isOpen, setIsOpen, tableName }) => {
 
   const capitalizeFirstLetter = string => {
     return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+  };
 
   const handleSubmit = async values => {
     try {
