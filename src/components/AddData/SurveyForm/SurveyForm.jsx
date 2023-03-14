@@ -3,9 +3,11 @@ import { Form, Row, Col, Input, InputNumber, Button, DatePicker, TimePicker, Spa
 import PropTypes from 'prop-types';
 import styles from './SurveyForm.module.css';
 
-function SurveyForm({ incrStep }) {
+function SurveyForm({ incrStep, setSurveyData }) {
+  const [form] = Form.useForm();
   // eslint-disable-next-line no-unused-vars
   const onFinish = values => {
+    setSurveyData(values);
     incrStep();
   };
 
@@ -23,6 +25,7 @@ function SurveyForm({ incrStep }) {
           onFinish={onFinish}
           labelCol={{ span: 16 }}
           wrapperCol={{ span: 20 }}
+          form={form}
           className={styles.surveyForm}
           layout="vertical"
           style={{ width: '100%' }}
@@ -58,7 +61,7 @@ function SurveyForm({ incrStep }) {
             </Row>
             <Row>
               <Col span={12}>
-                <Form.Item label="Survey Location" name="surveyLocation">
+                <Form.Item label="Survey Location" name="location">
                   <Input placeholder="3029 Ocean Blvd, Corona Del Mar, CA" />
                 </Form.Item>
               </Col>
@@ -121,13 +124,9 @@ function SurveyForm({ incrStep }) {
     </div>
   );
 }
-
-SurveyForm.defaultProps = {
-  incrStep: PropTypes.func,
-};
-
 SurveyForm.propTypes = {
-  incrStep: PropTypes.func,
+  incrStep: PropTypes.func.isRequired,
+  setSurveyData: PropTypes.func.isRequired,
 };
 
 export default SurveyForm;

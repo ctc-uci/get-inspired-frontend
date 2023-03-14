@@ -11,6 +11,7 @@ import { clamsTableCols, rakerTableCols } from '../../components/AddData/CSVTabl
 import styles from './AddData.module.css';
 
 const AddData = () => {
+  const [surveyData, setSurveyData] = useState({});
   const [csvData, setCsvData] = useState({
     clam: [],
     raker: [],
@@ -87,7 +88,9 @@ const AddData = () => {
           />
         )}
       </div>
-      {showNewSurvey && curStep === 0 && <SurveyForm incrStep={incrStep} />}
+      {showNewSurvey && curStep === 0 && (
+        <SurveyForm incrStep={incrStep} surveyData={surveyData} setSurveyData={setSurveyData} />
+      )}
       {showNewSurvey && curStep === 1 && (
         <ImportCSV
           incrStep={incrStep}
@@ -107,7 +110,12 @@ const AddData = () => {
         />
       )}
       {showNewSurvey && curStep === 3 && (
-        <ReviewForm incrStep={incrStep} decrStep={decrStep} csvData={csvData} />
+        <ReviewForm
+          incrStep={incrStep}
+          decrStep={decrStep}
+          surveyData={surveyData}
+          csvData={csvData}
+        />
       )}
       {showNewSurvey && curStep === 4 && <UploadComplete />}
     </div>
