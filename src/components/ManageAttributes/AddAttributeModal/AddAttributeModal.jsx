@@ -8,8 +8,7 @@ import styles from './AddAttributeModal.module.css';
 import { GSPBackend } from '../../../utils/utils';
 
 const { Option } = Select;
-
-const AddAttributeModal = ({ isOpen, setIsOpen }) => {
+const AddAttributeModal = ({ isOpen, setIsOpen, tableName }) => {
   const handleOk = () => {
     setIsOpen(false);
   };
@@ -17,12 +16,39 @@ const AddAttributeModal = ({ isOpen, setIsOpen }) => {
     setIsOpen(false);
   };
 
+  const adjustDataType = typeString => {
+    let adjustString = '';
+
+    if (typeString === 'int' || typeString === 'double') {
+      adjustString = 'Number';
+    } else if (typeString === 'datetime') {
+      adjustString = 'Datetime';
+    } else if (typeString === 'boolean') {
+      adjustString = 'Boolean';
+    } else {
+      adjustString = 'Text';
+    }
+
+    return adjustString;
+  };
+
+  const capitalizeFirstLetter = string => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   const handleSubmit = async values => {
     try {
-      console.log(values.attribute);
-      const { newAttributeName } = values.attribute;
-      const { dataType } = values;
-      await GSPBackend.put(`/survey/${newAttributeName}`, { newAttributeName, dataType });
+      const { newAttributeName, dataType } = values;
+      await GSPBackend.post(
+        `/tables/${`${tableName.toLowerCase()}/${capitalizeFirstLetter(
+          newAttributeName,
+        )}/${adjustDataType(dataType)}`}`,
+        {
+          tableName,
+          newAttributeName,
+          dataType,
+        },
+      );
       // do i need to get table after with updated info
       handleOk();
     } catch (error) {
@@ -36,7 +62,7 @@ const AddAttributeModal = ({ isOpen, setIsOpen }) => {
         <h1>New Attribute Name</h1>
         <Form onFinish={handleSubmit}>
           <Form.Item
-            name="attribute"
+            name="newAttributeName"
             rules={[
               {
                 required: true,
@@ -47,7 +73,7 @@ const AddAttributeModal = ({ isOpen, setIsOpen }) => {
           </Form.Item>
           <h1>Data Type</h1>
           <Form.Item
-            name="datatype"
+            name="dataType"
             rules={[
               {
                 required: true,
@@ -75,6 +101,7 @@ const AddAttributeModal = ({ isOpen, setIsOpen }) => {
 AddAttributeModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
+  tableName: PropTypes.string.isRequired,
 };
 
 export default withCookies(AddAttributeModal);
