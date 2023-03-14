@@ -62,7 +62,6 @@ const ManageAttributes = () => {
   const adjustDataType = typeString => {
     let adjustString = '';
 
-    console.log(typeString)
     if (typeString === 'int' || typeString === 'double' || typeString === 'decimal') {
       adjustString = 'Number';
     } else if (typeString === 'datetime') {
@@ -98,7 +97,7 @@ const ManageAttributes = () => {
     getAllClams();
     getAllSurveys();
     getAllRakers();
-  }, []);
+  }, [isAddAttributeModalOpen, isDeleteAttributeModalOpen, isEditAttributeModalOpen]);
 
   // Columns for table
   const columns = [
@@ -172,7 +171,8 @@ const ManageAttributes = () => {
       <DeleteAttributesModal
         isOpen={isDeleteAttributeModalOpen}
         setIsOpen={setIsDeleteAttributeModalOpen}
-        attributeName={attributeNameToEdit}
+        tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
+        columnName={attributeNameToEdit}
       />
       <div className={styles.window}>
         <div>
