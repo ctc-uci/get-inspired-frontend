@@ -159,7 +159,8 @@ const ManageAttributes = () => {
       <AddAttributeModal
         isOpen={isAddAttributeModalOpen}
         setIsOpen={setIsAttributeModalOpen}
-
+        tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
+        getTableColsFromDB={getTableColsFromDB}
         // tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name} // need to soomehow get current table name.
         // do i need to also pass in the get all thing for tables.
       />
@@ -167,7 +168,6 @@ const ManageAttributes = () => {
         isOpen={isEditAttributeModalOpen}
         setIsOpen={setIsEditAttributeModalOpen}
         attributeName={attributeNameToEdit}
-        getTableColsFromDB={getTableColsFromDB}
       />
       <DeleteAttributesModal
         isOpen={isDeleteAttributeModalOpen}
