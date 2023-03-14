@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { React, useState } from 'react';
-import { Row, Col, Upload, Button, Alert, Table, message } from 'antd';
+import { Row, Col, Upload, Button, Alert, Table, Checkbox, message } from 'antd';
 import PropTypes from 'prop-types';
 import { InboxOutlined } from '@ant-design/icons';
 import { GSPBackend } from '../../../utils/utils';
@@ -10,6 +10,7 @@ function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
   const { Dragger } = Upload;
   // eslint-disable-next-line
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [noData, setNoData] = useState(false);
 
   const uploadProps = {
     name: 'file',
@@ -26,6 +27,7 @@ function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
             data: e.target.result,
           });
           setCsvData({ ...csvData, [typeOfData]: result.data });
+          setNoData(false);
         };
         reader.readAsText(info.file.originFileObj);
       }
@@ -80,6 +82,9 @@ function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
             </p>
             <Button type="primary">Upload File</Button>
           </Dragger>
+          <Checkbox onClick={e => setNoData(e.target.checked)}>
+            There is no {typeOfData} data to upload
+          </Checkbox>
         </>
       )}
 
@@ -104,7 +109,11 @@ function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
           </Button>
         </Col>
         <Col span={12}>
-          <Button type="primary" onClick={incrStep}>
+          <Button
+            type="primary"
+            onClick={incrStep}
+            disabled={!noData && !csvData[typeOfData].length}
+          >
             Next
           </Button>
         </Col>
