@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Table, Button } from 'antd';
 
+import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
+import { dataSource, tableViews, adjustDataType } from './ManageAttributesUtils';
 import styles from './ManageAttributes.module.css';
 import { GSPBackend } from '../../utils/utils';
 import AddAttributeModal from './AddAttributeModal/AddAttributeModal';
+<<<<<<< HEAD
 import EditAttributeModal from './EditAttributesModal/EditAttributeModal';
 import DeleteAttributesModal from './DeleteAttributesModal/DeleteAttributesModal';
 
@@ -27,6 +30,8 @@ const dataSource = [
     dataType: 'Text',
   },
 ];
+=======
+>>>>>>> f1afe2a127763a69581ec28c414cd1f7cd9a9864
 
 const ManageAttributes = () => {
   const [isAddAttributeModalOpen, setIsAttributeModalOpen] = useState(false);
@@ -34,6 +39,9 @@ const ManageAttributes = () => {
   const [isDeleteAttributeModalOpen, setIsDeleteAttributeModalOpen] = useState(false);
   const [attributeNameToEdit, setAttributeNameToEdit] = useState('');
   const [contentType, setContentType] = useState('t1');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAddAttributeModalOpen, setIsAddAttributeModalOpen] = useState(false);
+  const [curTableName, setCurTableName] = useState('computation');
 
   const [surveys, setSurveys] = useState([]);
   const [clams, setClams] = useState([]);
@@ -59,6 +67,7 @@ const ManageAttributes = () => {
     return res;
   };
 
+<<<<<<< HEAD
   const adjustDataType = typeString => {
     let adjustString = '';
 
@@ -77,27 +86,31 @@ const ManageAttributes = () => {
 
   // Surveys
   const getAllSurveys = async () => {
+=======
+  useEffect(async () => {
+    // Surveys
+>>>>>>> f1afe2a127763a69581ec28c414cd1f7cd9a9864
     const surveyCols = await getTableColsFromDB('survey');
     setSurveys(surveyCols);
-  };
 
-  // Clams
-  const getAllClams = async () => {
+    // Clams
     const clamCols = await getTableColsFromDB('clam');
     setClams(clamCols);
-  };
 
-  // Rakers
-  const getAllRakers = async () => {
+    // Rakers
     const rakerCols = await getTableColsFromDB('raker');
     setRakers(rakerCols);
-  };
 
+<<<<<<< HEAD
   useEffect(() => {
     getAllClams();
     getAllSurveys();
     getAllRakers();
   }, [isAddAttributeModalOpen, isDeleteAttributeModalOpen, isEditAttributeModalOpen]);
+=======
+    setIsLoading(false);
+  }, []);
+>>>>>>> f1afe2a127763a69581ec28c414cd1f7cd9a9864
 
   // Columns for table
   const columns = [
@@ -132,32 +145,41 @@ const ManageAttributes = () => {
   // Tables
   const ComputationsTable = () => (
     <div className={styles.table}>
+      {setCurTableName('computation')}
       <Table dataSource={dataSource} columns={columns} />
     </div>
   );
 
   const RakerTable = () => (
     <div className={styles.table}>
+      {setCurTableName('raker')}
       <Table dataSource={rakers} columns={columns} />
     </div>
   );
 
   const ClamTable = () => (
     <div className={styles.table}>
+      {setCurTableName('clam')}
       <Table dataSource={clams} columns={columns} />
     </div>
   );
 
   const SurveyTable = () => (
     <div className={styles.table}>
+      {setCurTableName('survey')}
       <Table dataSource={surveys} columns={columns} />
     </div>
   );
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
       <AddAttributeModal
         isOpen={isAddAttributeModalOpen}
+<<<<<<< HEAD
         setIsOpen={setIsAttributeModalOpen}
         tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
         // tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name} // need to soomehow get current table name.
@@ -174,6 +196,11 @@ const ManageAttributes = () => {
         setIsOpen={setIsDeleteAttributeModalOpen}
         tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
         columnName={attributeNameToEdit}
+=======
+        setIsOpen={setIsAddAttributeModalOpen}
+        tableName={curTableName}
+        getTableColsFromDB={getTableColsFromDB}
+>>>>>>> f1afe2a127763a69581ec28c414cd1f7cd9a9864
       />
       <div className={styles.window}>
         <div>
@@ -192,6 +219,7 @@ const ManageAttributes = () => {
               ))}
             </div>
             <div className={styles.addButton}>
+<<<<<<< HEAD
               <form>
                 <Button
                   key="add-attribute"
@@ -201,6 +229,11 @@ const ManageAttributes = () => {
                   + Add Attribute
                 </Button>
               </form>
+=======
+              <Button type="primary" onClick={() => setIsAddAttributeModalOpen(true)}>
+                + Add Attribute
+              </Button>
+>>>>>>> f1afe2a127763a69581ec28c414cd1f7cd9a9864
             </div>
           </div>
         </div>

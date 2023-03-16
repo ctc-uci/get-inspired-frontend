@@ -10,7 +10,7 @@ import {
   UsergroupAddOutlined,
 } from '@ant-design/icons';
 
-import GSPLogo from '../../assets/GSPLogo.svg';
+import GSPLogo from '../../assets/images/GSPLogo.svg';
 
 // eslint-disable-next-line import/no-unresolved
 import styles from './Navbar.module.css';
