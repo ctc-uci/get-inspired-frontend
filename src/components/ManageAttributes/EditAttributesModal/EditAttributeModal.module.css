@@ -8,6 +8,7 @@
 .container h1 {
   font-weight: bold;
   margin-bottom: 10px;
+  font-size: 25px;
 }
 
 .container form {
@@ -20,7 +21,7 @@
 
 .container label {
   font-weight: 500;
-  font-size: 20px !important;
+  font-size: 17px !important;
   line-height: 22px;
 }
 
@@ -29,4 +30,5 @@
   height: 40px;
   font-weight: 500;
   transform: translateY(-25px);
+  margin: 30px 0 0 0;
 }

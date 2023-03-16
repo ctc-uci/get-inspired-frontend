@@ -32,7 +32,6 @@ const DeleteAttributesModal = ({ isOpen, setIsOpen, tableName, columnName }) => 
     <>
       <Modal open={isOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
         <div className={styles.container}>
-          <h1>{tableName}</h1>
           <Button
             type="primary"
             form="edit-user-form"
