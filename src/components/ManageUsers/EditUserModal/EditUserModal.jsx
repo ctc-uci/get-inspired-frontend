@@ -31,12 +31,15 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
 
   const handleSubmit = async values => {
     try {
-      const { role, firstName, lastName } = values;
-
+      const { role, firstName, lastName, password, checkPassword } = values;
+      if (password !== checkPassword) {
+        throw new Error("Passwords don't match");
+      }
       await GSPBackend.put(`/users/${id}`, {
         role,
         firstName,
         lastName,
+        password,
       });
       await fetchUsersFromDB();
       handleOk();
@@ -89,6 +92,30 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
               ]}
             >
               <Input type="text" />
+            </Form.Item>
+            <Form.Item
+              label="Reset Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
+            >
+              <Input.Password type="text" />
+            </Form.Item>
+            <Form.Item
+              label="Confirm Password"
+              name="checkPassword"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
+            >
+              <Input.Password type="text" />
             </Form.Item>
           </Form>
           <p>{errorMessage}</p>
