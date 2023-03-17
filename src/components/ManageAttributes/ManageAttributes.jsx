@@ -6,41 +6,17 @@ import { dataSource, tableViews, adjustDataType } from './ManageAttributesUtils'
 import styles from './ManageAttributes.module.css';
 import { GSPBackend } from '../../utils/utils';
 import AddAttributeModal from './AddAttributeModal/AddAttributeModal';
-<<<<<<< HEAD
 import EditAttributeModal from './EditAttributesModal/EditAttributeModal';
 import DeleteAttributesModal from './DeleteAttributesModal/DeleteAttributesModal';
-
-const tableViews = [
-  { name: 'Computations', type: 't1' },
-  { name: 'Survey', type: 't2' },
-  { name: 'Clam', type: 't3' },
-  { name: 'Raker', type: 't4' },
-];
-
-// Temporary Data for Computations Table
-const dataSource = [
-  {
-    key: '1',
-    attributeName: 'People',
-    dataType: 'Number',
-  },
-  {
-    key: '2',
-    attributeName: 'Comments',
-    dataType: 'Text',
-  },
-];
-=======
->>>>>>> f1afe2a127763a69581ec28c414cd1f7cd9a9864
 
 const ManageAttributes = () => {
   const [isAddAttributeModalOpen, setIsAttributeModalOpen] = useState(false);
   const [isEditAttributeModalOpen, setIsEditAttributeModalOpen] = useState(false);
   const [isDeleteAttributeModalOpen, setIsDeleteAttributeModalOpen] = useState(false);
   const [attributeNameToEdit, setAttributeNameToEdit] = useState('');
-  const [contentType, setContentType] = useState('t1');
+  const [contentType, setContentType] = useState('t2');
+  // this is the problem lol
   const [isLoading, setIsLoading] = useState(true);
-  const [isAddAttributeModalOpen, setIsAddAttributeModalOpen] = useState(false);
   const [curTableName, setCurTableName] = useState('computation');
 
   const [surveys, setSurveys] = useState([]);
@@ -67,185 +43,154 @@ const ManageAttributes = () => {
     return res;
   };
 
-<<<<<<< HEAD
-  const adjustDataType = typeString => {
-    let adjustString = '';
-
-    if (typeString === 'int' || typeString === 'double' || typeString === 'decimal') {
-      adjustString = 'Number';
-    } else if (typeString === 'datetime') {
-      adjustString = 'Datetime';
-    } else if (typeString === 'boolean' || typeString === 'tinyint') {
-      adjustString = 'Boolean';
-    } else {
-      adjustString = 'Text';
-    }
-
-    return adjustString;
-  };
-
   // Surveys
   const getAllSurveys = async () => {
-=======
-  useEffect(async () => {
-    // Surveys
->>>>>>> f1afe2a127763a69581ec28c414cd1f7cd9a9864
     const surveyCols = await getTableColsFromDB('survey');
     setSurveys(surveyCols);
+  };
 
+  const getAllClams = async () => {
     // Clams
     const clamCols = await getTableColsFromDB('clam');
     setClams(clamCols);
+  };
 
     // Rakers
+  const getAllRakers = async () => {
     const rakerCols = await getTableColsFromDB('raker');
     setRakers(rakerCols);
+  };
 
-<<<<<<< HEAD
-  useEffect(() => {
-    getAllClams();
-    getAllSurveys();
-    getAllRakers();
-  }, [isAddAttributeModalOpen, isDeleteAttributeModalOpen, isEditAttributeModalOpen]);
-=======
-    setIsLoading(false);
-  }, []);
->>>>>>> f1afe2a127763a69581ec28c414cd1f7cd9a9864
+    useEffect(() => {
+      getAllClams();
+      getAllSurveys();
+      getAllRakers();
+      setIsLoading(false);
+    }, [isAddAttributeModalOpen, isDeleteAttributeModalOpen, isEditAttributeModalOpen]);
 
-  // Columns for table
-  const columns = [
-    {
-      title: 'Attribute Name',
-      dataIndex: 'attributeName',
-      key: 'attributeName',
-    },
-    {
-      title: 'Data Type',
-      dataIndex: 'dataType',
-      key: 'dataType',
-    },
-    {
-      title: 'Actions',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="middle">
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a href="#" onClick={() => editAttributeLabelClicked(record.attributeName)}>
-            Edit
-          </a>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a href="#" onClick={() => deleteAttributeButtonClicked(record.attributeName)}>
-            Delete
-          </a>
-        </Space>
-      ),
-    },
-  ];
+    // Columns for table
+    const columns = [
+      {
+        title: 'Attribute Name',
+        dataIndex: 'attributeName',
+        key: 'attributeName',
+      },
+      {
+        title: 'Data Type',
+        dataIndex: 'dataType',
+        key: 'dataType',
+      },
+      {
+        title: 'Actions',
+        key: 'action',
+        render: (_, record) => (
+          <Space size="middle">
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a href="#" onClick={() => editAttributeLabelClicked(record.attributeName)}>
+              Edit
+            </a>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a href="#" onClick={() => deleteAttributeButtonClicked(record.attributeName)}>
+              Delete
+            </a>
+          </Space>
+        ),
+      },
+    ];
 
-  // Tables
-  const ComputationsTable = () => (
-    <div className={styles.table}>
-      {setCurTableName('computation')}
-      <Table dataSource={dataSource} columns={columns} />
-    </div>
-  );
+    // Tables
+    const ComputationsTable = () => (
+      <div className={styles.table}>
+        {setCurTableName('computation')}
+        <Table dataSource={dataSource} columns={columns} />
+      </div>
+    );
 
-  const RakerTable = () => (
-    <div className={styles.table}>
-      {setCurTableName('raker')}
-      <Table dataSource={rakers} columns={columns} />
-    </div>
-  );
+    const RakerTable = () => (
+      <div className={styles.table}>
+        {setCurTableName('raker')}
+        <Table dataSource={rakers} columns={columns} />
+      </div>
+    );
 
-  const ClamTable = () => (
-    <div className={styles.table}>
-      {setCurTableName('clam')}
-      <Table dataSource={clams} columns={columns} />
-    </div>
-  );
+    const ClamTable = () => (
+      <div className={styles.table}>
+        {setCurTableName('clam')}
+        <Table dataSource={clams} columns={columns} />
+      </div>
+    );
 
-  const SurveyTable = () => (
-    <div className={styles.table}>
-      {setCurTableName('survey')}
-      <Table dataSource={surveys} columns={columns} />
-    </div>
-  );
+    const SurveyTable = () => (
+      <div className={styles.table}>
+        {setCurTableName('survey')}
+        <Table dataSource={surveys} columns={columns} />
+      </div>
+    );
 
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
+    if (isLoading) {
+      return <LoadingScreen />;
+    }
 
-  return (
-    <>
-      <AddAttributeModal
-        isOpen={isAddAttributeModalOpen}
-<<<<<<< HEAD
-        setIsOpen={setIsAttributeModalOpen}
-        tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
-        // tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name} // need to soomehow get current table name.
-        // do i need to also pass in the get all thing for tables.
-      />
-      <EditAttributeModal
-        isOpen={isEditAttributeModalOpen}
-        setIsOpen={setIsEditAttributeModalOpen}
-        tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
-        columnName={attributeNameToEdit}
-      />
-      <DeleteAttributesModal
-        isOpen={isDeleteAttributeModalOpen}
-        setIsOpen={setIsDeleteAttributeModalOpen}
-        tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
-        columnName={attributeNameToEdit}
-=======
-        setIsOpen={setIsAddAttributeModalOpen}
-        tableName={curTableName}
-        getTableColsFromDB={getTableColsFromDB}
->>>>>>> f1afe2a127763a69581ec28c414cd1f7cd9a9864
-      />
-      <div className={styles.window}>
-        <div>
-          <h3 className={styles.title}>Manage Attributes</h3>
+    return (
+      <>
+        <AddAttributeModal
+          isOpen={isAddAttributeModalOpen}
+          setIsOpen={setIsAttributeModalOpen}
+          tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
+          // tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name} // need to soomehow get current table name.
+          // do i need to also pass in the get all thing for tables.
+        />
+        <EditAttributeModal
+          isOpen={isEditAttributeModalOpen}
+          setIsOpen={setIsEditAttributeModalOpen}
+          tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
+          columnName={attributeNameToEdit}
+        />
+        <DeleteAttributesModal
+          isOpen={isDeleteAttributeModalOpen}
+          setIsOpen={setIsDeleteAttributeModalOpen}
+          tableName={tableViews.filter(tableView => tableView.type === contentType)[0].name}
+          columnName={attributeNameToEdit}
+        />
+        <div className={styles.window}>
           <div>
-            <div className={styles.button}>
-              {tableViews.map(tableView => (
-                <Button
-                  className={styles.divider}
-                  key={tableView.type}
-                  type="primary"
-                  onClick={() => setContentType(tableView.type)}
-                >
-                  {tableView.name} Table
-                </Button>
-              ))}
+            <h3 className={styles.title}>Manage Attributes</h3>
+            <div>
+              <div className={styles.button}>
+                {tableViews.map(tableView => (
+                  <Button
+                    className={styles.divider}
+                    key={tableView.type}
+                    type="primary"
+                    onClick={() => setContentType(tableView.type)}
+                  >
+                    {tableView.name} Table
+                  </Button>
+                ))}
+              </div>
+              <div className={styles.addButton}>
+                <form>
+                  <Button
+                    key="add-attribute"
+                    type="primary"
+                    onClick={() => setIsAttributeModalOpen(true)}
+                  >
+                    + Add Attribute
+                  </Button>
+                </form>
+              </div>
             </div>
-            <div className={styles.addButton}>
-<<<<<<< HEAD
-              <form>
-                <Button
-                  key="add-attribute"
-                  type="primary"
-                  onClick={() => setIsAttributeModalOpen(true)}
-                >
-                  + Add Attribute
-                </Button>
-              </form>
-=======
-              <Button type="primary" onClick={() => setIsAddAttributeModalOpen(true)}>
-                + Add Attribute
-              </Button>
->>>>>>> f1afe2a127763a69581ec28c414cd1f7cd9a9864
+            <div>
+              {contentType === 't1' && <ComputationsTable />}
+              {contentType === 't2' && <SurveyTable />}
+              {contentType === 't3' && <ClamTable />}
+              {contentType === 't4' && <RakerTable />}
             </div>
           </div>
         </div>
-        <div>
-          {contentType === 't1' && <ComputationsTable />}
-          {contentType === 't2' && <SurveyTable />}
-          {contentType === 't3' && <ClamTable />}
-          {contentType === 't4' && <RakerTable />}
-        </div>
-      </div>
-    </>
-  );
+      </>
+    );
 };
+
 
 export default ManageAttributes;

@@ -1,8 +1,9 @@
 /* eslint-disable */
 import React, { useState, useCallback, useEffect } from 'react';
+import '@react-awesome-query-builder/antd/css/styles.css';
 import { Utils as QbUtils, Query, Builder, AntdConfig } from '@react-awesome-query-builder/antd';
 import { Alert, Button } from 'antd';
-import '@react-awesome-query-builder/antd/css/styles.css';
+
 
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 import SelectAttributesModal from './SelectAttributesModal/SelectAttributesModal';
