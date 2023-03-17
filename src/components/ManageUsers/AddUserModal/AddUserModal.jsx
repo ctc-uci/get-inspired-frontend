@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Form, Input, Radio } from 'antd';
+import { Button, Modal, Form, Input, Radio, notification } from 'antd';
+import { CheckCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { withCookies } from '../../../utils/cookie_utils';
 import { registerWithEmailAndPassword } from '../../../utils/auth_utils';
@@ -36,6 +37,13 @@ const AddUserModal = ({ isOpen, setIsOpen, fetchUsersFromDB }) => {
         '/manage-users',
       );
       await fetchUsersFromDB();
+      notification.open({
+        message: 'User deleted.',
+        icon: <CheckCircleOutlined style={{ color: 'green' }} />,
+        onClick: () => {
+          console.log('Notification Clicked!');
+        },
+      });
       handleOk();
     } catch (error) {
       setErrorMessage(error.message);

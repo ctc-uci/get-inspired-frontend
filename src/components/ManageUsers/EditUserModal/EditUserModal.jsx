@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Form, Input, Radio } from 'antd';
+import { Button, Modal, Form, Input, Radio, notification } from 'antd';
+import { CheckCircleOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 // import { useNavigate } from 'react-router-dom';
 import { withCookies } from '../../../utils/cookie_utils';
 
 import styles from './EditUserModal.module.css';
 import { GSPBackend } from '../../../utils/utils';
+// import Notification from '../../../common/Notification/Notification';
 
 const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
   const [form] = Form.useForm();
@@ -32,7 +34,7 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
   const handleSubmit = async values => {
     try {
       const { role, firstName, lastName, password, checkPassword } = values;
-      if (password !== checkPassword) {
+      if (password !== '' && password !== checkPassword) {
         throw new Error("Passwords don't match");
       }
       await GSPBackend.put(`/users/${id}`, {
@@ -42,6 +44,13 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
         password,
       });
       await fetchUsersFromDB();
+      notification.open({
+        message: 'Edits Saved',
+        icon: <CheckCircleOutlined style={{ color: 'green' }} />,
+        onClick: () => {
+          console.log('Notification Clicked!');
+        },
+      });
       handleOk();
     } catch (error) {
       setErrorMessage(error.message);
@@ -50,6 +59,7 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
 
   return (
     <>
+      {/* <Notification /> */}
       <Modal open={isOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
         <div className={styles.container}>
           <h1>Edit User</h1>
@@ -93,28 +103,10 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
             >
               <Input type="text" />
             </Form.Item>
-            <Form.Item
-              label="Reset Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your password!',
-                },
-              ]}
-            >
+            <Form.Item label="Reset Password" name="password">
               <Input.Password type="text" />
             </Form.Item>
-            <Form.Item
-              label="Confirm Password"
-              name="checkPassword"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your password!',
-                },
-              ]}
-            >
+            <Form.Item label="Confirm Password" name="checkPassword">
               <Input.Password type="text" />
             </Form.Item>
           </Form>

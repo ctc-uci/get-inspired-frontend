@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Space, Button, notification } from 'antd';
+import { Table, Space, Button } from 'antd';
 import EditUserModal from './EditUserModal/EditUserModal';
 import AddUserModal from './AddUserModal/AddUserModal';
 import DeleteUserModal from './DeleteUserModal/DeleteUserModal';
-
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 import { GSPBackend } from '../../utils/utils';
 
@@ -16,10 +15,8 @@ const ManageUsers = () => {
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
   const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
-  const [idToEdit, setIdToEdit] = useState('');
+  const [idToEditOrDelete, setIdToEditOrDelete] = useState('');
   const [users, setUsers] = useState([]);
-  const [userToDelete, setUserToDelete] = useState(null);
-
   const getUsersFromDB = async () => {
     const res = (await GSPBackend.get('/users')).data.map(user => ({
       ...user,
@@ -39,58 +36,18 @@ const ManageUsers = () => {
   };
 
   const editUserLabelClicked = id => {
-    setIdToEdit(id);
+    setIdToEditOrDelete(id);
     setIsEditUserModalOpen(true);
   };
 
-  const deleteUserLabelClicked = user => {
-    console.log('AsdfasD');
-    setUserToDelete(user);
-    console.log(user);
+  const deleteUserLabelClicked = id => {
+    setIdToEditOrDelete(id);
     setIsDeleteUserModalOpen(true);
   };
 
   const fetchUsersFromDB = async () => {
     const usersFromDB = await getUsersFromDB();
     setUsers(usersFromDB);
-  };
-
-  const close = () => {
-    console.log(
-      'Notification was closed. Either the close button was clicked or duration time elapsed.',
-    );
-  };
-  const Notification = () => {
-    const [api, contextHolder] = notification.useNotification();
-    const openNotification = () => {
-      const key = `open${Date.now()}`;
-      const btn = (
-        <Space>
-          <Button type="primary" size="small" onClick={() => api.destroy()}>
-            Cancel
-          </Button>
-          <Button type="primary" size="small" onClick={() => api.destroy(key)}>
-            Confirm
-          </Button>
-        </Space>
-      );
-      api.open({
-        message: 'Notification Title',
-        description:
-          'A function will be be called after the notification is closed (automatically after the "duration" time of manually).',
-        btn,
-        key,
-        onCLose: close,
-      });
-    };
-    return (
-      <>
-        {contextHolder}
-        <Button type="primary" onClick={openNotification}>
-          Open the notification box
-        </Button>
-      </>
-    );
   };
 
   useEffect(() => {
@@ -108,11 +65,11 @@ const ManageUsers = () => {
       <EditUserModal
         isOpen={isEditUserModalOpen}
         setIsOpen={setIsEditUserModalOpen}
-        id={idToEdit}
+        id={idToEditOrDelete}
         fetchUsersFromDB={fetchUsersFromDB}
-        onFinish={() => {
-          Notification();
-        }}
+        // onFinish={() => {
+        //   Notification();
+        // }}
       />
       <AddUserModal
         isOpen={isAddUserModalOpen}
@@ -122,19 +79,11 @@ const ManageUsers = () => {
       <DeleteUserModal
         isOpen={isDeleteUserModalOpen}
         setIsOpen={setIsDeleteUserModalOpen}
-        onOk={() => {
-          if (userToDelete) {
-            deleteUser(userToDelete.id);
-            setUserToDelete(null);
-            // notification for deleting successfully//
-          }
-        }}
-        onCancel={() => {
-          setUserToDelete(null);
-          setIsDeleteUserModalOpen(false);
-        }}
+        deleteUser={deleteUser}
+        id={idToEditOrDelete}
+        fetchUsersFromDB={fetchUsersFromDB}
       />
-      <Notification />
+      {/* <Notification /> */}
       <div className={styles['header-title']}>
         <h1>Manage Users</h1>
         <Button type="primary" onClick={() => setIsAddUserModalOpen(true)}>
@@ -159,7 +108,7 @@ const ManageUsers = () => {
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     href="#"
-                    onClick={() => deleteUserLabelClicked(record)}
+                    onClick={() => deleteUserLabelClicked(record.id)}
                     className={styles.deleteLink}
                   >
                     Delete
