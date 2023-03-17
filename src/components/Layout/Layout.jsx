@@ -4,12 +4,13 @@ import { Outlet } from 'react-router-dom';
 
 import styles from './Layout.module.css';
 
-import NavBar from '../NavBar/NavBar';
+// eslint-disable-next-line import/no-unresolved
+import Navbar from '../Navbar/Navbar';
 
 const Layout = ({ isAdmin }) => (
   <div className={styles.wrapper}>
     <div className={styles.navbar}>
-      <NavBar isAdmin={isAdmin} />
+      <Navbar isAdmin={isAdmin} />
     </div>
     <div className={styles.layout}>
       <Outlet />

@@ -54,7 +54,7 @@ function App() {
             />
             <Route
               exact
-              path="/view-data"
+              path="/manage-attributes"
               element={
                 <ProtectedRoute
                   Component={Data}
@@ -66,7 +66,7 @@ function App() {
 
             <Route
               exact
-              path="/query-data"
+              path="/manage-data"
               element={
                 <ProtectedRoute
                   Component={Data}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .layout {
     margin: 0 auto;
   
@@ -16,3 +17,21 @@
     height: 100%;
     width: 100%;
   }
+=======
+.wrapper {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+.navbar {
+  z-index: 999;
+}
+
+.layout {
+  margin: 0 auto;
+
+  width: calc(100vw - 200px);
+  height: 100vh;
+}
+>>>>>>> dev
