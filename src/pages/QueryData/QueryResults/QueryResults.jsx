@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'antd';
 import LoadingScreen from '../../../common/LoadingScreen/LoadingScreen';
-import { TABLE_PRIMARY_KEYS } from '../QueryDataUtils';
+import { TABLE_PRIMARY_KEYS, humanizeCell } from '../QueryDataUtils';
 
 import styles from './QueryResults.module.css';
 const computeColumns = (checkedLists, data, query = '') => {
@@ -36,7 +36,7 @@ const computeColumns = (checkedLists, data, query = '') => {
                   : 'white',
             },
           },
-          children: <div>{text}</div>,
+          children: <div>{humanizeCell(text)}</div>,
         };
       },
     })),
