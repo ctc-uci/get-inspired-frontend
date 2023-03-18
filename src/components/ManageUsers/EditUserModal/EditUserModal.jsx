@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Input, Radio, notification } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
-// import { useNavigate } from 'react-router-dom';
 import { withCookies } from '../../../utils/cookie_utils';
 
 import styles from './EditUserModal.module.css';
 import { GSPBackend } from '../../../utils/utils';
-// import Notification from '../../../common/Notification/Notification';
 
 const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
   const [form] = Form.useForm();
@@ -58,9 +56,6 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
       notification.open({
         message: 'Edits Saved',
         icon: <CheckCircleOutlined style={{ color: 'green' }} />,
-        onClick: () => {
-          console.log('Notification Clicked!');
-        },
       });
       handleOk();
     } catch (error) {
@@ -69,65 +64,62 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
   };
 
   return (
-    <>
-      {/* <Notification /> */}
-      <Modal open={isOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
-        <div className={styles.container}>
-          <h1>Edit User</h1>
-          <Form
-            id="edit-user-form"
-            layout="vertical"
-            name="login-form"
-            form={form}
-            onFinish={handleSubmit}
-          >
-            <span>
-              <Form.Item label="" name="role">
-                <Radio.Group>
-                  <Radio value="viewer">Viewer</Radio>
-                  <Radio value="editor">Editor</Radio>
-                </Radio.Group>
-              </Form.Item>
-            </span>
+    <Modal open={isOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
+      <div className={styles.container}>
+        <h1>Edit User</h1>
+        <Form
+          id="edit-user-form"
+          layout="vertical"
+          name="login-form"
+          form={form}
+          onFinish={handleSubmit}
+        >
+          <span>
+            <Form.Item label="" name="role">
+              <Radio.Group>
+                <Radio value="viewer">Viewer</Radio>
+                <Radio value="editor">Editor</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </span>
 
-            <Form.Item
-              label="First Name"
-              name="firstName"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your first name!',
-                },
-              ]}
-            >
-              <Input type="text" />
-            </Form.Item>
-            <Form.Item
-              label="Last Name"
-              name="lastName"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your last name!',
-                },
-              ]}
-            >
-              <Input type="text" />
-            </Form.Item>
-            <Form.Item label="Reset Password" name="password">
-              <Input.Password type="text" />
-            </Form.Item>
-            <Form.Item label="Confirm Password" name="checkPassword">
-              <Input.Password type="text" />
-            </Form.Item>
-          </Form>
-          <p>{errorMessage}</p>
-          <Button type="primary" form="edit-user-form" key="submit" htmlType="submit">
-            Save Edits
-          </Button>
-        </div>
-      </Modal>
-    </>
+          <Form.Item
+            label="First Name"
+            name="firstName"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your first name!',
+              },
+            ]}
+          >
+            <Input type="text" />
+          </Form.Item>
+          <Form.Item
+            label="Last Name"
+            name="lastName"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your last name!',
+              },
+            ]}
+          >
+            <Input type="text" />
+          </Form.Item>
+          <Form.Item label="Reset Password" name="password">
+            <Input.Password type="text" />
+          </Form.Item>
+          <Form.Item label="Confirm Password" name="checkPassword">
+            <Input.Password type="text" />
+          </Form.Item>
+        </Form>
+        <p>{errorMessage}</p>
+        <Button type="primary" form="edit-user-form" key="submit" htmlType="submit">
+          Save Edits
+        </Button>
+      </div>
+    </Modal>
   );
 };
 

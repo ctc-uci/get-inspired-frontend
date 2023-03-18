@@ -6,19 +6,13 @@ import { CheckCircleOutlined } from '@ant-design/icons';
 import { withCookies } from '../../../utils/cookie_utils';
 
 const DeleteUsersModal = ({ isOpen, setIsOpen, deleteUser, id, fetchUsersFromDB }) => {
-  // const [isModalVisible, setIsModalVisible] = useState(false);
-  // await deleteUser();
-
   const handleOk = async () => {
     // Delete user function here
     await deleteUser(id);
     await fetchUsersFromDB();
     notification.open({
-      message: 'User deleted.',
+      message: 'User deleted!',
       icon: <CheckCircleOutlined style={{ color: 'green' }} />,
-      onClick: () => {
-        console.log('Notification Clicked!');
-      },
     });
     setIsOpen(false);
   };

@@ -38,11 +38,8 @@ const AddUserModal = ({ isOpen, setIsOpen, fetchUsersFromDB }) => {
       );
       await fetchUsersFromDB();
       notification.open({
-        message: 'User deleted.',
+        message: 'User added!',
         icon: <CheckCircleOutlined style={{ color: 'green' }} />,
-        onClick: () => {
-          console.log('Notification Clicked!');
-        },
       });
       handleOk();
     } catch (error) {
