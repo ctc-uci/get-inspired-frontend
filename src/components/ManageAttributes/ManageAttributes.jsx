@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Table, Button } from 'antd';
-
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 import { dataSource, tableViews, adjustDataType } from './ManageAttributesUtils';
 import styles from './ManageAttributes.module.css';
@@ -55,7 +54,7 @@ const ManageAttributes = () => {
     setClams(clamCols);
   };
 
-    // Rakers
+   // Rakers
   const getAllRakers = async () => {
     const rakerCols = await getTableColsFromDB('raker');
     setRakers(rakerCols);

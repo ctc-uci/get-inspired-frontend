@@ -1,19 +1,5 @@
 // import { Space } from 'antd';
 
-// Temporary Data for Computations Table
-export const dataSource = [
-  {
-    key: '1',
-    attributeName: 'People',
-    dataType: 'Number',
-  },
-  {
-    key: '2',
-    attributeName: 'Comments',
-    dataType: 'Text',
-  },
-];
-
 export const tableViews = [
   { name: 'Survey', type: 't2' },
   { name: 'Clam', type: 't3' },
