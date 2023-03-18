@@ -27,9 +27,20 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
         role: user.data[0].role,
         firstName: user.data[0].firstName,
         lastName: user.data[0].lastName,
+        password: '',
+        checkPassword: '',
       });
     }
   }, [id]);
+
+  useEffect(() => {
+    if (isOpen) {
+      form.setFieldsValue({
+        password: '',
+        checkPassword: '',
+      });
+    }
+  }, [isOpen]);
 
   const handleSubmit = async values => {
     try {
