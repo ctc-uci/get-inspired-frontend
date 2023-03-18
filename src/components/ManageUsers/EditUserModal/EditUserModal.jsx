@@ -24,6 +24,7 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
         role: user.data[0].role,
         firstName: user.data[0].firstName,
         lastName: user.data[0].lastName,
+        email: user.data[0].email,
         password: '',
         checkPassword: '',
       });
@@ -41,7 +42,7 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
 
   const handleSubmit = async values => {
     try {
-      const { role, firstName, lastName, password, checkPassword } = values;
+      const { role, firstName, lastName, email, password, checkPassword } = values;
       if (password !== '' && password !== checkPassword) {
         throw new Error("Passwords don't match");
       }
@@ -49,6 +50,7 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
         role,
         firstName,
         lastName,
+        email,
         password,
       });
       await fetchUsersFromDB();
@@ -102,6 +104,18 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
             ]}
           >
             <Input type="text" />
+          </Form.Item>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your email!',
+              },
+            ]}
+          >
+            <Input type="email" />
           </Form.Item>
           <Form.Item label="Reset Password" name="password">
             <Input.Password type="text" />
