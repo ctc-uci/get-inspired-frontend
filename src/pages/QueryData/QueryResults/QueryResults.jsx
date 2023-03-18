@@ -6,8 +6,7 @@ import LoadingScreen from '../../../common/LoadingScreen/LoadingScreen';
 import { TABLE_PRIMARY_KEYS } from '../QueryDataUtils';
 
 import styles from './QueryResults.module.css';
-
-const computeColumns = (checkedLists, data) => {
+const computeColumns = (checkedLists, data, query = '') => {
   // if no data, use checkedLists to determine column names
   if (data.length === 0 || data[0].length <= TABLE_PRIMARY_KEYS.length) {
     return Object.keys(checkedLists)
@@ -27,11 +26,24 @@ const computeColumns = (checkedLists, data) => {
       title: field,
       dataIndex: field,
       key: field,
+      render: text => {
+        return {
+          props: {
+            style: {
+              background:
+                query.length && text && text.toString().toLowerCase().includes(query)
+                  ? 'yellow'
+                  : 'white',
+            },
+          },
+          children: <div>{text}</div>,
+        };
+      },
     })),
   ];
 };
 
-const QueryResults = ({ checkedLists, data, isLoading }) => {
+const QueryResults = ({ checkedLists, data, isLoading, query }) => {
   if (isLoading) {
     return (
       <div className={styles['query-results-container']}>
@@ -46,7 +58,7 @@ const QueryResults = ({ checkedLists, data, isLoading }) => {
           return TABLE_PRIMARY_KEYS.map(value => record[value]);
         }}
         dataSource={data}
-        columns={computeColumns(checkedLists, data)}
+        columns={computeColumns(checkedLists, data, query)}
         scroll={{ x: true }}
         size="middle"
       />

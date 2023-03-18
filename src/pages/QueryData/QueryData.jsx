@@ -44,6 +44,7 @@ const QueryData = () => {
   const [queryState, setQueryState] = useState({
     tree: QbUtils.checkTree(QbUtils.loadTree(queryValue), config),
     config,
+    genericSearchQuery: '',
     queryResultsLoading: false,
     results: [],
   });
@@ -111,7 +112,12 @@ const QueryData = () => {
     setErrorState('');
 
     // get rid of prev. results (find more elegant way to do this?)
-    setQueryState(prevState => ({ ...prevState, results: [], queryResultsLoading: true }));
+    setQueryState(prevState => ({
+      ...prevState,
+      genericSearchQuery: query,
+      results: [],
+      queryResultsLoading: true,
+    }));
 
     // get current state and make query
     try {
@@ -252,6 +258,7 @@ const QueryData = () => {
         checkedLists={checkedLists}
         data={queryState.results}
         isLoading={queryState.queryResultsLoading}
+        query={queryState.genericSearchQuery}
       />
     </div>
   );
