@@ -24,7 +24,13 @@ const SelectAttributesModal = ({
   };
 
   return (
-    <Modal title="Selesct Attributes" open={isOpen} onOk={onOk} onCancel={onCancel}>
+    <Modal
+      title="Display Attributes"
+      open={isOpen}
+      onOk={onOk}
+      okText="Display Selected"
+      onCancel={onCancel}
+    >
       <Collapse>
         {columnInfo.map((columns, index) => {
           return (
