@@ -15,7 +15,6 @@ export const dataSource = [
 ];
 
 export const tableViews = [
-  { name: 'Computations', type: 't1' },
   { name: 'Survey', type: 't2' },
   { name: 'Clam', type: 't3' },
   { name: 'Raker', type: 't4' },
@@ -25,10 +24,9 @@ export const adjustDataType = typeString => {
   const numericTypes = ['int', 'double', 'decimal'];
   const textTypes = ['text', 'varchar'];
   const booleanTypes = ['boolean'];
-  const timeTypes = ['datetime', 'timestamp'];
+  const timeTypes = ['datetime', 'timestamp', 'time'];
 
   let adjustString = '';
-
   if (numericTypes.includes(typeString)) {
     adjustString = 'Number';
   } else if (timeTypes.includes(typeString)) {
