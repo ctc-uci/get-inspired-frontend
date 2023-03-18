@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Form, Input, Radio, notification } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { Button, Modal, Form, Input, Radio } from 'antd';
 import PropTypes from 'prop-types';
 import { withCookies } from '../../../utils/cookie_utils';
 
 import styles from './EditUserModal.module.css';
-import { GSPBackend } from '../../../utils/utils';
+import { GSPBackend, NotiMessage, NotiIcon, notify } from '../../../utils/utils';
 
 const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
   const [form] = Form.useForm();
@@ -53,10 +52,7 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
         password,
       });
       await fetchUsersFromDB();
-      notification.open({
-        message: 'Edits Saved!',
-        icon: <CheckCircleOutlined style={{ color: 'green' }} />,
-      });
+      notify(NotiMessage.USER_EDITED, NotiIcon.SUCCESS);
       handleOk();
     } catch (error) {
       setErrorMessage(error.message);

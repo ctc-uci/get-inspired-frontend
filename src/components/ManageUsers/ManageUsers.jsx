@@ -31,7 +31,7 @@ const ManageUsers = () => {
       const usersFromDB = await getUsersFromDB();
       setUsers(usersFromDB);
     } catch (error) {
-      console.log('what the hell');
+      // console.log('what the hell');
     }
   };
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Button, notification } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { Modal, Button } from 'antd';
 
+import { NotiMessage, NotiIcon, notify } from '../../../utils/utils';
 import { withCookies } from '../../../utils/cookie_utils';
 
 const DeleteUsersModal = ({ isOpen, setIsOpen, deleteUser, id, fetchUsersFromDB }) => {
@@ -10,10 +10,7 @@ const DeleteUsersModal = ({ isOpen, setIsOpen, deleteUser, id, fetchUsersFromDB 
     // Delete user function here
     await deleteUser(id);
     await fetchUsersFromDB();
-    notification.open({
-      message: 'User deleted!',
-      icon: <CheckCircleOutlined style={{ color: 'green' }} />,
-    });
+    notify(NotiMessage.USER_DELETED, NotiIcon.SUCCESS);
     setIsOpen(false);
   };
 

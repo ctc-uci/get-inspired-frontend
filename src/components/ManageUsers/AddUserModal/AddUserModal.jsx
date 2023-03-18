@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Form, Input, Radio, notification } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { Button, Modal, Form, Input, Radio } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { withCookies } from '../../../utils/cookie_utils';
+import { NotiMessage, NotiIcon, notify } from '../../../utils/utils';
 import { registerWithEmailAndPassword } from '../../../utils/auth_utils';
 
 import styles from './AddUserModal.module.css';
@@ -37,10 +37,7 @@ const AddUserModal = ({ isOpen, setIsOpen, fetchUsersFromDB }) => {
         '/manage-users',
       );
       await fetchUsersFromDB();
-      notification.open({
-        message: 'User added!',
-        icon: <CheckCircleOutlined style={{ color: 'green' }} />,
-      });
+      notify(NotiMessage.USER_ADDED, NotiIcon.SUCCESS);
       handleOk();
     } catch (error) {
       setErrorMessage(error.message);
