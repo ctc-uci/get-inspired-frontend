@@ -56,13 +56,13 @@ const AddUserModal = ({ isOpen, setIsOpen, fetchUsersFromDB }) => {
           layout="vertical"
           name="login-form"
           onFinish={handleSubmit}
-          initialValues={{ role: 'viewer' }}
+          initialValues={{ role: 'intern' }}
         >
           <span>
             <Form.Item label="" name="role">
-              <Radio.Group initialValues="viewer">
-                <Radio value="viewer">Viewer</Radio>
-                <Radio value="editor">Editor</Radio>
+              <Radio.Group>
+                <Radio value="intern">Intern</Radio>
+                <Radio value="admin">Admin</Radio>
               </Radio.Group>
             </Form.Item>
           </span>

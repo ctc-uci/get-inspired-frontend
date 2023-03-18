@@ -54,7 +54,7 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
       });
       await fetchUsersFromDB();
       notification.open({
-        message: 'Edits Saved',
+        message: 'Edits Saved!',
         icon: <CheckCircleOutlined style={{ color: 'green' }} />,
       });
       handleOk();
@@ -77,8 +77,8 @@ const EditUsersModal = ({ isOpen, setIsOpen, id, fetchUsersFromDB }) => {
           <span>
             <Form.Item label="" name="role">
               <Radio.Group>
-                <Radio value="viewer">Viewer</Radio>
-                <Radio value="editor">Editor</Radio>
+                <Radio value="intern">Intern</Radio>
+                <Radio value="admin">Admin</Radio>
               </Radio.Group>
             </Form.Item>
           </span>
