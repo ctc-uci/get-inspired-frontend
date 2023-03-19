@@ -33,7 +33,7 @@ const AttributeGroup = ({ tableName, columns, checkedLists, setCheckedLists }) =
   return (
     <>
       <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
-        Select all
+        Select All
       </Checkbox>
       <Checkbox.Group
         className={`${styles['checkbox-group']} checkbox-group`}

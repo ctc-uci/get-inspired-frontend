@@ -1,0 +1,39 @@
+/* Entire container */
+.query-data-container {
+  padding: 0 1rem 0 1rem;
+}
+
+/* Search type selector */
+.search-type-selector {
+}
+
+/* Generic search bar */
+.generic-search-bar {
+  margin-top: 20px;
+  width: 50%;
+}
+
+/* Advanced query section (filter + button) */
+.advanced-query {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+}
+
+/* Advanced query button */
+.advanced-query-button {
+  align-self: flex-end;
+}
+
+/* Query Results */
+.query-results-header {
+  margin: 2.1rem 0 2rem 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 95%;
+}
+.query-results-header h2 {
+  margin: 0;
+}

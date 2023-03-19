@@ -48,4 +48,17 @@ export const tableToWidget = (table, columns) => ({
   ),
 });
 
+const isIsoDate = str => {
+  if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
+  const d = new Date(str);
+  return d instanceof Date && !Number.isNaN(d) && d.toISOString() === str; // valid date
+};
+
+export const humanizeCell = text => {
+  if (isIsoDate(text)) {
+    return new Date(text).toLocaleDateString();
+  }
+  return text;
+};
+
 export const TABLE_PRIMARY_KEYS = ['sid', 'rid', 'cid'];
