@@ -2,29 +2,29 @@
 .table {
 
   position: flex;
-  margin-top: 11em;
-  margin-left: 2vw;
+  margin-top: 8.3em;
+  margin-left: 2em;
   width: 60%;
 }
 
 .title {
   font-size: 150%;
-  position: absolute;
-  top: 1em;
-  left: 10em;
+  position: flex;
+  margin-top: 1.8em;
+  margin-left: 2em;
 }
 
 .button {
   position: absolute;
-  left: 13.8vw;
-  top: 6vw;
+  left: 14.8em;
+  top: 6em;
 
 }
 
 .addButton {
   position: absolute;
   right: 2vw;
-  top: 6vw;
+  top: 6em;
 }
 
 .divider {
