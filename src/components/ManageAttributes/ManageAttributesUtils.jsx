@@ -10,7 +10,7 @@ export const adjustDataType = typeString => {
   const numericTypes = ['int', 'double', 'decimal'];
   const textTypes = ['text', 'varchar'];
   const booleanTypes = ['boolean'];
-  const timeTypes = ['datetime', 'timestamp', 'time'];
+  const timeTypes = ['datetime', 'timestamp', 'time', 'date'];
 
   let adjustString = '';
   if (numericTypes.includes(typeString)) {

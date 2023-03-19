@@ -54,7 +54,7 @@ const ManageAttributes = () => {
     setClams(clamCols);
   };
 
-   // Rakers
+  // Rakers
   const getAllRakers = async () => {
     const rakerCols = await getTableColsFromDB('raker');
     setRakers(rakerCols);
@@ -86,7 +86,7 @@ const ManageAttributes = () => {
         <Space size="middle">
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a href="#" onClick={() => editAttributeLabelClicked(record.attributeName)}>
-            Edit
+            Edit {record.key}
           </a>
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a href="#" onClick={() => deleteAttributeButtonClicked(record.attributeName)}>
