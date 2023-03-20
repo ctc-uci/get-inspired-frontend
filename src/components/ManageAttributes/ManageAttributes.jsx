@@ -85,13 +85,19 @@ const ManageAttributes = () => {
       render: (_, record) => (
         <Space size="middle">
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a href="#" onClick={() => editAttributeLabelClicked(record.attributeName)}>
-            Edit {record.key}
-          </a>
+          {record.attributeName !== 'id' && (
+            // eslint-disable-next-line jsx-a11y/anchor-is-valid
+            <a href="#" onClick={() => editAttributeLabelClicked(record.attributeName)}>
+              Edit
+            </a>
+          )}
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a href="#" onClick={() => deleteAttributeButtonClicked(record.attributeName)}>
-            Delete
-          </a>
+          {record.attributeName !== 'id' && (
+            // eslint-disable-next-line jsx-a11y/anchor-is-valid
+            <a href="#" onClick={() => deleteAttributeButtonClicked(record.attributeName)}>
+              Delete
+            </a>
+          )}
         </Space>
       ),
     },
