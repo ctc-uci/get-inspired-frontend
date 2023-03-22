@@ -1,67 +1,59 @@
 import React from 'react';
-import { Layout, Menu, Typography } from 'antd';
+import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 
 import {
-  HomeOutlined,
-  DatabaseOutlined,
-  FileAddOutlined,
-  AppstoreOutlined,
-  UsergroupAddOutlined,
+  ClockCircleFilled,
+  HomeFilled,
+  SafetyCertificateFilled,
+  DatabaseFilled,
+  BellFilled,
 } from '@ant-design/icons';
 
-import GSPLogo from '../../assets/GSPLogo.svg';
-
-// eslint-disable-next-line import/no-unresolved
-import styles from './Navbar.module.css';
+import { ReactComponent as GSPLogo } from '../../assets/GSPLogo.svg';
 
 const SIDER_WIDTH = 200;
 
 const { Sider } = Layout;
-const { Title } = Typography;
 
-const Navbar = () => {
+const VerticalMenu = () => {
   const location = useLocation();
   const path = location.pathname;
 
   const selectedKeys = [
-    ...(path === '/' ? ['dashboard'] : []),
-    ...(path === '/manage-attributes' ? ['manage-attributes'] : []),
-    ...(path === '/add-data' ? ['add-data'] : []),
-    ...(path === '/manage-data' ? ['manage-data'] : []),
-    ...(path === '/manage-users' ? ['manage-users'] : []),
+    ...(path === '/data' ? ['database-logo'] : []),
+    ...(path === '/' ? ['certificate-logo'] : []),
+    ...(path === '/Dashboard' ? ['home-logo'] : []),
+    ...(path === '/data' ? ['clock-logo'] : []),
   ];
   return (
-    <Sider width={SIDER_WIDTH} className={styles.sider}>
-      <div className={styles['logo-wrapper']}>
-        <img src={GSPLogo} alt="GSP Logo" className={styles['logo-picture']} />
-        <Title className={styles['logo-text']} level={5}>
-          Get Inspired
-        </Title>
-      </div>
+    <Sider width={SIDER_WIDTH} collapsible>
       <Menu
         mode="inline"
         defaultSelectedKeys={selectedKeys}
         style={{ height: '100%', borderRight: 0 }}
       >
-        <Menu.Item key="dashboard" icon={<HomeOutlined />}>
-          <Link to="/">Dashboard</Link>
+        <Menu.Item key="global-log" icon={<GSPLogo />}>
+          GetInspired
         </Menu.Item>
-        <Menu.Item key="manage-attributes" icon={<DatabaseOutlined />}>
-          <Link to="/manage-attributes">Manage Attributes</Link>
+        <Menu.Item key="home-logo" icon={<HomeFilled />}>
+          <Link to="/Dashboard">Overview</Link>
         </Menu.Item>
-        <Menu.Item key="add-data" icon={<FileAddOutlined />}>
-          <Link to="/add-data">Add Data</Link>
+        <Menu.Item key="database-logo" icon={<DatabaseFilled />}>
+          <Link to="/Data">Manage Attributes</Link>
         </Menu.Item>
-        <Menu.Item key="manage-data" icon={<AppstoreOutlined />}>
-          <Link to="/manage-data">Manage Data</Link>
+        <Menu.Item key="certificate-logo" icon={<SafetyCertificateFilled />}>
+          <Link to="/AddData">Add Data</Link>
         </Menu.Item>
-        <Menu.Item key="manage-users" icon={<UsergroupAddOutlined />}>
-          <Link to="/manage-users">Manage Users</Link>
+        <Menu.Item key="clock-logo" icon={<ClockCircleFilled />}>
+          <Link to="/Data">Manage Data</Link>
+        </Menu.Item>
+        <Menu.Item key="bell-logo" icon={<BellFilled />}>
+          Notifications
         </Menu.Item>
       </Menu>
     </Sider>
   );
 };
 
-export default Navbar;
+export default VerticalMenu;
