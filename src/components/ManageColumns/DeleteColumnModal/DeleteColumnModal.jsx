@@ -38,7 +38,7 @@ const DeleteAttributesModal = ({ isOpen, setIsOpen, tableName, columnName }) => 
             htmlType="submit"
             onClick={handleSubmit}
           >
-            Delete Attribute
+            Delete Column
           </Button>
         </div>
       </Modal>

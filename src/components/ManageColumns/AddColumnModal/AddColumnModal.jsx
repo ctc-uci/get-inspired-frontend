@@ -59,7 +59,7 @@ const AddAttributeModal = ({ isOpen, setIsOpen, tableName }) => {
   return (
     <Modal open={isOpen} onOk={handleOk} onCancel={handleCancel} footer={[]}>
       <div className={styles.container}>
-        <h1>New Attribute Name</h1>
+        <h1>New Column Name</h1>
         <Form onFinish={handleSubmit}>
           <Form.Item
             name="newAttributeName"
@@ -89,7 +89,7 @@ const AddAttributeModal = ({ isOpen, setIsOpen, tableName }) => {
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Add Attribute
+              Add Column
             </Button>
           </Form.Item>
         </Form>

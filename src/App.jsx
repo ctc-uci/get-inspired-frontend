@@ -11,7 +11,7 @@ import ManageData from './pages/ManageData/ManageData';
 import AddData from './pages/AddData/AddData';
 import ProtectedRoute from './utils/ProtectedRoute';
 import RegisterPage from './pages/Register/RegisterPage';
-import ManageAttributesPage from './pages/ManageAttributes/ManageAttributesPage';
+import ManageColumnsPage from './pages/ManageColumns/ManageColumnsPage';
 import ManageUsersPage from './pages/ManageUsers/ManageUsersPage';
 import AUTH_ROLES from './utils/auth_config';
 import './module.css';
@@ -53,10 +53,10 @@ function App() {
             />
             <Route
               exact
-              path="/manage-attributes"
+              path="/manage-columns"
               element={
                 <ProtectedRoute
-                  Component={ManageAttributesPage}
+                  Component={ManageColumnsPage}
                   redirectPath="/login"
                   roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />

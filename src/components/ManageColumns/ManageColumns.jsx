@@ -119,7 +119,7 @@ const ManageAttributes = () => {
       />
       <div className={styles.window}>
         <div>
-          <Title className={styles.title}>Manage Attributes</Title>
+          <Title className={styles.title}>Manage Columns</Title>
           <div>
             <Radio.Group
               defaultValue="Survey"
@@ -139,7 +139,7 @@ const ManageAttributes = () => {
                   type="primary"
                   onClick={() => setIsAttributeModalOpen(true)}
                 >
-                  + Add Attribute
+                  + Add Column
                 </Button>
               </form>
             </div>

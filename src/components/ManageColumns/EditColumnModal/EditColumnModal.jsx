@@ -40,7 +40,7 @@ const EditAttributeModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
     <>
       <Modal open={isOpen} onOk={handleOk} onCancel={handleCancel} footer={[]}>
         <div className={styles.container}>
-          <h1>Edit Attribute</h1>
+          <h1>Edit Column</h1>
           <Form
             id="edit-attribute-form"
             layout="vertical"
@@ -48,7 +48,7 @@ const EditAttributeModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
             onFinish={handleSubmit}
           >
             <Form.Item
-              label="Attribute Name"
+              label="Column Name"
               name="attributeName"
               rules={[
                 {

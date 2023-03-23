@@ -27,7 +27,7 @@ const Navbar = () => {
 
   const selectedKeys = [
     ...(path === '/' ? ['dashboard'] : []),
-    ...(path === '/manage-attributes' ? ['manage-attributes'] : []),
+    ...(path === '/manage-columns' ? ['manage-columns'] : []),
     ...(path === '/add-data' ? ['add-data'] : []),
     ...(path === '/query-data' ? ['query-data'] : []),
     ...(path === '/manage-data' ? ['manage-data'] : []),
@@ -49,8 +49,8 @@ const Navbar = () => {
         <Menu.Item key="dashboard" icon={<HomeOutlined />}>
           <Link to="/">Dashboard</Link>
         </Menu.Item>
-        <Menu.Item key="manage-attributes" icon={<DatabaseOutlined />}>
-          <Link to="/manage-attributes">Manage Attributes</Link>
+        <Menu.Item key="manage-columns" icon={<DatabaseOutlined />}>
+          <Link to="/manage-columns">Manage Attributes</Link>
         </Menu.Item>
         <Menu.Item key="add-data" icon={<FileAddOutlined />}>
           <Link to="/add-data">Add Data</Link>
