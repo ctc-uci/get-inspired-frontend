@@ -1,0 +1,74 @@
+.app-data-heading {
+  padding: 3% 3% 2% 3%;
+}
+
+.add-data-div {
+  text-align: center;
+  padding: 0.5% 3%;
+  align-items: center;
+  justify-content: center;
+  margin-top: -1%;
+}
+
+.survey-form {
+  text-align: left;
+}
+
+.review-form {
+  padding: 0 3% 3%;
+}
+
+.survey-form-entry-label {
+  font-weight: 400;
+}
+
+.choose-survey-page {
+  height: 80vh;
+}
+
+/* Fix to make responsive */
+.choose-survey-btns-div {
+  display: flex;
+  justify-content: center;
+  padding: 5%;
+  margin-top: 20%;
+  transition: all 0s ease-in-out;
+}
+
+.choose-survey-btns {
+  margin: 0 15% 0 15%;
+  transition: all 0s ease-in-out;
+}
+
+@media (max-width: 1200px) {
+  .choose-survey-btns {
+    margin: 15% 15% 15% 15%;
+  }
+  .choose-survey-btns-div {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10%;
+  }
+}
+
+.upload-complete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 60vh;
+}
+
+.add-data-wrapper
+  .ant-table
+  .ant-table-container
+  .ant-table-content
+  table
+  thead.ant-table-thead
+  .ant-table-cell {
+  background-color: #e6f7ff;
+}
+
+#back-next-buttons {
+  text-align: center;
+}

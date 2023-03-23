@@ -1,6 +1,4 @@
-
 .table {
-
   position: flex;
   margin-top: 8.3em;
   margin-left: 2em;
@@ -18,7 +16,6 @@
   position: absolute;
   left: 14.8em;
   top: 6em;
-
 }
 
 .addButton {
@@ -30,4 +27,3 @@
 .divider {
   border: solid white;
 }
-
