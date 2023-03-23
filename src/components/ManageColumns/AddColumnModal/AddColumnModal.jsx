@@ -4,7 +4,7 @@ import { Button, Form, Input, Select, Modal } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withCookies } from '../../../utils/cookie_utils';
-import styles from './AddAttributeModal.module.css';
+import styles from './AddColumnModal.module.css';
 import { GSPBackend } from '../../../utils/utils';
 
 const { Option } = Select;

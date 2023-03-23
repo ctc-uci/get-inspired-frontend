@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Modal, Form, Input } from 'antd';
+import React from 'react';
+import { Button, Modal } from 'antd';
 import PropTypes from 'prop-types';
-// import { useNavigate } from 'react-router-dom';
 import { withCookies } from '../../../utils/cookie_utils';
 
-import styles from './DeleteAttributesModal.module.css';
+import styles from './DeleteColumnModal.module.css';
 import { GSPBackend } from '../../../utils/utils';
 
 const DeleteAttributesModal = ({ isOpen, setIsOpen, tableName, columnName }) => {

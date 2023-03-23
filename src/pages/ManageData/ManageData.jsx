@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Radio, Cascader, Table } from 'antd';
+import { Radio, Cascader, Table, Typography } from 'antd';
 
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
 import { GSPBackend, keysToCamel, toCamel } from '../../utils/utils';
 import styles from './ManageData.module.css';
+
+const { Title } = Typography;
 
 const ManageData = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +54,7 @@ const ManageData = () => {
   }
   return (
     <div className={styles['manage-data-container']}>
-      <h1>Manage Data</h1>
+      <Title>Manage Data</Title>
       <Radio.Group
         defaultValue="survey"
         buttonStyle="solid"

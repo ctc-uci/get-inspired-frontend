@@ -1,15 +1,12 @@
 .table {
   position: flex;
-  margin-top: 8.3em;
-  margin-left: 2em;
+  margin-top: 20px;
   width: 60%;
 }
 
 .title {
   font-size: 150%;
   position: flex;
-  margin-top: 1.8em;
-  margin-left: 2em;
 }
 
 .button {
@@ -26,4 +23,8 @@
 
 .divider {
   border: solid white;
+}
+
+.window {
+  padding: 0 1rem 0 1rem;
 }

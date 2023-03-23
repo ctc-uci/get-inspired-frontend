@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
-// import { useNavigate } from 'react-router-dom';
 import { withCookies } from '../../../utils/cookie_utils';
 
-import styles from './EditAttributeModal.module.css';
+import styles from './EditColumnModal.module.css';
 import { GSPBackend } from '../../../utils/utils';
 
 const EditAttributeModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
@@ -32,6 +31,8 @@ const EditAttributeModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
       handleOk();
     } catch (error) {
       setErrorMessage(error.message);
+      // Temporary error handling so eslint doesn't complain
+      console.log(errorMessage);
     }
   };
 
@@ -74,6 +75,7 @@ EditAttributeModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   tableName: PropTypes.string.isRequired,
+  columnName: PropTypes.string.isRequired,
 };
 
 export default withCookies(EditAttributeModal);

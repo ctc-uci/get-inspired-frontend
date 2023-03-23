@@ -1,10 +1,8 @@
-// import { Space } from 'antd';
-
-export const tableViews = [
-  { name: 'Survey', type: 't2' },
-  { name: 'Clam', type: 't3' },
-  { name: 'Raker', type: 't4' },
-];
+export const tableNames = {
+  survey: 'Survey',
+  clam: 'Clam',
+  raker: 'Raker',
+};
 
 export const adjustDataType = typeString => {
   const numericTypes = ['int', 'double', 'decimal'];
