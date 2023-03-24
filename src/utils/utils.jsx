@@ -67,6 +67,11 @@ const keysToCamel = data => {
   return data;
 };
 const NotiMessage = {
+  COLUMN_ADDED: (column, table) => `Column '${column}' added to the ${table.toLowerCase()} table!`,
+  COLUMN_EDITED: (oldColumnName, newColumnName, table) =>
+    `Renamed '${oldColumnName}' to '${newColumnName}' in the ${table.toLowerCase()} table!`,
+  COLUMN_DELETED: (column, table) =>
+    `Column ${column} deleted from the ${table.toLowerCase()} table!`,
   USER_DELETED: 'User deleted!',
   USER_ADDED: 'User added!',
   USER_EDITED: 'User edits saved!',

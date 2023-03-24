@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Input, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import { withCookies } from '../../../utils/cookie_utils';
+import { GSPBackend, notify, NotiIcon, NotiMessage } from '../../../utils/utils';
 
 import styles from './EditColumnModal.module.css';
-import { GSPBackend } from '../../../utils/utils';
 
 const { Title } = Typography;
 
@@ -14,6 +14,10 @@ const EditColumnModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
 
   const handleOk = () => {
     setIsOpen(false);
+    notify(
+      NotiMessage.COLUMN_EDITED(columnName, form.getFieldValue('attributeName'), tableName),
+      NotiIcon.SUCCESS,
+    );
   };
   const handleCancel = () => {
     setIsOpen(false);

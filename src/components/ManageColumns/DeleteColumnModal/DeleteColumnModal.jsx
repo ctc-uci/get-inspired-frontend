@@ -2,15 +2,16 @@ import React from 'react';
 import { Button, Modal, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import { withCookies } from '../../../utils/cookie_utils';
+import { GSPBackend, notify, NotiMessage, NotiIcon } from '../../../utils/utils';
 
 import styles from './DeleteColumnModal.module.css';
-import { GSPBackend } from '../../../utils/utils';
 
 const { Title } = Typography;
 
 const DeleteColumnModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
   const handleOk = () => {
     setIsOpen(false);
+    notify(NotiMessage.COLUMN_DELETED(columnName, tableName), NotiIcon.SUCCESS);
   };
   const handleCancel = () => {
     setIsOpen(false);

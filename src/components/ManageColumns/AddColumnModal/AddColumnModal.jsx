@@ -3,14 +3,19 @@ import { Button, Form, Input, Select, Modal, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import { withCookies } from '../../../utils/cookie_utils';
 import styles from './AddColumnModal.module.css';
-import { GSPBackend } from '../../../utils/utils';
+import { GSPBackend, notify, NotiIcon, NotiMessage } from '../../../utils/utils';
 
 const { Option } = Select;
 const { Title } = Typography;
+
 const AddColumnModal = ({ isOpen, setIsOpen, tableName }) => {
   const [form] = Form.useForm();
   const handleOk = () => {
     setIsOpen(false);
+    notify(
+      NotiMessage.COLUMN_ADDED(form.getFieldValue('newAttributeName'), tableName),
+      NotiIcon.SUCCESS,
+    );
   };
   const handleCancel = () => {
     setIsOpen(false);
