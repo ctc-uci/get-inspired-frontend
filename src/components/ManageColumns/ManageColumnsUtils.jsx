@@ -7,7 +7,7 @@ export const tableNames = {
 export const adjustDataType = typeString => {
   const numericTypes = ['int', 'double', 'decimal'];
   const textTypes = ['text', 'varchar'];
-  const booleanTypes = ['boolean'];
+  const booleanTypes = ['boolean', 'tinyint'];
   const timeTypes = ['datetime', 'timestamp', 'time', 'date'];
 
   let adjustString = '';
