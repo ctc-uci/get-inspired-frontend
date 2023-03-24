@@ -103,7 +103,6 @@ const ManageAttributes = () => {
         isOpen={isAddAttributeModalOpen}
         setIsOpen={setIsAttributeModalOpen}
         tableName={tableNames[tableState.table]}
-        // do i need to also pass in the get all thing for tables.
       />
       <EditColumnModal
         isOpen={isEditAttributeModalOpen}
@@ -122,12 +121,15 @@ const ManageAttributes = () => {
           <Title className={styles.title}>Manage Columns</Title>
           <div>
             <Radio.Group
-              defaultValue="Survey"
+              defaultValue="survey"
               buttonStyle="solid"
-              onChange={e => setTableState({ ...tableState, table: e.target.value })}
+              onChange={e => {
+                console.log(e.target.value);
+                setTableState({ ...tableState, table: e.target.value });
+              }}
             >
               {Object.values(tableNames).map(name => (
-                <Radio.Button key={name} value={name}>
+                <Radio.Button key={name} value={name.toLowerCase()}>
                   {name} Table
                 </Radio.Button>
               ))}

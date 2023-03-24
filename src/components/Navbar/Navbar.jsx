@@ -50,7 +50,7 @@ const Navbar = () => {
           <Link to="/">Dashboard</Link>
         </Menu.Item>
         <Menu.Item key="manage-columns" icon={<DatabaseOutlined />}>
-          <Link to="/manage-columns">Manage Attributes</Link>
+          <Link to="/manage-columns">Manage Columns</Link>
         </Menu.Item>
         <Menu.Item key="add-data" icon={<FileAddOutlined />}>
           <Link to="/add-data">Add Data</Link>

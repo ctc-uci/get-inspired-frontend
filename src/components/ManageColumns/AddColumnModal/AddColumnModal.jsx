@@ -1,14 +1,14 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
-import { Button, Form, Input, Select, Modal } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Button, Form, Input, Select, Modal, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import { withCookies } from '../../../utils/cookie_utils';
 import styles from './AddColumnModal.module.css';
 import { GSPBackend } from '../../../utils/utils';
 
 const { Option } = Select;
-const AddAttributeModal = ({ isOpen, setIsOpen, tableName }) => {
+const { Title } = Typography;
+const AddColumnModal = ({ isOpen, setIsOpen, tableName }) => {
+  const [form] = Form.useForm();
   const handleOk = () => {
     setIsOpen(false);
   };
@@ -32,36 +32,38 @@ const AddAttributeModal = ({ isOpen, setIsOpen, tableName }) => {
     return adjustString;
   };
 
-  const capitalizeFirstLetter = string => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-
   const handleSubmit = async values => {
     try {
       const { newAttributeName, dataType } = values;
       await GSPBackend.post(
-        `/tables/${`${tableName.toLowerCase()}/${capitalizeFirstLetter(
-          newAttributeName,
-        )}/${adjustDataType(dataType)}`}`,
+        `/tables/${`${tableName.toLowerCase()}/${newAttributeName}/${adjustDataType(dataType)}`}`,
         {
           tableName,
           newAttributeName,
           dataType,
         },
       );
-      // do i need to get table after with updated info
       handleOk();
     } catch (error) {
       console.log(error.message);
     }
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      form.setFieldsValue({ newAttributeName: '', dataType: '' });
+    }
+  }, [isOpen]);
+
   return (
     <Modal open={isOpen} onOk={handleOk} onCancel={handleCancel} footer={[]}>
       <div className={styles.container}>
-        <h1>New Column Name</h1>
-        <Form onFinish={handleSubmit}>
+        <Title level={3} className={styles.header}>
+          New Column Name
+        </Title>
+        <Form form={form} onFinish={handleSubmit} layout="vertical">
           <Form.Item
+            label="New Column Name"
             name="newAttributeName"
             rules={[
               {
@@ -71,8 +73,8 @@ const AddAttributeModal = ({ isOpen, setIsOpen, tableName }) => {
           >
             <Input />
           </Form.Item>
-          <h1>Data Type</h1>
           <Form.Item
+            label="Data Type"
             name="dataType"
             rules={[
               {
@@ -87,21 +89,19 @@ const AddAttributeModal = ({ isOpen, setIsOpen, tableName }) => {
               <Option value="datetime">Datetime</Option>
             </Select>
           </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Add Column
-            </Button>
-          </Form.Item>
+          <Button type="primary" htmlType="submit" className={styles['add-column-button']}>
+            Add Column
+          </Button>
         </Form>
       </div>
     </Modal>
   );
 };
 
-AddAttributeModal.propTypes = {
+AddColumnModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   tableName: PropTypes.string.isRequired,
 };
 
-export default withCookies(AddAttributeModal);
+export default withCookies(AddColumnModal);
