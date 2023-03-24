@@ -123,10 +123,7 @@ const ManageAttributes = () => {
             <Radio.Group
               defaultValue="survey"
               buttonStyle="solid"
-              onChange={e => {
-                console.log(e.target.value);
-                setTableState({ ...tableState, table: e.target.value });
-              }}
+              onChange={e => setTableState({ ...tableState, table: e.target.value })}
             >
               {Object.values(tableNames).map(name => (
                 <Radio.Button key={name} value={name.toLowerCase()}>
