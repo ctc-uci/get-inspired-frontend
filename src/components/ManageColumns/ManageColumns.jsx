@@ -37,6 +37,7 @@ const ManageAttributes = () => {
     const res = (await GSPBackend.get(`/tables/${tableName.toLowerCase()}/columns`)).data.map(
       id => ({
         ...id,
+        key: id.COLUMN_NAME,
         attributeName: id.COLUMN_NAME,
         // eslint-disable-next-line no-use-before-define
         dataType: adjustDataType(id.DATA_TYPE),
