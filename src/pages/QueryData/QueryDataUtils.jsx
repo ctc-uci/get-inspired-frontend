@@ -11,7 +11,7 @@ const subfieldType = {
 const columnToSubfield = column => {
   const numericTypes = ['int', 'double', 'decimal'];
   const textTypes = ['text', 'varchar'];
-  const booleanTypes = ['boolean'];
+  const booleanTypes = ['boolean', 'tinyint'];
   const dateTypes = ['date'];
   const timeTypes = ['time'];
   const dateTimeTypes = ['datetime', 'timestamp'];
