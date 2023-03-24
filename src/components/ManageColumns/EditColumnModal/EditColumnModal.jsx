@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Modal, Form, Input, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import { withCookies } from '../../../utils/cookie_utils';
@@ -10,7 +10,6 @@ const { Title } = Typography;
 
 const EditColumnModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
   const [form] = Form.useForm();
-  const [errorMessage, setErrorMessage] = useState();
 
   const handleOk = () => {
     setIsOpen(false);
@@ -31,8 +30,8 @@ const EditColumnModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
 
   // this obviously will not work
   const handleSubmit = async values => {
+    const { attributeName } = values;
     try {
-      const { attributeName } = values;
       await GSPBackend.put(
         `/tables/${`${tableName.toLowerCase()}`}/${columnName}/${attributeName}`,
         {
@@ -43,9 +42,10 @@ const EditColumnModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
       );
       handleOk();
     } catch (error) {
-      setErrorMessage(error.message);
-      // Temporary error handling so eslint doesn't complain
-      console.log(errorMessage);
+      notify(
+        NotiMessage.COLUMN_EDITED_ERROR(columnName, attributeName, tableName, error.message),
+        NotiIcon.ERROR,
+      );
     }
   };
 

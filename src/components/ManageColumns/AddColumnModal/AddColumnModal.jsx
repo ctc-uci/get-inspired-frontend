@@ -38,8 +38,8 @@ const AddColumnModal = ({ isOpen, setIsOpen, tableName }) => {
   };
 
   const handleSubmit = async values => {
+    const { newAttributeName, dataType } = values;
     try {
-      const { newAttributeName, dataType } = values;
       await GSPBackend.post(
         `/tables/${`${tableName.toLowerCase()}/${newAttributeName}/${adjustDataType(dataType)}`}`,
         {
@@ -50,7 +50,10 @@ const AddColumnModal = ({ isOpen, setIsOpen, tableName }) => {
       );
       handleOk();
     } catch (error) {
-      console.log(error.message);
+      notify(
+        NotiMessage.COLUMN_ADDED_ERROR(newAttributeName, tableName, error.message),
+        NotiIcon.ERROR,
+      );
     }
   };
 

@@ -23,10 +23,9 @@ const DeleteColumnModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
       await GSPBackend.delete(`/tables/${`${tableName.toLowerCase()}`}/${columnName}`, {
         columnName,
       });
-      // do i need to get table after with updated info
       handleOk();
     } catch (error) {
-      console.log(error.message);
+      notify(NotiMessage.COLUMN_DELETE_ERROR(columnName, tableName), NotiIcon.ERROR, error.message);
     }
   };
 
