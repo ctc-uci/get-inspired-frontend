@@ -61,7 +61,7 @@ const ManageAttributes = () => {
   // Columns for table
   const columns = [
     {
-      title: 'Attribute Name',
+      title: 'Column Name',
       dataIndex: 'attributeName',
       key: 'attributeName',
     },
