@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Radio, Cascader, Table, Typography } from 'antd';
+import PropTypes from 'prop-types';
+import { Radio, Cascader, Table, Typography, Button, Input } from 'antd';
 
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
@@ -8,33 +9,89 @@ import styles from './ManageData.module.css';
 
 const { Title } = Typography;
 
+const EditableCell = ({ record, columnName, defaultValue, editingState, setEditingState }) => {
+  const [value, setValue] = useState(defaultValue);
+
+  const handleInputChanged = e => {
+    setValue(e.target.value);
+    const newRecord = { ...record, [columnName]: e.target.value };
+    setEditingState({
+      ...editingState,
+      editedRows: {
+        ...editingState.editedRows,
+        // eslint-disable-next-line react/prop-types
+        [record.id]: newRecord,
+      },
+    });
+  };
+  return <Input value={value} onChange={handleInputChanged} />;
+};
+
+EditableCell.propTypes = {
+  record: PropTypes.shape({}).isRequired,
+  columnName: PropTypes.string.isRequired,
+  defaultValue: PropTypes.string.isRequired,
+  editingState: PropTypes.shape({
+    selectedRowKeys: PropTypes.arrayOf(PropTypes.number).isRequired,
+    editedRows: PropTypes.shape({}).isRequired,
+  }).isRequired,
+  setEditingState: PropTypes.func.isRequired,
+};
+
 const ManageData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSurveyId, setSelectedSurveyId] = useState(null);
   const [selectedTable, setSelectedTable] = useState('survey');
-  const [tableState, setTableState] = useState({ rows: [], columns: [] });
-  const [options, setOptions] = useState({});
+  const [editingMode, setEditingMode] = useState(false);
+  const [surveyOptions, setSurveyOptions] = useState([]);
 
-  const computeColumns = columnData =>
-    columnData.map(col => ({
-      title: toCamel(col.COLUMN_NAME),
-      key: toCamel(col.COLUMN_NAME),
-      dataIndex: toCamel(col.COLUMN_NAME),
-    }));
+  const [editingState, setEditingState] = useState({
+    selectedRowKeys: [],
+    editedRows: {},
+  });
+
+  const [tableState, setTableState] = useState({ rows: [], columns: [] });
 
   const onSurveyChange = ([, surveyId]) => {
     setSelectedSurveyId(surveyId);
   };
 
-  // Load dropdown survey options on page load
-  useEffect(async () => {
-    const map = await GSPBackend.get('/surveys/manageDataOptions');
-    setOptions([{ label: 'View all data' }, ...map.data]);
-    setIsLoading(false);
-  }, []);
+  // Object with options to handle when user selects one or more rows
+  const rowSelection = {
+    onChange: selectedRowKeys => {
+      setEditingState({ ...editingState, selectedRowKeys });
+    },
+  };
 
-  // Load table data when selected table or selected survey changes
-  useEffect(async () => {
+  // Creates columns for table based on SQL table columns
+  const computeColumnsFromSQL = columnData =>
+    columnData.map(col => ({
+      title: toCamel(col.COLUMN_NAME),
+      key: toCamel(col.COLUMN_NAME),
+      dataIndex: toCamel(col.COLUMN_NAME),
+      type: col.DATA_TYPE,
+    }));
+
+  // Creates columns for table based on existing columns (switches to input if in editing mode)
+  const computeColumnsFromExisting = columnData =>
+    columnData.map(col => ({
+      ...col,
+      render:
+        col.title !== 'id' && col.title !== 'survey_id' && editingMode
+          ? (text, record) => (
+              <EditableCell
+                record={record}
+                columnName={col.title}
+                defaultValue={text}
+                editingState={editingState}
+                setEditingState={setEditingState}
+              />
+            )
+          : undefined,
+    }));
+
+  // Fetches table data based on selected survey and table
+  const fetchTableData = async () => {
     const rowDataUrl = selectedSurveyId
       ? `/${selectedTable}s/survey/${selectedSurveyId}`
       : `/${selectedTable}s`;
@@ -44,9 +101,59 @@ const ManageData = () => {
     ];
     const [{ data: columnData }, { data: rowData }] = await Promise.all(requests);
     setTableState({
-      rows: keysToCamel(rowData),
-      columns: computeColumns(columnData),
+      rows: keysToCamel(rowData).map(row => ({ ...row })),
+      columns: computeColumnsFromSQL(columnData),
     });
+  };
+
+  const cancelEditingMode = () => {
+    setEditingMode(false);
+    setEditingState({ selectedRowKeys: [], editedRows: {} });
+  };
+
+  const deleteSelectedRows = async () => {
+    if (editingState.selectedRowKeys.length) {
+      const requests = editingState.selectedRowKeys.map(rowId =>
+        GSPBackend.delete(`/${selectedTable}s/${rowId}`),
+      );
+      await Promise.all(requests);
+      setTableState({
+        ...tableState,
+        rows: tableState.rows.filter(row => !editingState.selectedRowKeys.includes(row.id)),
+      });
+    }
+  };
+
+  const saveEdits = async () => {
+    if (editingState.editedRows) {
+      const requests = Object.keys(editingState.editedRows).map(id =>
+        GSPBackend.put(`/${selectedTable}s/${id}`, editingState.editedRows[id]),
+      );
+      console.log(editingState.editedRows);
+      await Promise.all(requests);
+      await fetchTableData();
+    }
+    setEditingMode(false);
+  };
+
+  // Load dropdown survey options on page load
+  useEffect(async () => {
+    const map = await GSPBackend.get('/surveys/manageDataOptions');
+    setSurveyOptions([{ label: 'View all data' }, ...map.data]);
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    // Changes columns based in if the user is in editing mode
+    if (tableState.columns) {
+      setTableState({ ...tableState, columns: computeColumnsFromExisting(tableState.columns) });
+    }
+  }, [editingMode, editingState]);
+
+  // Load table data when selected table or selected survey changes
+  useEffect(async () => {
+    await fetchTableData();
+    setEditingState({ selectedRowKeys: [], editedRows: {} });
   }, [selectedTable, selectedSurveyId]);
 
   if (isLoading) {
@@ -66,20 +173,40 @@ const ManageData = () => {
         <Radio.Button value="raker">Raker Table</Radio.Button>
       </Radio.Group>
       <br />
-      <div className={styles['select-survey-options']}>
+      <div className={styles['data-options']}>
         <Cascader
           className={styles.cascader}
-          options={options}
+          options={surveyOptions}
           placeholder="Select a survey"
           onChange={onSurveyChange}
         />
+        {editingMode ? (
+          <div className={styles['editing-mode-buttons']}>
+            {editingState.selectedRowKeys.length ? (
+              <Button className={styles['delete-button']} onClick={deleteSelectedRows}>
+                Delete
+              </Button>
+            ) : (
+              <Button className={styles['save-button']} onClick={saveEdits}>
+                Save
+              </Button>
+            )}
+            <Button className={styles['cancel-button']} onClick={cancelEditingMode}>
+              Cancel
+            </Button>
+          </div>
+        ) : (
+          <Button onClick={() => setEditingMode(true)}>Edit {selectedTable} data</Button>
+        )}
       </div>
       <div className={styles['table-container']}>
         <Table
+          rowSelection={editingMode ? rowSelection : undefined}
           bordered
           columns={tableState.columns}
           dataSource={tableState.rows}
           scroll={{ x: true }}
+          rowKey="id"
         />
       </div>
     </div>
