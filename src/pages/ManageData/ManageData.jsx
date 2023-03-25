@@ -160,9 +160,10 @@ const ManageData = () => {
     <div className={styles['manage-data-container']}>
       <Title>Manage Data</Title>
       <Radio.Group
-        defaultValue="survey"
+        value={selectedTable}
         buttonStyle="solid"
         onChange={e => setSelectedTable(e.target.value)}
+        disabled={editingMode}
       >
         <Radio.Button value="computation">Computations Table</Radio.Button>
         <Radio.Button value="survey">Survey Table</Radio.Button>
