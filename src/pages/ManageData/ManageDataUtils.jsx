@@ -23,8 +23,10 @@ export const EditableCell = ({
   editingState,
   setEditingState,
 }) => {
+  // const [editedRows, setEditedRows] = useState({});
   const saveData = value => {
-    const newRecord = { ...record, [columnName]: value };
+    // eslint-disable-next-line react/prop-types
+    const newRecord = { ...editingState.editedRows[record.id], [columnName]: value };
     setEditingState({
       ...editingState,
       editedRows: {
@@ -67,7 +69,13 @@ export const EditableCell = ({
     );
   }
   // Time type requires TimePicker
-  return <TimePicker defaultValue={dayjs(defaultValue, 'HH:mm:ss')} onChange={saveData} />;
+  return (
+    <TimePicker
+      format="HH:mm"
+      defaultValue={dayjs(defaultValue, 'HH:mm')}
+      onChange={(time, timeString) => saveData(timeString)}
+    />
+  );
 };
 
 EditableCell.propTypes = {
