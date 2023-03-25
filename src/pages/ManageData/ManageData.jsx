@@ -5,6 +5,8 @@ import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
 import DeleteDataModal from './DeleteDataModal/DeleteDataModal';
 import EditDataModal from './EditDataModal/EditDataModal';
+import CancelModal from './CancelModal/CancelModal';
+
 import { EditableCell } from './ManageDataUtils';
 import { humanizeCell } from '../QueryData/QueryDataUtils';
 import { GSPBackend, keysToCamel, toCamel } from '../../utils/utils';
@@ -21,6 +23,7 @@ const ManageData = () => {
 
   const [isDeleteDataModalOpen, setIsDeleteDataModalOpen] = useState(false);
   const [isEditDataModalOpen, setIsEditDataModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const [editingState, setEditingState] = useState({
     selectedRowKeys: [],
@@ -84,9 +87,17 @@ const ManageData = () => {
     });
   };
 
-  const cancelEditingMode = () => {
+  const exitEditingMode = () => {
     setEditingMode(false);
     setEditingState({ selectedRowKeys: [], editedRows: {} });
+  };
+
+  const cancelButtonClicked = () => {
+    if (Object.keys(editingState.editedRows).length) {
+      setIsCancelModalOpen(true);
+    } else {
+      exitEditingMode();
+    }
   };
 
   const deleteSelectedRows = async () => {
@@ -176,7 +187,7 @@ const ManageData = () => {
                 Save
               </Button>
             )}
-            <Button className={styles['cancel-button']} onClick={cancelEditingMode}>
+            <Button className={styles['cancel-button']} onClick={cancelButtonClicked}>
               Cancel
             </Button>
           </div>
@@ -207,6 +218,12 @@ const ManageData = () => {
         setIsOpen={setIsEditDataModalOpen}
         selectedRowKeys={editingState.editedRows}
         saveEdits={saveEdits}
+      />
+      <CancelModal
+        isOpen={isCancelModalOpen}
+        setIsOpen={setIsCancelModalOpen}
+        editedRows={editingState.editedRows}
+        exitEditingMode={exitEditingMode}
       />
     </div>
   );
