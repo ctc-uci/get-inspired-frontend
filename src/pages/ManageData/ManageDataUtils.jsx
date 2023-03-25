@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, DatePicker, TimePicker, Select, Space } from 'antd';
@@ -23,15 +24,15 @@ export const EditableCell = ({
   editingState,
   setEditingState,
 }) => {
-  // const [editedRows, setEditedRows] = useState({});
   const saveData = value => {
-    // eslint-disable-next-line react/prop-types
-    const newRecord = { ...editingState.editedRows[record.id], [columnName]: value };
+    const newRecord = {
+      ...(record.id in editingState.editedRows ? editingState.editedRows[record.id] : record),
+      [columnName]: value,
+    };
     setEditingState({
       ...editingState,
       editedRows: {
         ...editingState.editedRows,
-        // eslint-disable-next-line react/prop-types
         [record.id]: newRecord,
       },
     });
