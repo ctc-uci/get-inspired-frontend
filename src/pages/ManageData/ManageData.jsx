@@ -10,10 +10,7 @@ import styles from './ManageData.module.css';
 const { Title } = Typography;
 
 const EditableCell = ({ record, columnName, defaultValue, editingState, setEditingState }) => {
-  const [value, setValue] = useState(defaultValue);
-
-  const handleInputChanged = e => {
-    setValue(e.target.value);
+  const saveInput = e => {
     const newRecord = { ...record, [columnName]: e.target.value };
     setEditingState({
       ...editingState,
@@ -24,7 +21,7 @@ const EditableCell = ({ record, columnName, defaultValue, editingState, setEditi
       },
     });
   };
-  return <Input value={value} onChange={handleInputChanged} />;
+  return <Input defaultValue={defaultValue} onBlur={saveInput} onPressEnter={saveInput} />;
 };
 
 EditableCell.propTypes = {
