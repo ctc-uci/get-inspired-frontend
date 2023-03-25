@@ -3,6 +3,7 @@ import { Radio, Cascader, Table, Typography, Button } from 'antd';
 
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
+import DeleteDataModal from './DeleteDataModal/DeleteDataModal';
 import { EditableCell } from './ManageDataUtils';
 import { humanizeCell } from '../QueryData/QueryDataUtils';
 import { GSPBackend, keysToCamel, toCamel } from '../../utils/utils';
@@ -16,6 +17,8 @@ const ManageData = () => {
   const [selectedTable, setSelectedTable] = useState('survey');
   const [editingMode, setEditingMode] = useState(false);
   const [surveyOptions, setSurveyOptions] = useState([]);
+
+  const [isDeleteDataModalOpen, setIsDeleteDataModalOpen] = useState(false);
 
   const [editingState, setEditingState] = useState({
     selectedRowKeys: [],
@@ -156,7 +159,10 @@ const ManageData = () => {
         {editingMode ? (
           <div className={styles['editing-mode-buttons']}>
             {editingState.selectedRowKeys.length ? (
-              <Button className={styles['delete-button']} onClick={deleteSelectedRows}>
+              <Button
+                className={styles['delete-button']}
+                onClick={() => setIsDeleteDataModalOpen(true)}
+              >
                 Delete
               </Button>
             ) : (
@@ -182,6 +188,13 @@ const ManageData = () => {
           rowKey="id"
         />
       </div>
+      <DeleteDataModal
+        isOpen={isDeleteDataModalOpen}
+        setIsOpen={setIsDeleteDataModalOpen}
+        selectedTable={selectedTable}
+        selectedRowKeys={editingState.selectedRowKeys}
+        deleteSelectedRows={deleteSelectedRows}
+      />
     </div>
   );
 };
