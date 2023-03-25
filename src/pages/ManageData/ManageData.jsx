@@ -94,6 +94,7 @@ const ManageData = () => {
         ...tableState,
         rows: tableState.rows.filter(row => !editingState.selectedRowKeys.includes(row.id)),
       });
+      setEditingState({ ...editingState, selectedRowKeys: [] });
     }
   };
 
