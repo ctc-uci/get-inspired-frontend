@@ -155,6 +155,7 @@ const ManageData = () => {
           options={surveyOptions}
           placeholder="Select a survey"
           onChange={onSurveyChange}
+          disabled={editingMode}
         />
         {editingMode ? (
           <div className={styles['editing-mode-buttons']}>
