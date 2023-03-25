@@ -1,39 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { Radio, Cascader, Table, Typography, Button, Input } from 'antd';
+import { Radio, Cascader, Table, Typography, Button } from 'antd';
 
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
+import { EditableCell } from './ManageDataUtils';
+import { humanizeCell } from '../QueryData/QueryDataUtils';
 import { GSPBackend, keysToCamel, toCamel } from '../../utils/utils';
 import styles from './ManageData.module.css';
 
 const { Title } = Typography;
-
-const EditableCell = ({ record, columnName, defaultValue, editingState, setEditingState }) => {
-  const saveInput = e => {
-    const newRecord = { ...record, [columnName]: e.target.value };
-    setEditingState({
-      ...editingState,
-      editedRows: {
-        ...editingState.editedRows,
-        // eslint-disable-next-line react/prop-types
-        [record.id]: newRecord,
-      },
-    });
-  };
-  return <Input defaultValue={defaultValue} onBlur={saveInput} onPressEnter={saveInput} />;
-};
-
-EditableCell.propTypes = {
-  record: PropTypes.shape({}).isRequired,
-  columnName: PropTypes.string.isRequired,
-  defaultValue: PropTypes.string.isRequired,
-  editingState: PropTypes.shape({
-    selectedRowKeys: PropTypes.arrayOf(PropTypes.number).isRequired,
-    editedRows: PropTypes.shape({}).isRequired,
-  }).isRequired,
-  setEditingState: PropTypes.func.isRequired,
-};
 
 const ManageData = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -73,18 +48,19 @@ const ManageData = () => {
   const computeColumnsFromExisting = columnData =>
     columnData.map(col => ({
       ...col,
-      render:
-        col.title !== 'id' && col.title !== 'survey_id' && editingMode
-          ? (text, record) => (
-              <EditableCell
-                record={record}
-                columnName={col.title}
-                defaultValue={text}
-                editingState={editingState}
-                setEditingState={setEditingState}
-              />
-            )
-          : undefined,
+      render: (text, record) =>
+        col.title !== 'id' && col.title !== 'survey_id' && editingMode ? (
+          <EditableCell
+            record={record}
+            columnName={col.title}
+            columnType={col.type}
+            defaultValue={text}
+            editingState={editingState}
+            setEditingState={setEditingState}
+          />
+        ) : (
+          <div>{humanizeCell(text, col.type)}</div>
+        ),
     }));
 
   // Fetches table data based on selected survey and table
@@ -98,7 +74,7 @@ const ManageData = () => {
     ];
     const [{ data: columnData }, { data: rowData }] = await Promise.all(requests);
     setTableState({
-      rows: keysToCamel(rowData).map(row => ({ ...row })),
+      rows: keysToCamel(rowData),
       columns: computeColumnsFromSQL(columnData),
     });
   };
@@ -126,7 +102,6 @@ const ManageData = () => {
       const requests = Object.keys(editingState.editedRows).map(id =>
         GSPBackend.put(`/${selectedTable}s/${id}`, editingState.editedRows[id]),
       );
-      console.log(editingState.editedRows);
       await Promise.all(requests);
       await fetchTableData();
     }
