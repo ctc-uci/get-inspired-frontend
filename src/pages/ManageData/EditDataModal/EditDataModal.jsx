@@ -22,17 +22,13 @@ const EditDataModal = ({ isOpen, setIsOpen, editedRows, saveEdits }) => {
   return (
     <Modal open={isOpen} onOk={handleOk} onCancel={handleCancel} footer={[]}>
       <div className={styles.container}>
-        {editedRows ? (
+        {Object.keys(editedRows).length ? (
           <>
             <Title level={3}>
               Are you sure you want to edit {Object.keys(editedRows).length} row(s)?
             </Title>
             <div className={styles.buttons}>
-              <Button
-                className={styles['delete-button']}
-                type="primary"
-                onClick={editButtonClicked}
-              >
+              <Button type="primary" onClick={editButtonClicked}>
                 Edit {Object.keys(editedRows).length} row(s)
               </Button>
               <Button onClick={handleCancel}>Cancel</Button>

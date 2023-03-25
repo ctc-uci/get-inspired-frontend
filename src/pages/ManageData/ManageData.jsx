@@ -100,6 +100,14 @@ const ManageData = () => {
     }
   };
 
+  const saveButtonClicked = () => {
+    if (Object.keys(editingState.editedRows).length) {
+      setIsEditDataModalOpen(true);
+    } else {
+      exitEditingMode();
+    }
+  };
+
   const deleteSelectedRows = async () => {
     if (editingState.selectedRowKeys.length) {
       const requests = editingState.selectedRowKeys.map(rowId =>
@@ -180,10 +188,7 @@ const ManageData = () => {
                 Delete
               </Button>
             ) : (
-              <Button
-                className={styles['save-button']}
-                onClick={() => setIsEditDataModalOpen(true)}
-              >
+              <Button className={styles['save-button']} onClick={saveButtonClicked}>
                 Save
               </Button>
             )}
