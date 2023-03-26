@@ -15,6 +15,11 @@ const DataType = {
   timeTypes: ['time'],
 };
 
+const equals = (record, newRecord) =>
+  record &&
+  newRecord &&
+  Object.keys(record).every(key => record[key].toString() === newRecord[key].toString());
+
 // eslint-disable-next-line import/prefer-default-export
 export const EditableCell = ({
   record,
@@ -24,18 +29,26 @@ export const EditableCell = ({
   editingState,
   setEditingState,
 }) => {
+  // Sets editingState.editedRows according to if the new value is different from the original value
   const saveData = value => {
     const newRecord = {
       ...(record.id in editingState.editedRows ? editingState.editedRows[record.id] : record),
       [columnName]: value,
     };
-    setEditingState({
-      ...editingState,
-      editedRows: {
-        ...editingState.editedRows,
-        [record.id]: newRecord,
-      },
-    });
+    // If the new value is the same as the original value, remove the record from editedRows
+    if (equals(record, newRecord)) {
+      const { [record.id]: _, ...editedRows } = editingState.editedRows;
+      setEditingState({ ...editingState, editedRows });
+      // If the new value is different from the original value, add the record to editedRows
+    } else {
+      setEditingState({
+        ...editingState,
+        editedRows: {
+          ...editingState.editedRows,
+          [record.id]: newRecord,
+        },
+      });
+    }
   };
   // Date or time type requires input
   if (DataType.numericTypes.includes(columnType) || DataType.textTypes.includes(columnType)) {
@@ -47,23 +60,23 @@ export const EditableCell = ({
         type={DataType.numericTypes.includes(columnType) ? 'number' : undefined}
       />
     );
-    // Boolean type requires dropdown with True and False options
   }
+  // Boolean type requires dropdown with True and False options
   if (DataType.booleanTypes.includes(columnType)) {
     return (
       <Space wrap>
         <Select
           defaultValue={Boolean(defaultValue)}
           options={[
-            { value: false, label: 'False' },
-            { value: true, label: 'True' },
+            { value: false, label: 'false' },
+            { value: true, label: 'true' },
           ]}
           onChange={saveData}
         />
       </Space>
     );
-    // Date type requires DatePicker
   }
+  // Date type requires DatePicker
   if (DataType.dateTypes.includes(columnType)) {
     return (
       <DatePicker style={{ width: 125 }} defaultValue={dayjs(defaultValue)} onChange={saveData} />

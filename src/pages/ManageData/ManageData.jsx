@@ -32,6 +32,10 @@ const ManageData = () => {
 
   const [tableState, setTableState] = useState({ rows: [], columns: [] });
 
+  const clearEditingState = () => {
+    setEditingState({ selectedRowKeys: [], editedRows: {} });
+  };
+
   const onSurveyChange = ([, surveyId]) => {
     setSelectedSurveyId(surveyId);
   };
@@ -139,6 +143,10 @@ const ManageData = () => {
     setSurveyOptions([{ label: 'View all data' }, ...map.data]);
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    clearEditingState();
+  }, [editingMode]);
 
   useEffect(() => {
     // Changes columns based in if the user is in editing mode
