@@ -21,6 +21,7 @@ const computeColumns = (checkedLists, data, query = '') => {
   }
 
   const cols = Object.keys(data[0]).filter(value => !TABLE_PRIMARY_KEYS.includes(value));
+
   return [
     ...cols.map(field => ({
       title: field,
@@ -54,9 +55,7 @@ const QueryResults = ({ checkedLists, data, isLoading, query }) => {
   return (
     <div className={styles['query-results-container']}>
       <Table
-        rowKey={record => {
-          return TABLE_PRIMARY_KEYS.map(value => record[value]);
-        }}
+        rowKey="id"
         dataSource={data}
         columns={computeColumns(checkedLists, data, query)}
         scroll={{ x: true }}
