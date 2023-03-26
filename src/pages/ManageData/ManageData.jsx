@@ -7,7 +7,7 @@ import DeleteDataModal from './DeleteDataModal/DeleteDataModal';
 import EditDataModal from './EditDataModal/EditDataModal';
 import CancelModal from './CancelModal/CancelModal';
 
-import { EditableCell } from './ManageDataUtils';
+import { EditableCell, UndoButton } from './ManageDataUtils';
 import { humanizeCell } from '../QueryData/QueryDataUtils';
 import { GSPBackend, keysToCamel, toCamel } from '../../utils/utils';
 import styles from './ManageData.module.css';
@@ -30,11 +30,7 @@ const ManageData = () => {
     editedRows: {},
   });
 
-  const [tableState, setTableState] = useState({ rows: [], columns: [] });
-
-  const clearEditingState = () => {
-    setEditingState({ selectedRowKeys: [], editedRows: {} });
-  };
+  const [tableState, setTableState] = useState({ originalRows: [], rows: [], columns: [] });
 
   const onSurveyChange = ([, surveyId]) => {
     setSelectedSurveyId(surveyId);
@@ -57,23 +53,52 @@ const ManageData = () => {
     }));
 
   // Creates columns for table based on existing columns (switches to input if in editing mode)
-  const computeColumnsFromExisting = columnData =>
-    columnData.map(col => ({
-      ...col,
-      render: (text, record) =>
-        col.title !== 'id' && col.title !== 'survey_id' && editingMode ? (
-          <EditableCell
-            record={record}
-            columnName={col.title}
-            columnType={col.type}
-            defaultValue={text}
-            editingState={editingState}
-            setEditingState={setEditingState}
-          />
-        ) : (
-          <div>{humanizeCell(text, col.type)}</div>
-        ),
-    }));
+  const computeColumnsFromExisting = columnData => [
+    ...columnData
+      .filter(col => col.key !== 'operation')
+      .map(col => ({
+        ...col,
+        render: (text, record, index) =>
+          col.title !== 'id' && col.title !== 'survey_id' && editingMode ? (
+            <EditableCell
+              text={text}
+              originalRecord={tableState.originalRows[index]}
+              record={record}
+              index={index}
+              columnName={col.title}
+              columnType={col.type}
+              editingState={editingState}
+              setEditingState={setEditingState}
+              tableState={tableState}
+              setTableState={setTableState}
+              editingMode={editingMode}
+              setEditingMode={setEditingMode}
+            />
+          ) : (
+            <div>{humanizeCell(text, col.type)}</div>
+          ),
+      })),
+    ...(editingMode
+      ? [
+          {
+            title: 'Action',
+            key: 'operation',
+            fixed: 'right',
+            width: 100,
+            render: (text, record, index) => (
+              <UndoButton
+                originalRecord={{ ...tableState.originalRows[index] }}
+                index={index}
+                tableState={tableState}
+                setTableState={setTableState}
+                editingState={editingState}
+                setEditingState={setEditingState}
+              />
+            ),
+          },
+        ]
+      : []),
+  ];
 
   // Fetches table data based on selected survey and table
   const fetchTableData = async () => {
@@ -86,29 +111,29 @@ const ManageData = () => {
     ];
     const [{ data: columnData }, { data: rowData }] = await Promise.all(requests);
     setTableState({
+      originalRows: keysToCamel(rowData),
       rows: keysToCamel(rowData),
       columns: computeColumnsFromSQL(columnData),
     });
   };
 
-  const exitEditingMode = () => {
-    setEditingMode(false);
-    setEditingState({ selectedRowKeys: [], editedRows: {} });
-  };
-
   const cancelButtonClicked = () => {
+    // If there are edited rows, open the cancel modal
     if (Object.keys(editingState.editedRows).length) {
       setIsCancelModalOpen(true);
+      // Otherwise, exit editing mode
     } else {
-      exitEditingMode();
+      setEditingMode(false);
     }
   };
 
   const saveButtonClicked = () => {
+    // If there are edited rows, open the edit data modal
     if (Object.keys(editingState.editedRows).length) {
       setIsEditDataModalOpen(true);
+      // Otherwise, exit editing mode
     } else {
-      exitEditingMode();
+      setEditingMode(false);
     }
   };
 
@@ -144,21 +169,24 @@ const ManageData = () => {
     setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    clearEditingState();
+  // Clear the editing state every time editingMode is toggled
+  useEffect(async () => {
+    if (!editingMode) {
+      await fetchTableData();
+    }
+    setEditingState({ selectedRowKeys: [], editedRows: {} });
   }, [editingMode]);
 
   useEffect(() => {
-    // Changes columns based in if the user is in editing mode
+    // Re-renders table columns -- needed because antd only computes column state based on state values when a column is rendered
     if (tableState.columns) {
       setTableState({ ...tableState, columns: computeColumnsFromExisting(tableState.columns) });
     }
-  }, [editingMode, editingState]);
+  }, [editingMode, editingState, tableState.rows]);
 
   // Load table data when selected table or selected survey changes
   useEffect(async () => {
     await fetchTableData();
-    setEditingState({ selectedRowKeys: [], editedRows: {} });
   }, [selectedTable, selectedSurveyId]);
 
   if (isLoading) {
@@ -213,8 +241,8 @@ const ManageData = () => {
         <Table
           rowSelection={editingMode ? rowSelection : undefined}
           bordered
-          columns={tableState.columns}
-          dataSource={tableState.rows}
+          columns={[...tableState.columns]}
+          dataSource={[...tableState.rows]}
           scroll={{ x: true }}
           rowKey="id"
         />
@@ -237,7 +265,7 @@ const ManageData = () => {
         isOpen={isCancelModalOpen}
         setIsOpen={setIsCancelModalOpen}
         editedRows={editingState.editedRows}
-        exitEditingMode={exitEditingMode}
+        setEditingMode={setEditingMode}
       />
     </div>
   );

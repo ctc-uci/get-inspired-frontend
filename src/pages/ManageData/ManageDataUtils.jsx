@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, DatePicker, TimePicker, Select, Space } from 'antd';
+import { Input, DatePicker, TimePicker, Select, Space, Button } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -22,13 +22,25 @@ const equals = (record, newRecord) =>
 
 // eslint-disable-next-line import/prefer-default-export
 export const EditableCell = ({
+  text,
   record,
+  originalRecord,
+  index,
   columnName,
   columnType,
-  defaultValue,
   editingState,
   setEditingState,
+  tableState,
+  setTableState,
 }) => {
+  const onChange = value => {
+    // For some reason this line has to be there so typing more than 2 characters doesn't re-render the table???
+    setEditingState({ ...editingState });
+    // Update the tableState with the new data value
+    const newTableState = { ...tableState };
+    newTableState.rows[index][columnName] = value;
+    setTableState(newTableState);
+  };
   // Sets editingState.editedRows according to if the new value is different from the original value
   const saveData = value => {
     const newRecord = {
@@ -36,7 +48,7 @@ export const EditableCell = ({
       [columnName]: value,
     };
     // If the new value is the same as the original value, remove the record from editedRows
-    if (equals(record, newRecord)) {
+    if (equals(originalRecord, newRecord)) {
       const { [record.id]: _, ...editedRows } = editingState.editedRows;
       setEditingState({ ...editingState, editedRows });
       // If the new value is different from the original value, add the record to editedRows
@@ -54,7 +66,9 @@ export const EditableCell = ({
   if (DataType.numericTypes.includes(columnType) || DataType.textTypes.includes(columnType)) {
     return (
       <Input
-        defaultValue={defaultValue}
+        style={{ width: DataType.numericTypes.includes(columnType) ? 75 : 175 }}
+        value={text}
+        onChange={e => onChange(e.target.value)}
         onBlur={e => saveData(e.target.value)}
         onPressEnter={e => saveData(e.target.value)}
         type={DataType.numericTypes.includes(columnType) ? 'number' : undefined}
@@ -66,7 +80,7 @@ export const EditableCell = ({
     return (
       <Space wrap>
         <Select
-          defaultValue={Boolean(defaultValue)}
+          defaultValue={Boolean(text)}
           options={[
             { value: false, label: 'false' },
             { value: true, label: 'true' },
@@ -78,18 +92,50 @@ export const EditableCell = ({
   }
   // Date type requires DatePicker
   if (DataType.dateTypes.includes(columnType)) {
-    return (
-      <DatePicker style={{ width: 125 }} defaultValue={dayjs(defaultValue)} onChange={saveData} />
-    );
+    return <DatePicker style={{ width: 125 }} defaultValue={dayjs(text)} onChange={saveData} />;
   }
   // Time type requires TimePicker
   return (
     <TimePicker
+      style={{ width: 80 }}
       format="HH:mm"
-      defaultValue={dayjs(defaultValue, 'HH:mm')}
+      defaultValue={dayjs(text, 'HH:mm')}
       onChange={(time, timeString) => saveData(timeString)}
     />
   );
+};
+
+export const UndoButton = ({
+  originalRecord,
+  index,
+  tableState,
+  setTableState,
+  editingState,
+  setEditingState,
+}) => {
+  const undoChanges = () => {
+    // Update the table state with original values
+    const newTableState = { ...tableState };
+    newTableState.rows[index] = { ...originalRecord };
+    setTableState(newTableState);
+    //  Remove the record from editedRows
+    const { [originalRecord.id]: _, ...editedRows } = editingState.editedRows;
+    setEditingState({ ...editingState, editedRows });
+  };
+  return (
+    <Button onClick={undoChanges} disabled={!(originalRecord.id in editingState.editedRows)}>
+      Undo
+    </Button>
+  );
+};
+
+UndoButton.propTypes = {
+  originalRecord: PropTypes.shape({}).isRequired,
+  editingState: PropTypes.shape({
+    selectedRowKeys: PropTypes.arrayOf(PropTypes.number).isRequired,
+    editedRows: PropTypes.shape({}).isRequired,
+  }).isRequired,
+  setEditingState: PropTypes.func.isRequired,
 };
 
 EditableCell.propTypes = {

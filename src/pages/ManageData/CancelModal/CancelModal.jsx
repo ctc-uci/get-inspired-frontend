@@ -6,7 +6,7 @@ import styles from './CancelModal.module.css';
 
 const { Title } = Typography;
 
-const CancelModal = ({ isOpen, setIsOpen, editedRows, exitEditingMode }) => {
+const CancelModal = ({ isOpen, setIsOpen, editedRows, setEditingMode }) => {
   const handleOk = () => {
     setIsOpen(false);
   };
@@ -15,7 +15,7 @@ const CancelModal = ({ isOpen, setIsOpen, editedRows, exitEditingMode }) => {
   };
 
   const cancelButtonClicked = () => {
-    exitEditingMode();
+    setEditingMode(false);
     handleOk();
   };
 
@@ -43,7 +43,7 @@ CancelModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   editedRows: PropTypes.shape({}).isRequired,
-  exitEditingMode: PropTypes.func.isRequired,
+  setEditingMode: PropTypes.func.isRequired,
 };
 
 export default CancelModal;
