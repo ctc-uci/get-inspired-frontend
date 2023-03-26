@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Modal, Button, Typography } from 'antd';
 import { WarningOutlined } from '@ant-design/icons';
 
+import { NotiMessage, NotiIcon, notify } from '../../../utils/utils';
+
 import styles from './DeleteDataModal.module.css';
 
 const { Title } = Typography;
@@ -22,8 +24,16 @@ const DeleteDataModal = ({
   };
 
   const deleteButtonClicked = async () => {
-    await deleteSelectedRows();
-    handleOk();
+    try {
+      await deleteSelectedRows();
+      handleOk();
+      notify(NotiMessage.ROWS_DELETED(selectedRowKeys.length, selectedTable), NotiIcon.SUCCESS);
+    } catch (error) {
+      notify(
+        NotiMessage.ROWS_DELETED_ERROR(selectedRowKeys.length, selectedTable, error.message),
+        NotiIcon.ERROR,
+      );
+    }
   };
 
   return (

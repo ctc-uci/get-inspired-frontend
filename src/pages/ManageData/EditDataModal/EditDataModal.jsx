@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button, Typography } from 'antd';
 
+import { NotiIcon, NotiMessage, notify } from '../../../utils/utils';
+
 import styles from './EditDataModal.module.css';
 
 const { Title } = Typography;
 
-const EditDataModal = ({ isOpen, setIsOpen, editedRows, saveEdits }) => {
+const EditDataModal = ({ isOpen, setIsOpen, editedRows, selectedTable, saveEdits }) => {
   const handleOk = () => {
     setIsOpen(false);
   };
@@ -15,8 +17,19 @@ const EditDataModal = ({ isOpen, setIsOpen, editedRows, saveEdits }) => {
   };
 
   const editButtonClicked = async () => {
-    await saveEdits();
-    handleOk();
+    try {
+      await saveEdits();
+      handleOk();
+      notify(
+        NotiMessage.ROWS_EDITED(Object.keys(editedRows).length, selectedTable),
+        NotiIcon.SUCCESS,
+      );
+    } catch (error) {
+      notify(
+        NotiMessage.ROWS_EDITED_ERROR(Object.keys(editedRows).length, selectedTable, error.message),
+        NotiIcon.ERROR,
+      );
+    }
   };
 
   return (
@@ -49,6 +62,7 @@ EditDataModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   editedRows: PropTypes.shape({}).isRequired,
+  selectedTable: PropTypes.string.isRequired,
   saveEdits: PropTypes.func.isRequired,
 };
 

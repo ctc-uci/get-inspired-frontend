@@ -24,7 +24,6 @@ const ManageData = () => {
   const [isDeleteDataModalOpen, setIsDeleteDataModalOpen] = useState(false);
   const [isEditDataModalOpen, setIsEditDataModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-
   const [editingState, setEditingState] = useState({
     selectedRowKeys: [],
     editedRows: {},
@@ -266,6 +265,7 @@ const ManageData = () => {
         editedRows={editingState.editedRows}
         setIsOpen={setIsEditDataModalOpen}
         selectedRowKeys={editingState.editedRows}
+        selectedTable={selectedTable}
         saveEdits={saveEdits}
       />
       <CancelModal

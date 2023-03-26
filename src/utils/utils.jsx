@@ -67,6 +67,13 @@ const keysToCamel = data => {
   return data;
 };
 const NotiMessage = {
+  ROWS_DELETED: (numRows, table) =>
+    `Deleted ${numRows} row(s) from the ${table.toLowerCase()} table!`,
+  ROWS_DELETED_ERROR: (numRows, table, error) =>
+    `Error deleting ${numRows} row(s) from the ${table.toLowerCase()} table: ${error}`,
+  ROWS_EDITED: (numRows, table) => `Edited ${numRows} row(s) in the ${table.toLowerCase()} table!`,
+  ROWS_EDITED_ERROR: (numRows, table, error) =>
+    `Error editing ${numRows} row(s) in the ${table.toLowerCase()} table: ${error}`,
   COLUMN_ADDED: (column, table) => `Column '${column}' added to the ${table.toLowerCase()} table!`,
   COLUMN_ADDED_ERROR: (column, table, error) =>
     `Error adding column '${column}' to the ${table.toLowerCase()} table: ${error}`,

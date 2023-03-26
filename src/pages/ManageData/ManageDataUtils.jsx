@@ -46,24 +46,26 @@ export const EditableCell = ({
       ...(record.id in editingState.editedRows ? editingState.editedRows[record.id] : record),
       [columnName]: value,
     };
+
+    // Update the tableState with the new data value
+    const newTableState = { ...tableState };
+    newTableState.rows[index][columnName] = value;
+    setTableState(newTableState);
     // If the new value is the same as the original value, remove the record from editedRows
     if (equals(originalRecord, newRecord)) {
       const { [record.id]: _, ...editedRows } = editingState.editedRows;
       setEditingState({ ...editingState, editedRows });
       // If the new value is different from the original value, add the record to editedRows
     } else {
+      const editedRows = {
+        ...editingState.editedRows,
+        [record.id]: newRecord,
+      };
       setEditingState({
         ...editingState,
-        editedRows: {
-          ...editingState.editedRows,
-          [record.id]: newRecord,
-        },
+        editedRows,
       });
     }
-    // Update the tableState with the new data value
-    const newTableState = { ...tableState };
-    newTableState.rows[index][columnName] = value;
-    setTableState(newTableState);
   };
   // Date or time type requires input
   if (DataType.numericTypes.includes(columnType) || DataType.textTypes.includes(columnType)) {
