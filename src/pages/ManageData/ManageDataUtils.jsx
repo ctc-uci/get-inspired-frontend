@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Input, DatePicker, TimePicker, Select, Space, Button } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -61,6 +60,10 @@ export const EditableCell = ({
         },
       });
     }
+    // Update the tableState with the new data value
+    const newTableState = { ...tableState };
+    newTableState.rows[index][columnName] = value;
+    setTableState(newTableState);
   };
   // Date or time type requires input
   if (DataType.numericTypes.includes(columnType) || DataType.textTypes.includes(columnType)) {
@@ -80,7 +83,7 @@ export const EditableCell = ({
     return (
       <Space wrap>
         <Select
-          defaultValue={Boolean(text)}
+          value={Boolean(text)}
           options={[
             { value: false, label: 'false' },
             { value: true, label: 'true' },
@@ -92,14 +95,14 @@ export const EditableCell = ({
   }
   // Date type requires DatePicker
   if (DataType.dateTypes.includes(columnType)) {
-    return <DatePicker style={{ width: 125 }} defaultValue={dayjs(text)} onChange={saveData} />;
+    return <DatePicker style={{ width: 125 }} value={dayjs(text)} onChange={saveData} />;
   }
   // Time type requires TimePicker
   return (
     <TimePicker
       style={{ width: 80 }}
       format="HH:mm"
-      defaultValue={dayjs(text, 'HH:mm')}
+      value={dayjs(text, 'HH:mm')}
       onChange={(time, timeString) => saveData(timeString)}
     />
   );
@@ -127,25 +130,4 @@ export const UndoButton = ({
       Undo
     </Button>
   );
-};
-
-UndoButton.propTypes = {
-  originalRecord: PropTypes.shape({}).isRequired,
-  editingState: PropTypes.shape({
-    selectedRowKeys: PropTypes.arrayOf(PropTypes.number).isRequired,
-    editedRows: PropTypes.shape({}).isRequired,
-  }).isRequired,
-  setEditingState: PropTypes.func.isRequired,
-};
-
-EditableCell.propTypes = {
-  record: PropTypes.shape({}).isRequired,
-  columnName: PropTypes.string.isRequired,
-  columnType: PropTypes.string.isRequired,
-  defaultValue: PropTypes.string.isRequired,
-  editingState: PropTypes.shape({
-    selectedRowKeys: PropTypes.arrayOf(PropTypes.number).isRequired,
-    editedRows: PropTypes.shape({}).isRequired,
-  }).isRequired,
-  setEditingState: PropTypes.func.isRequired,
 };

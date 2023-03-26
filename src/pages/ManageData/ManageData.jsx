@@ -147,7 +147,14 @@ const ManageData = () => {
         ...tableState,
         rows: tableState.rows.filter(row => !editingState.selectedRowKeys.includes(row.id)),
       });
-      setEditingState({ ...editingState, selectedRowKeys: [] });
+      setEditingState({
+        editedRows: Object.fromEntries(
+          Object.entries(editingState.editedRows).filter(
+            ([key]) => !editingState.selectedRowKeys.includes(Number.parseInt(key, 10)),
+          ),
+        ),
+        selectedRowKeys: [],
+      });
     }
   };
 
