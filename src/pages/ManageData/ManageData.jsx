@@ -58,7 +58,7 @@ const ManageData = () => {
       .map(col => ({
         ...col,
         render: (text, record, index) =>
-          col.title !== 'id' && col.title !== 'survey_id' && editingMode ? (
+          col.title !== 'id' && col.title !== 'surveyId' && editingMode ? (
             <EditableCell
               text={text}
               originalRecord={tableState.originalRows[index]}
