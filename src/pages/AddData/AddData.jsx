@@ -1,7 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { Button } from 'antd';
-import { FileAddOutlined, EditOutlined } from '@ant-design/icons';
-
 import StepsBar from '../../components/AddData/StepsBar/StepsBar';
 import SurveyForm from '../../components/AddData/SurveyForm/SurveyForm';
 import ImportCSV from '../../components/AddData/ImportCSV/ImportCSV';
@@ -19,18 +16,15 @@ const AddData = () => {
     rakerCols: rakerTableCols,
   });
   const [curStep, setCurStep] = useState(0);
-  const [showChooseSurveyButtons, setShowChooseSurveyButtons] = useState(true);
-  const [showNewSurvey, setShowNewSurvey] = useState(false);
-  const [showExistingSurvey, setShowExistingSurvey] = useState(false);
+  const [showNewSurvey] = useState(true);
+  // const [showExistingSurvey, setShowExistingSurvey] = useState(false);
 
-  const handleCreateNewSurvey = () => {
-    setShowChooseSurveyButtons(false);
-    setShowNewSurvey(true);
-  };
-  const handleAddToExistingSurvey = () => {
-    setShowChooseSurveyButtons(false);
-    setShowExistingSurvey(true);
-  };
+  // const handleCreateNewSurvey = () => {
+  //   setShowNewSurvey(true);
+  // };
+  // const handleAddToExistingSurvey = () => {
+  //   setShowExistingSurvey(true);
+  // };
   const incrStep = useCallback(() => {
     setCurStep(prevStep => {
       return prevStep + 1;
@@ -46,30 +40,6 @@ const AddData = () => {
     <div className={styles.addDataWrapper}>
       <div className={styles.appDataHeading}>
         <h3 style={{ fontFamily: 'Roboto, sans-serif' }}>Add Data Form</h3>
-        {showChooseSurveyButtons && (
-          <div className={styles.chooseSurveyBtnsDiv}>
-            {showChooseSurveyButtons && (
-              <Button
-                className={styles.chooseSurveyBtns}
-                type="primary"
-                icon={<EditOutlined />}
-                onClick={() => handleAddToExistingSurvey()}
-              >
-                Add to existing survey
-              </Button>
-            )}
-            {showChooseSurveyButtons && (
-              <Button
-                className={styles.chooseSurveyBtns}
-                type="primary"
-                icon={<FileAddOutlined />}
-                onClick={() => handleCreateNewSurvey()}
-              >
-                Create new survey
-              </Button>
-            )}
-          </div>
-        )}
         {showNewSurvey && curStep < 4 && (
           <StepsBar
             curStep={curStep}
@@ -81,12 +51,12 @@ const AddData = () => {
             ]}
           />
         )}
-        {showExistingSurvey && curStep < 3 && (
+        {/* {showExistingSurvey && curStep < 3 && (
           <StepsBar
             curStep={curStep}
             titleArray={[{ title: 'Select' }, { title: 'Upload' }, { title: 'Preview' }]}
           />
-        )}
+        )} */}
       </div>
       {showNewSurvey && curStep === 0 && (
         <SurveyForm incrStep={incrStep} surveyData={surveyData} setSurveyData={setSurveyData} />
