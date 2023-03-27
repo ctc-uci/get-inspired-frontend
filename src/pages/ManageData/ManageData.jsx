@@ -9,7 +9,7 @@ import CancelModal from './CancelModal/CancelModal';
 
 import { EditableCell, UndoButton } from './ManageDataUtils';
 import { humanizeCell } from '../QueryData/QueryDataUtils';
-import { GSPBackend, keysToCamel, toCamel } from '../../utils/utils';
+import { GSPBackend } from '../../utils/utils';
 import styles from './ManageData.module.css';
 
 const { Title } = Typography;
@@ -45,9 +45,9 @@ const ManageData = () => {
   // Creates columns for table based on SQL table columns
   const computeColumnsFromSQL = columnData =>
     columnData.map(col => ({
-      title: toCamel(col.COLUMN_NAME),
-      key: toCamel(col.COLUMN_NAME),
-      dataIndex: toCamel(col.COLUMN_NAME),
+      title: col.COLUMN_NAME,
+      key: col.COLUMN_NAME,
+      dataIndex: col.COLUMN_NAME,
       type: col.DATA_TYPE,
     }));
 
@@ -58,10 +58,10 @@ const ManageData = () => {
       .map(col => ({
         ...col,
         render: (text, record, index) =>
-          col.title !== 'id' && col.title !== 'surveyId' && editingMode ? (
+          col.title !== 'id' && col.title !== 'survey_id' && editingMode ? (
             <EditableCell
               text={text}
-              originalRecord={tableState.originalRows[index]}
+              originalRecord={{ ...tableState.originalRows[index] }}
               record={record}
               index={index}
               columnName={col.title}
@@ -109,9 +109,10 @@ const ManageData = () => {
       GSPBackend.get(rowDataUrl),
     ];
     const [{ data: columnData }, { data: rowData }] = await Promise.all(requests);
+
     setTableState({
-      originalRows: keysToCamel(rowData),
-      rows: keysToCamel(rowData),
+      originalRows: rowData.map(row => ({ ...row })),
+      rows: rowData,
       columns: computeColumnsFromSQL(columnData),
     });
   };
