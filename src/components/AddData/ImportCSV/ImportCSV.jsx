@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { React, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Upload, Button, Alert, Table, Checkbox, message } from 'antd';
 import PropTypes from 'prop-types';
 import { InboxOutlined } from '@ant-design/icons';
@@ -42,6 +42,22 @@ function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
   };
 
   const showCSVTable = csvData[typeOfData].length > 0;
+
+  // Get table columns on page load
+  useEffect(async () => {
+    const { data } = await GSPBackend.get(`/tables/${typeOfData}/columns`);
+    setCsvData({
+      ...csvData,
+      [`${typeOfData}Cols`]: data
+        .filter(column => column.COLUMN_NAME !== 'id' && column.COLUMN_NAME !== 'survey_id')
+        .map(column => ({
+          title: column.COLUMN_NAME,
+          dataIndex: column.COLUMN_NAME,
+          key: column.COLUMN_NAME,
+          type: column.DATA_TYPE,
+        })),
+    });
+  }, []);
 
   return (
     <div className={styles.addDataDiv}>

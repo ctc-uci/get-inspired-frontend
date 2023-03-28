@@ -15,7 +15,7 @@ const DataType = {
   timeTypes: ['time'],
 };
 
-export const fieldValueBuilder = (value, columnType) => {
+const fieldValueBuilder = (value, columnType) => {
   if (DataType.dateTypes.includes(columnType)) {
     return dayjs(value);
   }
@@ -31,29 +31,25 @@ export const fieldValueBuilder = (value, columnType) => {
 const FLEX = '40%';
 
 // eslint-disable-next-line import/prefer-default-export
-export const UserInput = ({ columnName, columnType, selectedExistingSurvey }) => {
-  const form = Form.useFormInstance();
-  const [, selectedExistingSurveyId] = selectedExistingSurvey;
+export const UserInput = ({ columnName, value, columnType }) => {
   if (DataType.numericTypes.includes(columnType) || DataType.textTypes.includes(columnType)) {
     return (
-      <Form.Item style={{ flex: FLEX }} form={form} name={columnName} label={columnName}>
-        <Input
-          disabled={selectedExistingSurveyId}
-          type={DataType.numericTypes.includes(columnType) ? 'number' : undefined}
-        />
+      <Form.Item style={{ flex: FLEX }} label={columnName}>
+        <Input disabled value={fieldValueBuilder(value, columnType)} />
       </Form.Item>
     );
   }
   // Boolean type requires dropdown with True and False options
   if (DataType.booleanTypes.includes(columnType)) {
     return (
-      <Form.Item style={{ flex: FLEX }} form={form} name={columnName} label={columnName}>
+      <Form.Item style={{ flex: FLEX }} name={columnName} label={columnName}>
         <Select
+          disabled
+          value={fieldValueBuilder(value, columnType)}
           options={[
             { value: false, label: 'false' },
             { value: true, label: 'true' },
           ]}
-          disabled={selectedExistingSurveyId}
         />
       </Form.Item>
     );
@@ -61,22 +57,15 @@ export const UserInput = ({ columnName, columnType, selectedExistingSurvey }) =>
   // Date type requires DatePicker
   if (DataType.dateTypes.includes(columnType)) {
     return (
-      <Form.Item style={{ flex: FLEX }} name={columnName} label={columnName}>
-        <DatePicker
-          disabled={selectedExistingSurveyId}
-          onChange={date => form.setFieldsValue({ [columnName]: date })}
-        />
+      <Form.Item style={{ flex: FLEX }} label={columnName}>
+        <DatePicker value={fieldValueBuilder(value, columnType)} disabled />
       </Form.Item>
     );
   }
   // Time type requires TimePicker
   return (
-    <Form.Item style={{ flex: FLEX }} name={columnName} label={columnName}>
-      <TimePicker
-        disabled={selectedExistingSurveyId}
-        format="HH:mm"
-        onChange={time => form.setFieldsValue({ [columnName]: time })}
-      />
+    <Form.Item style={{ flex: FLEX }} label={columnName}>
+      <TimePicker disabled value={fieldValueBuilder(value, columnType)} format="HH:mm" />
     </Form.Item>
   );
 };

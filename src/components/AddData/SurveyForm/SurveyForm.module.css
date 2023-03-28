@@ -7,8 +7,8 @@
 
 .header {
   display: flex;
-  width: 95%;
-  justify-content: space-between;
+  flex-direction: column;
+  row-gap: 10px;
 }
 
 .cascader {

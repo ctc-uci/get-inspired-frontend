@@ -1,26 +1,40 @@
 import { React } from 'react';
 import { CaretDownOutlined } from '@ant-design/icons';
-import { Row, Col, Button, Collapse, theme, Table } from 'antd';
+import { Row, Col, Button, Collapse, theme, Table, Form } from 'antd';
 import PropTypes from 'prop-types';
 
+import { UserInput } from './ReviewFormUtils';
 import { GSPBackend } from '../../../utils/utils';
 
 import styles from './ReviewForm.module.css';
 
 const { Panel } = Collapse;
 
-function ReviewForm({ incrStep, decrStep, surveyData, csvData }) {
+function ReviewForm({
+  incrStep,
+  decrStep,
+  surveyData,
+  csvData,
+  selectedExistingSurvey,
+  surveyColumns,
+}) {
   const { token } = theme.useToken();
 
   const addData = async () => {
-    const surveyId = (await GSPBackend.post('/surveys', surveyData)).data[0].insertId;
+    const [, selectedExistingSurveyId] = selectedExistingSurvey;
+    const surveyId =
+      selectedExistingSurveyId || (await GSPBackend.post('/surveys', surveyData)).data[0].insertId;
 
     const addClamAndRakerRequests = [
       ...(csvData.clam
-        ? csvData.clam.map(clamData => GSPBackend.post('/clams', { surveyId, ...clamData }))
+        ? csvData.clam.map(clamData =>
+            GSPBackend.post('/clams', { survey_id: surveyId, ...clamData }),
+          )
         : []),
       ...(csvData.raker
-        ? csvData.raker.map(rakerData => GSPBackend.post('/rakers', { surveyId, ...rakerData }))
+        ? csvData.raker.map(rakerData =>
+            GSPBackend.post('/rakers', { survey_id: surveyId, ...rakerData }),
+          )
         : []),
     ];
 
@@ -45,14 +59,23 @@ function ReviewForm({ incrStep, decrStep, surveyData, csvData }) {
         style={{ background: token.colorBgContainer }}
       >
         <Panel header="Survey" key="1" style={panelStyle}>
-          <p>Show review data here</p>
+          <Form className={styles['survey-form']} layout="vertical">
+            {Object.keys(surveyData).map(key => (
+              <UserInput
+                key={key}
+                columnName={key}
+                value={surveyData[key]}
+                columnType={surveyColumns[key]}
+              />
+            ))}
+          </Form>
         </Panel>
         <Panel header="Clams" key="2" style={panelStyle}>
           <Table
             className="review-ant-table"
             dataSource={csvData.clam}
             columns={csvData.clamCols}
-            pagination={{ pageSize: 2 }}
+            pagination={{ pageSize: 8 }}
           />
         </Panel>
         <Panel header="Raker" key="3" style={panelStyle}>
@@ -60,7 +83,7 @@ function ReviewForm({ incrStep, decrStep, surveyData, csvData }) {
             className="review-ant-table"
             dataSource={csvData.raker}
             columns={csvData.rakerCols}
-            pagination={{ pageSize: 2 }}
+            pagination={{ pageSize: 8 }}
           />
         </Panel>
       </Collapse>
@@ -81,14 +104,9 @@ function ReviewForm({ incrStep, decrStep, surveyData, csvData }) {
   );
 }
 
-ReviewForm.defaultProps = {
-  incrStep: PropTypes.func,
-  decrStep: PropTypes.func,
-};
-
 ReviewForm.propTypes = {
-  incrStep: PropTypes.func,
-  decrStep: PropTypes.func,
+  incrStep: PropTypes.func.isRequired,
+  decrStep: PropTypes.func.isRequired,
   surveyData: PropTypes.shape({}).isRequired,
   csvData: PropTypes.shape({
     clam: PropTypes.arrayOf(PropTypes.shape({})),
@@ -96,6 +114,8 @@ ReviewForm.propTypes = {
     clamCols: PropTypes.arrayOf(PropTypes.shape({})),
     rakerCols: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
+  selectedExistingSurvey: PropTypes.arrayOf(PropTypes.string).isRequired,
+  surveyColumns: PropTypes.shape({}).isRequired,
 };
 
 export default ReviewForm;
