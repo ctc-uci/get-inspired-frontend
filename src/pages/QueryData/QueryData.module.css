@@ -1,25 +1,22 @@
-/* Entire container */
-.query-data-container {
-  padding: 0 1rem 0 1rem;
-}
-
-/* Search type selector */
-.search-type-selector {
-}
-
 /* Generic search bar */
 .generic-search-bar {
-  margin-top: 20px;
   width: 50%;
 }
 
 /* Advanced query section (filter + button) */
+.generic-query,
 .advanced-query {
   display: flex;
   flex-direction: column;
   width: 95%;
+  padding-top: 10px;
 }
 
+.search-config-buttons {
+  display: flex;
+  column-gap: 10px;
+  align-self: flex-end;
+}
 /* Advanced query button */
 .advanced-query-button {
   align-self: flex-end;

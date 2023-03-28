@@ -12,9 +12,10 @@ import { tableToWidget } from './QueryDataUtils';
 import { GSPBackend } from '../../utils/utils';
 
 import styles from './QueryData.module.css';
+// Used ONLY to overrule default styling of react-awesome-query-builder
+import './QueryData.css';
 
-const { Search } = Input;
-const { Text } = Typography;
+const { Title, Text } = Typography;
 
 class DefaultDict {
   constructor(DefaultInit) {
@@ -70,7 +71,7 @@ const QueryData = () => {
   const onAdvancedSearch = async () => {
     // only query if checkedLists is nonempty
     if (Object.values(checkedLists).every(arr => arr.length === 0)) {
-      setErrorState('Please select at least one attribute to query');
+      setErrorState('Please select at least one column to display');
       return;
     }
     setErrorState('');
@@ -99,14 +100,12 @@ const QueryData = () => {
     }
   };
 
-  const onGenericSearch = async query => {
-    // only query if checkedLists and query are nonempty
-    if (!checkedTables.length) {
-      setErrorState('Please select at least one table to query');
+  const onGenericSearch = async () => {
+    if (!queryState.genericSearchQuery.length) {
+      setErrorState('Please enter a search query');
       return;
-    }
-    if (!query) {
-      setErrorState('Please make at least one query');
+    } else if (!checkedTables.length) {
+      setErrorState('Please select at least one table to query');
       return;
     }
     setErrorState('');
@@ -114,7 +113,7 @@ const QueryData = () => {
     // get rid of prev. results (find more elegant way to do this?)
     setQueryState(prevState => ({
       ...prevState,
-      genericSearchQuery: query,
+      genericSearchQuery: queryState.genericSearchQuery,
       results: [],
       queryResultsLoading: true,
     }));
@@ -122,7 +121,7 @@ const QueryData = () => {
     // get current state and make query
     try {
       const results = await GSPBackend.post('/query/generic', {
-        query,
+        query: queryState.genericSearchQuery,
         checkedTables,
       });
       setQueryState(prevState => ({
@@ -136,16 +135,7 @@ const QueryData = () => {
     }
   };
 
-  const renderBuilder = useCallback(
-    props => (
-      <div className="query-builder-container" style={{ padding: '10px' }}>
-        <div className="query-builder qb-lite">
-          <Builder {...props} />
-        </div>
-      </div>
-    ),
-    [],
-  );
+  const renderBuilder = useCallback(props => <Builder {...props} />, []);
 
   // Build the config fields on page load
   useEffect(async () => {
@@ -199,15 +189,27 @@ const QueryData = () => {
         <Radio.Button value="advanced">Advanced Search</Radio.Button>
       </Radio.Group>
       {genericSearch ? (
-        <>
-          <br />
-          <Search
+        <div className={styles['generic-query']}>
+          <Input
+            value={queryState.genericSearchQuery}
+            onChange={e => setQueryState({ ...queryState, genericSearchQuery: e.target.value })}
             placeholder="Input search text..."
             className={styles['generic-search-bar']}
-            onSearch={onGenericSearch}
-            enterButton
+            onPressEnter={onGenericSearch}
           />
-        </>
+          <div className={styles['search-config-buttons']}>
+            <Button type="primary" onClick={onSelectButtonClicked}>
+              {genericSearch ? 'Select tables to search' : 'Select columns to display'}
+            </Button>
+            <Button
+              type="primary"
+              onClick={onGenericSearch}
+              className={styles['advanced-query-button']}
+            >
+              Query
+            </Button>
+          </div>
+        </div>
       ) : (
         <div className={styles['advanced-query']}>
           <Query
@@ -215,14 +217,20 @@ const QueryData = () => {
             value={queryState.tree}
             onChange={onChange}
             renderBuilder={renderBuilder}
+            className={styles['query-builder']}
           />
-          <Button
-            type="primary"
-            onClick={onAdvancedSearch}
-            className={styles['advanced-query-button']}
-          >
-            Query
-          </Button>
+          <div className={styles['search-config-buttons']}>
+            <Button type="primary" onClick={onSelectButtonClicked}>
+              {genericSearch ? 'Select tables to search' : 'Select columns to display'}
+            </Button>
+            <Button
+              type="primary"
+              onClick={onAdvancedSearch}
+              className={styles['advanced-query-button']}
+            >
+              Query
+            </Button>
+          </div>
         </div>
       )}
       <SelectTablesModal
@@ -240,15 +248,10 @@ const QueryData = () => {
         setCheckedLists={setCheckedLists}
       />
       <div className={styles['query-results-header']}>
-        <h2>
+        <Title level={2}>
           Query Results <Text>({queryState.results.length} rows returned)</Text>
-        </h2>
-        <div>
-          <Button>Export as CSV</Button>
-          <Button type="primary" onClick={onSelectButtonClicked}>
-            {genericSearch ? 'Select Tables to Search' : 'Select Filter Columns'}
-          </Button>
-        </div>
+        </Title>
+        <Button>Export data</Button>
       </div>
       {
         // temporary error banner
