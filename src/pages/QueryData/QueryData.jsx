@@ -101,10 +101,7 @@ const QueryData = () => {
   };
 
   const onGenericSearch = async () => {
-    if (!queryState.genericSearchQuery.length) {
-      setErrorState('Please enter a search query');
-      return;
-    } else if (!checkedTables.length) {
+    if (!checkedTables.length) {
       setErrorState('Please select at least one table to query');
       return;
     }
@@ -172,6 +169,12 @@ const QueryData = () => {
       setIsSelectedAttributesModalOpen(true);
     }
   };
+
+  // Reset results when switching between generic and advanced search
+  useEffect(() => {
+    setQueryState({ ...queryState, genericSearchQuery: '', results: [] });
+    setCheckedLists(new DefaultDict(Array));
+  }, [genericSearch]);
 
   if (isLoading) {
     return <LoadingScreen />;
