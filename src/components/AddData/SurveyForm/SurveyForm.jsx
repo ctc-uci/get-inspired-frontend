@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Typography, Cascader } from 'antd';
+import { Button, Form, Typography, Cascader } from 'antd';
 import PropTypes from 'prop-types';
-import { UserInput } from './SurveyFormUtils';
+import { fieldValueBuilder, UserInput } from './SurveyFormUtils';
 import LoadingScreen from '../../../common/LoadingScreen/LoadingScreen';
 import { GSPBackend } from '../../../utils/utils';
 
@@ -13,16 +13,32 @@ const SurveyForm = ({ incrStep, setSurveyData }) => {
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(true);
   const [existingSurveyOptions, setExistingSurveyOptions] = useState([]);
-  const [columns, setColumns] = useState([]);
+  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
+  // Mapping of column name --> column type
+  const [columns, setColumns] = useState({});
   // eslint-disable-next-line no-unused-vars
-  const onFinish = values => {
-    setSurveyData(values);
+  const onFinish = () => {
+    setSurveyData(form.getFieldsValue());
     incrStep();
   };
 
   const onSurveyChange = async ([, surveyId]) => {
-    const { data } = await GSPBackend.get(`/surveys/survey/${surveyId}`);
-    form.setFieldsValue(data[0]);
+    if (surveyId) {
+      const { data } = await GSPBackend.get(`/surveys/survey/${surveyId}`);
+      form.setFieldsValue(
+        Object.keys(data[0]).reduce(
+          (acc, key) => ({
+            ...acc,
+            [key]: fieldValueBuilder(data[0][key], columns[key]),
+          }),
+          {},
+        ),
+      );
+      setSelectedSurveyId(surveyId);
+    } else {
+      form.resetFields();
+      setSelectedSurveyId(null);
+    }
   };
 
   useEffect(async () => {
@@ -31,7 +47,7 @@ const SurveyForm = ({ incrStep, setSurveyData }) => {
       GSPBackend.get('/surveys/existingSurveyOptions'),
     ];
     const [{ data: columnData }, { data: map }] = await Promise.all(requests);
-    setColumns(columnData.map(col => ({ name: col.COLUMN_NAME, type: col.DATA_TYPE })));
+    setColumns(columnData.reduce((acc, col) => ({ ...acc, [col.COLUMN_NAME]: col.DATA_TYPE }), {}));
     setExistingSurveyOptions([{ label: 'Clear existing survey' }, ...map]);
     setIsLoading(false);
   }, []);
@@ -40,7 +56,7 @@ const SurveyForm = ({ incrStep, setSurveyData }) => {
     return <LoadingScreen />;
   }
   return (
-    <div className={styles.addDataDiv}>
+    <div className={styles.container}>
       <div className={styles.header}>
         <Title className={styles['create-new-survey-header']} level={3}>
           Input information for a new survey
@@ -52,21 +68,20 @@ const SurveyForm = ({ incrStep, setSurveyData }) => {
           onChange={onSurveyChange}
         />
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Form
-          onFinish={onFinish}
-          labelCol={{ span: 16 }}
-          wrapperCol={{ span: 20 }}
-          form={form}
-          className={styles.surveyForm}
-          layout="vertical"
-          style={{ width: '100%' }}
-        >
-          {columns.map(column => (
-            <UserInput key={column.name} column={column} />
-          ))}
-        </Form>
-      </div>
+      <Form className={styles['survey-form']} form={form} layout="vertical">
+        {Object.keys(columns).map(columnName => (
+          <UserInput
+            className={styles['user-input']}
+            key={columnName}
+            columnName={columnName}
+            columnType={columns[columnName]}
+            selectedSurveyId={selectedSurveyId}
+          />
+        ))}
+      </Form>
+      <Button type="primary" onClick={onFinish}>
+        Next
+      </Button>
     </div>
   );
 };

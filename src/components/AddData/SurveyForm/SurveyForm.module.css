@@ -1,19 +1,8 @@
-.addDataDiv {
+.container {
   text-align: center;
   padding: 0.5% 3%;
   align-items: center;
   justify-content: center;
-  margin-top: -1%;
-}
-
-.surveyForm {
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-}
-
-.create-new-survey-header {
-  margin: 0;
 }
 
 .header {
@@ -24,4 +13,15 @@
 
 .cascader {
   width: 30%;
+}
+
+.create-new-survey-header {
+  margin: 0;
+}
+
+.survey-form {
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 15%;
 }
