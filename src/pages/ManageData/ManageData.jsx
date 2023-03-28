@@ -26,7 +26,7 @@ const ManageData = () => {
 
   // Load dropdown survey options on page load
   useEffect(async () => {
-    const map = await GSPBackend.get('/surveys/manageDataOptions');
+    const map = await GSPBackend.get('/surveys/existingSurveyOptions');
     setOptions([{ label: 'View all data' }, ...map.data]);
     setIsLoading(false);
   }, []);

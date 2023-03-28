@@ -1,26 +1,58 @@
-import { React } from 'react';
-import { Form, Row, Col, Input, InputNumber, Button, DatePicker, TimePicker, Space } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Form, Typography, Cascader } from 'antd';
 import PropTypes from 'prop-types';
+import { UserInput } from './SurveyFormUtils';
+import LoadingScreen from '../../../common/LoadingScreen/LoadingScreen';
+import { GSPBackend } from '../../../utils/utils';
+
 import styles from './SurveyForm.module.css';
 
-function SurveyForm({ incrStep, setSurveyData }) {
+const { Title } = Typography;
+
+const SurveyForm = ({ incrStep, setSurveyData }) => {
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(true);
+  const [existingSurveyOptions, setExistingSurveyOptions] = useState([]);
+  const [columns, setColumns] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const onFinish = values => {
     setSurveyData(values);
     incrStep();
   };
 
-  const onlyInputNumbers = event => {
-    if (!/[0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
+  const onSurveyChange = async ([, surveyId]) => {
+    const { data } = await GSPBackend.get(`/surveys/survey/${surveyId}`);
+    form.setFieldsValue(data[0]);
   };
 
+  useEffect(async () => {
+    const requests = [
+      GSPBackend.get('/tables/survey/columns'),
+      GSPBackend.get('/surveys/existingSurveyOptions'),
+    ];
+    const [{ data: columnData }, { data: map }] = await Promise.all(requests);
+    setColumns(columnData.map(col => ({ name: col.COLUMN_NAME, type: col.DATA_TYPE })));
+    setExistingSurveyOptions([{ label: 'Clear existing survey' }, ...map]);
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
   return (
     <div className={styles.addDataDiv}>
-      <p style={{ fontWeight: '600' }}>Input basic information for your survey</p>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div className={styles.header}>
+        <Title className={styles['create-new-survey-header']} level={3}>
+          Input information for a new survey
+        </Title>
+        <Cascader
+          className={styles.cascader}
+          options={existingSurveyOptions}
+          placeholder="Add data to existing survey"
+          onChange={onSurveyChange}
+        />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Form
           onFinish={onFinish}
           labelCol={{ span: 16 }}
@@ -30,100 +62,14 @@ function SurveyForm({ incrStep, setSurveyData }) {
           layout="vertical"
           style={{ width: '100%' }}
         >
-          <div style={{ marginLeft: '6.5%' }}>
-            <Row>
-              <Col span={12}>
-                <Form.Item label="Beach" name="beach">
-                  <Input placeholder="Newport Beach" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="Water Depth" name="waterDepth">
-                  <InputNumber
-                    placeholder="1.5 feet"
-                    onKeyPress={onlyInputNumbers}
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={12}>
-                <Form.Item label="Start Time" name="startTime">
-                  <TimePicker style={{ width: '100%' }} />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="Tide" name="tide">
-                  <Input placeholder="High" />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={12}>
-                <Form.Item label="Survey Location" name="location">
-                  <Input placeholder="3029 Ocean Blvd, Corona Del Mar, CA" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="Duration" name="duration">
-                  <InputNumber
-                    placeholder="2 hours"
-                    onKeyPress={onlyInputNumbers}
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={12}>
-                <Form.Item label="Method" name="method">
-                  <Input placeholder="Method 1" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="Distance" name="distance">
-                  <InputNumber
-                    placeholder="35 feet"
-                    onKeyPress={onlyInputNumbers}
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={12}>
-                <Form.Item label="Date" name="date">
-                  <Space direction="vertical" style={{ width: '100%' }}>
-                    <DatePicker style={{ width: '100%' }} />
-                  </Space>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="Slope" name="slope">
-                  <InputNumber
-                    placeholder="5 feet"
-                    onKeyPress={onlyInputNumbers}
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col style={{ marginLeft: '43%', marginTop: '3%' }}>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    Next
-                  </Button>
-                </Form.Item>
-              </Col>
-            </Row>
-          </div>
+          {columns.map(column => (
+            <UserInput key={column.name} column={column} />
+          ))}
         </Form>
       </div>
     </div>
   );
-}
+};
 SurveyForm.propTypes = {
   incrStep: PropTypes.func.isRequired,
   setSurveyData: PropTypes.func.isRequired,

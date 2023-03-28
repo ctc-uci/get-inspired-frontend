@@ -8,4 +8,20 @@
 
 .surveyForm {
   text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.create-new-survey-header {
+  margin: 0;
+}
+
+.header {
+  display: flex;
+  width: 95%;
+  justify-content: space-between;
+}
+
+.cascader {
+  width: 30%;
 }

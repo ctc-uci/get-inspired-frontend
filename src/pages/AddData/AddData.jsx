@@ -16,15 +16,6 @@ const AddData = () => {
     rakerCols: rakerTableCols,
   });
   const [curStep, setCurStep] = useState(0);
-  const [showNewSurvey] = useState(true);
-  // const [showExistingSurvey, setShowExistingSurvey] = useState(false);
-
-  // const handleCreateNewSurvey = () => {
-  //   setShowNewSurvey(true);
-  // };
-  // const handleAddToExistingSurvey = () => {
-  //   setShowExistingSurvey(true);
-  // };
   const incrStep = useCallback(() => {
     setCurStep(prevStep => {
       return prevStep + 1;
@@ -39,8 +30,8 @@ const AddData = () => {
   return (
     <div className={styles.addDataWrapper}>
       <div className={styles.appDataHeading}>
-        <h3 style={{ fontFamily: 'Roboto, sans-serif' }}>Add Data Form</h3>
-        {showNewSurvey && curStep < 4 && (
+        <h3 style={{ fontFamily: 'Roboto' }}>Add Data Form</h3>
+        {curStep < 4 && (
           <StepsBar
             curStep={curStep}
             titleArray={[
@@ -51,17 +42,9 @@ const AddData = () => {
             ]}
           />
         )}
-        {/* {showExistingSurvey && curStep < 3 && (
-          <StepsBar
-            curStep={curStep}
-            titleArray={[{ title: 'Select' }, { title: 'Upload' }, { title: 'Preview' }]}
-          />
-        )} */}
       </div>
-      {showNewSurvey && curStep === 0 && (
-        <SurveyForm incrStep={incrStep} surveyData={surveyData} setSurveyData={setSurveyData} />
-      )}
-      {showNewSurvey && curStep === 1 && (
+      {curStep === 0 && <SurveyForm incrStep={incrStep} setSurveyData={setSurveyData} />}
+      {curStep === 1 && (
         <ImportCSV
           incrStep={incrStep}
           decrStep={decrStep}
@@ -70,7 +53,7 @@ const AddData = () => {
           setCsvData={setCsvData}
         />
       )}
-      {showNewSurvey && curStep === 2 && (
+      {curStep === 2 && (
         <ImportCSV
           incrStep={incrStep}
           decrStep={decrStep}
@@ -79,7 +62,7 @@ const AddData = () => {
           setCsvData={setCsvData}
         />
       )}
-      {showNewSurvey && curStep === 3 && (
+      {curStep === 3 && (
         <ReviewForm
           incrStep={incrStep}
           decrStep={decrStep}
@@ -87,7 +70,7 @@ const AddData = () => {
           csvData={csvData}
         />
       )}
-      {showNewSurvey && curStep === 4 && <UploadComplete />}
+      {curStep === 4 && <UploadComplete />}
     </div>
   );
 };
