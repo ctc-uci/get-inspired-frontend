@@ -3,6 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Checkbox } from 'antd';
 
+import styles from './SelectTablesModal.module.css';
+import './SelectTablesModal.css';
+
 const SelectTablesModal = ({ tableState, isOpen, setIsOpen, setCheckedTables }) => {
   const { tableNames } = tableState;
 
@@ -18,6 +21,14 @@ const SelectTablesModal = ({ tableState, isOpen, setIsOpen, setCheckedTables }) 
     setCheckedTables(list);
   };
 
+  const options = tableNames.map(tableName => {
+    const formattedTableName = tableName.charAt(0).toUpperCase() + tableName.slice(1);
+    return {
+      label: formattedTableName,
+      value: tableName,
+    };
+  });
+
   return (
     <Modal
       title="Select Tables to Search"
@@ -26,7 +37,11 @@ const SelectTablesModal = ({ tableState, isOpen, setIsOpen, setCheckedTables }) 
       okText="Select Tables"
       onCancel={onCancel}
     >
-      <Checkbox.Group options={tableNames} onChange={onChange} />
+      <Checkbox.Group
+        className={`${styles['checkbox-group']} checkbox-group`}
+        options={options}
+        onChange={onChange}
+      />
     </Modal>
   );
 };

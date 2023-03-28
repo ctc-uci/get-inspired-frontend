@@ -5,12 +5,24 @@
   padding: 0 1rem 0 1rem;
 }
 
-.select-survey-options {
+.data-options {
+  width: 95%;
   display: flex;
+  justify-content: space-between;
 }
 
 .cascader {
   width: 30%;
+}
+
+.save-button,
+.delete-button {
+  margin-right: 10px;
+}
+
+.delete-button {
+  background-color: red;
+  color: white;
 }
 
 .table-container {

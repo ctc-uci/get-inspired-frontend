@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding-top: 20px;
+}
+
+.container .add-column-button {
+  align-self: flex-end;
+}

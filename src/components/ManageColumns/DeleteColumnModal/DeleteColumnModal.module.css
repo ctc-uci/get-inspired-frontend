@@ -1,0 +1,17 @@
+.container {
+  /* margin: 35px 0 0 0; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.container h1 {
+  font-size: 20px;
+}
+
+.container .confirmation {
+  margin: 0;
+  padding: 10px 0px;
+}

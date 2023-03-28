@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { notification } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 // See auth_utils for AuthInterceptor
 const GSPBackend = axios.create({
@@ -67,6 +67,24 @@ const keysToCamel = data => {
   return data;
 };
 const NotiMessage = {
+  ROWS_DELETED: (numRows, table) =>
+    `Deleted ${numRows} row(s) from the ${table.toLowerCase()} table!`,
+  ROWS_DELETED_ERROR: (numRows, table, error) =>
+    `Error deleting ${numRows} row(s) from the ${table.toLowerCase()} table: ${error}`,
+  ROWS_EDITED: (numRows, table) => `Edited ${numRows} row(s) in the ${table.toLowerCase()} table!`,
+  ROWS_EDITED_ERROR: (numRows, table, error) =>
+    `Error editing ${numRows} row(s) in the ${table.toLowerCase()} table: ${error}`,
+  COLUMN_ADDED: (column, table) => `Column '${column}' added to the ${table.toLowerCase()} table!`,
+  COLUMN_ADDED_ERROR: (column, table, error) =>
+    `Error adding column '${column}' to the ${table.toLowerCase()} table: ${error}`,
+  COLUMN_EDITED: (oldColumnName, newColumnName, table) =>
+    `Renamed '${oldColumnName}' to '${newColumnName}' in the ${table.toLowerCase()} table!`,
+  COLUMN_EDITED_ERROR: (oldColumnName, newColumnName, table, error) =>
+    `Error renaming '${oldColumnName}' to '${newColumnName}' in the ${table.toLowerCase()} table: ${error}`,
+  COLUMN_DELETED: (column, table) =>
+    `Column '${column}' deleted from the ${table.toLowerCase()} table!`,
+  COLUMN_DELETE_ERROR: (column, table, error) =>
+    `Error deleting column '${column}' from the ${table.toLowerCase()} table: ${error}`,
   USER_DELETED: 'User deleted!',
   USER_ADDED: 'User added!',
   USER_EDITED: 'User edits saved!',
@@ -74,6 +92,7 @@ const NotiMessage = {
 
 const NotiIcon = {
   SUCCESS: <CheckCircleOutlined style={{ color: 'green' }} />,
+  ERROR: <ExclamationCircleOutlined style={{ color: 'red' }} />,
 };
 const notify = (message, icon) => {
   notification.open({
