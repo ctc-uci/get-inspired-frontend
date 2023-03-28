@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Upload, Button, Alert, Table, Checkbox, message } from 'antd';
 import PropTypes from 'prop-types';
 import { InboxOutlined } from '@ant-design/icons';
+import { EditableCell } from './ImportCSVUtils';
 import { GSPBackend } from '../../../utils/utils';
 import styles from './ImportCSV.module.css';
 
-function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
+const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
   const { Dragger } = Upload;
   // eslint-disable-next-line
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -41,6 +42,54 @@ function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
     },
   };
 
+  const computeColumnsFromSQL = columnData => {
+    return columnData
+      .filter(column => column.COLUMN_NAME !== 'id' && column.COLUMN_NAME !== 'survey_id')
+      .map(column => ({
+        title: column.COLUMN_NAME,
+        dataIndex: column.COLUMN_NAME,
+        key: column.COLUMN_NAME,
+        type: column.DATA_TYPE,
+        render: (text, record, index) => (
+          <EditableCell
+            text={text}
+            record={record}
+            index={index}
+            typeOfData={typeOfData}
+            columnName={column.COLUMN_NAME}
+            columnType={column.DATA_TYPE}
+            csvData={csvData}
+            setCsvData={setCsvData}
+          />
+        ),
+      }));
+  };
+
+  const computeColumnsFromExisting = columnData => {
+    return columnData.map(column => ({
+      ...column,
+      render: (text, record, index) => (
+        <EditableCell
+          text={text}
+          record={record}
+          index={index}
+          typeOfData={typeOfData}
+          columnName={column.title}
+          columnType={column.type}
+          csvData={csvData}
+          setCsvData={setCsvData}
+        />
+      ),
+    }));
+  };
+
+  useEffect(() => {
+    setCsvData({
+      ...csvData,
+      [`${typeOfData}Cols`]: computeColumnsFromExisting(csvData[`${typeOfData}Cols`]),
+    });
+  }, [csvData[typeOfData]]);
+
   const showCSVTable = csvData[typeOfData].length > 0;
 
   // Get table columns on page load
@@ -48,14 +97,7 @@ function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
     const { data } = await GSPBackend.get(`/tables/${typeOfData}/columns`);
     setCsvData({
       ...csvData,
-      [`${typeOfData}Cols`]: data
-        .filter(column => column.COLUMN_NAME !== 'id' && column.COLUMN_NAME !== 'survey_id')
-        .map(column => ({
-          title: column.COLUMN_NAME,
-          dataIndex: column.COLUMN_NAME,
-          key: column.COLUMN_NAME,
-          type: column.DATA_TYPE,
-        })),
+      [`${typeOfData}Cols`]: computeColumnsFromSQL(data),
     });
   }, []);
 
@@ -136,7 +178,7 @@ function ImportCSV({ incrStep, decrStep, typeOfData, csvData, setCsvData }) {
       </Row>
     </div>
   );
-}
+};
 
 ImportCSV.propTypes = {
   incrStep: PropTypes.func.isRequired,
