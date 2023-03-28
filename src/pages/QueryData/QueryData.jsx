@@ -2,6 +2,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Utils as QbUtils, Query, Builder, AntdConfig } from '@react-awesome-query-builder/antd';
 import { Alert, Button, Input, Radio, Typography } from 'antd';
+import { CSVLink } from 'react-csv';
 import '@react-awesome-query-builder/antd/css/styles.css';
 
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
@@ -53,6 +54,7 @@ const QueryData = () => {
   const [checkedLists, setCheckedLists] = useState(new DefaultDict(Array));
   const [checkedTables, setCheckedTables] = useState(new Set());
 
+  const [isExportDataModalOpen, setIsExportDataModalOpen] = useState(false);
   const [isSelectAttributesModalOpen, setIsSelectedAttributesModalOpen] = useState(false);
   const [isSelectedTablesModalOpen, setIsSelectedTablesModalOpen] = useState(false);
 
@@ -254,7 +256,9 @@ const QueryData = () => {
         <Title level={2}>
           Query Results <Text>({queryState.results.length} rows returned)</Text>
         </Title>
-        <Button>Export data</Button>
+        <CSVLink filename="data.csv" data={queryState.results}>
+          <Button disabled={!queryState.results.length}>Download CSV</Button>
+        </CSVLink>
       </div>
       {
         // temporary error banner
