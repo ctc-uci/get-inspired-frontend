@@ -14,21 +14,17 @@ import RegisterPage from './pages/Register/RegisterPage';
 import ManageUsersPage from './pages/ManageUsers/ManageUsersPage';
 import AUTH_ROLES from './utils/auth_config';
 import './module.css';
-// import LoadingScreen from './common/LoadingScreen/LoadingScreen';
 
-const { ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE } = AUTH_ROLES.AUTH_ROLES;
+const { ADMIN_ROLE, INTERN_ROLE } = AUTH_ROLES.AUTH_ROLES;
 
+// TODO: Make routes role protected
 function App() {
   return (
     <CookiesProvider>
       <Router>
         <Routes>
           {/* Unprotected routes */}
-          <Route
-            exact
-            path="/login"
-            element={<Login roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]} />}
-          />
+          <Route exact path="/login" element={<Login />} />
 
           <Route exact path="/register" element={<RegisterPage />} />
           <Route element={<Layout />}>
@@ -39,7 +35,7 @@ function App() {
                 <ProtectedRoute
                   Component={Dashboard}
                   redirectPath="/login"
-                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />
               }
             />
@@ -50,7 +46,7 @@ function App() {
                 <ProtectedRoute
                   Component={Profile}
                   redirectPath="/login"
-                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />
               }
             />
@@ -62,7 +58,7 @@ function App() {
                   // TODO: Replace ManageData with ManageAttributes
                   Component={ManageData}
                   redirectPath="/login"
-                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />
               }
             />
@@ -73,7 +69,7 @@ function App() {
                 <ProtectedRoute
                   Component={QueryData}
                   redirectPath="/login"
-                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />
               }
             />
@@ -85,7 +81,7 @@ function App() {
                 <ProtectedRoute
                   Component={ManageData}
                   redirectPath="/login"
-                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />
               }
             />
@@ -96,7 +92,7 @@ function App() {
                 <ProtectedRoute
                   Component={AddData}
                   redirectPath="/login"
-                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />
               }
             />
@@ -115,7 +111,7 @@ function App() {
               <ProtectedRoute
                 Component={Logout}
                 redirectPath="/login"
-                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                roles={[ADMIN_ROLE, INTERN_ROLE]}
               />
             }
           />

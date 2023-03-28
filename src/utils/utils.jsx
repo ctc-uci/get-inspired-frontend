@@ -1,4 +1,7 @@
+import React from 'react';
 import axios from 'axios';
+import { notification } from 'antd';
+import { CheckCircleOutlined } from '@ant-design/icons';
 
 // See auth_utils for AuthInterceptor
 const GSPBackend = axios.create({
@@ -10,7 +13,7 @@ const GSPBackend = axios.create({
 });
 
 // toCamel, isArray, and isObject are helper functions
-export const toCamel = s => {
+const toCamel = s => {
   if (!s) return s;
   return s.replace(/([-_][a-zA-Z])/g, $1 => {
     return $1.toUpperCase().replace('-', '').replace('_', '');
@@ -63,6 +66,21 @@ const keysToCamel = data => {
   }
   return data;
 };
+const NotiMessage = {
+  USER_DELETED: 'User deleted!',
+  USER_ADDED: 'User added!',
+  USER_EDITED: 'User edits saved!',
+};
+
+const NotiIcon = {
+  SUCCESS: <CheckCircleOutlined style={{ color: 'green' }} />,
+};
+const notify = (message, icon) => {
+  notification.open({
+    message,
+    icon,
+  });
+};
 
 // eslint-disable-next-line import/prefer-default-export
-export { GSPBackend, keysToCamel };
+export { GSPBackend, NotiMessage, NotiIcon, notify, keysToCamel, toCamel };
