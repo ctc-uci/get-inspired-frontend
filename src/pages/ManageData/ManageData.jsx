@@ -186,7 +186,7 @@ const ManageData = () => {
 
   useEffect(() => {
     // Re-renders table columns -- needed because antd only computes column state based on state values when a column is rendered
-    if (tableState.columns) {
+    if (tableState.rows && tableState.columns) {
       setTableState({ ...tableState, columns: computeColumnsFromExisting(tableState.columns) });
     }
   }, [editingMode, editingState, tableState.rows, page]);
