@@ -253,9 +253,7 @@ const QueryData = () => {
         setCheckedLists={setCheckedLists}
       />
       <div className={styles['query-results-header']}>
-        <Title level={2}>
-          Query Results <Text>({queryState.results.length} rows returned)</Text>
-        </Title>
+        <Title level={2}>Query Results</Title>
         <CSVLink filename="data.csv" data={queryState.results}>
           <Button disabled={!queryState.results.length}>Download CSV</Button>
         </CSVLink>

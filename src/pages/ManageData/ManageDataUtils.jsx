@@ -46,7 +46,6 @@ export const EditableCell = ({
       ...(record.id in editingState.editedRows ? editingState.editedRows[record.id] : record),
       [columnName]: value,
     };
-
     // Update the tableState with the new data value
     const newTableState = { ...tableState };
     newTableState.rows[index][columnName] = value;

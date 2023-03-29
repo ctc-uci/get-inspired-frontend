@@ -251,6 +251,7 @@ const ManageData = () => {
           columns={[...tableState.columns]}
           dataSource={[...tableState.rows]}
           scroll={{ x: true }}
+          pagination={{ showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items` }}
           rowKey="id"
         />
       </div>
