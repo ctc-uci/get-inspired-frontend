@@ -3,8 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Upload, Button, Alert, Table, Checkbox, message } from 'antd';
 import PropTypes from 'prop-types';
 import { InboxOutlined } from '@ant-design/icons';
-import { EditableCell } from './ImportCSVUtils';
+
+import DeleteDataModal from './DeleteDataModal/DeleteDataModal';
+import EditableCell from './EditableCell';
 import { GSPBackend } from '../../../utils/utils';
+
 import styles from './ImportCSV.module.css';
 
 const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
@@ -12,6 +15,16 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
   // eslint-disable-next-line
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [noData, setNoData] = useState(false);
+
+  const [isDeleteDataModalOpen, setIsDeleteDataModalOpen] = useState(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: _selectedRowKeys => {
+      setSelectedRowKeys(_selectedRowKeys);
+    },
+  };
 
   const uploadProps = {
     name: 'file',
@@ -27,7 +40,11 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
           const result = await GSPBackend.post('/csv/upload', {
             data: e.target.result,
           });
-          setCsvData({ ...csvData, [typeOfData]: result.data });
+          setCsvData({
+            ...csvData,
+            [typeOfData]: result.data.map((record, index) => ({ ...record, index })),
+          });
+          setSelectedRowKeys([]);
           setNoData(false);
         };
         reader.readAsText(info.file.originFileObj);
@@ -60,6 +77,7 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
             columnType={column.DATA_TYPE}
             csvData={csvData}
             setCsvData={setCsvData}
+            autoDisabled={false}
           />
         ),
       }));
@@ -78,9 +96,20 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
           columnType={column.type}
           csvData={csvData}
           setCsvData={setCsvData}
+          autoDisabled={false}
         />
       ),
     }));
+  };
+
+  const deleteSelectedRows = () => {
+    setCsvData({
+      ...csvData,
+      [typeOfData]: csvData[typeOfData]
+        .filter(({ index }) => !selectedRowKeys.includes(index))
+        .map((record, index) => ({ ...record, index })),
+    });
+    setSelectedRowKeys([]);
   };
 
   useEffect(() => {
@@ -88,9 +117,7 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
       ...csvData,
       [`${typeOfData}Cols`]: computeColumnsFromExisting(csvData[`${typeOfData}Cols`]),
     });
-  }, [csvData[typeOfData]]);
-
-  const showCSVTable = csvData[typeOfData].length > 0;
+  }, [csvData[typeOfData], selectedRowKeys]);
 
   // Get table columns on page load
   useEffect(async () => {
@@ -100,6 +127,8 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
       [`${typeOfData}Cols`]: computeColumnsFromSQL(data),
     });
   }, []);
+
+  const showCSVTable = csvData[typeOfData].length > 0;
 
   return (
     <div className={styles.addDataDiv}>
@@ -148,15 +177,31 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
 
       {showCSVTable && (
         <>
+          <Button
+            disabled={!selectedRowKeys.length}
+            className={styles['delete-button']}
+            type="primary"
+            onClick={() => setIsDeleteDataModalOpen(true)}
+          >
+            Delete selected rows
+          </Button>
           <Table
+            rowSelection={rowSelection}
             style={{ marginTop: '2%' }}
-            dataSource={csvData[typeOfData]}
-            columns={csvData[`${typeOfData}Cols`]}
-            pagination={{ pageSize: 6 }}
+            dataSource={[...csvData[typeOfData]]}
+            columns={[...csvData[`${typeOfData}Cols`]]}
+            pagination={{ pageSize: 8 }}
+            rowKey="index"
           />
           <Button type="primary" onClick={() => setCsvData({ ...csvData, [typeOfData]: [] })}>
             Reupload data
           </Button>
+          <DeleteDataModal
+            isOpen={isDeleteDataModalOpen}
+            setIsOpen={setIsDeleteDataModalOpen}
+            selectedRowKeys={selectedRowKeys}
+            deleteSelectedRows={deleteSelectedRows}
+          />
         </>
       )}
 

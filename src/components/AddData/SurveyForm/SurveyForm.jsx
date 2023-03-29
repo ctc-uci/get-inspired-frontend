@@ -63,7 +63,7 @@ const SurveyForm = ({
           Input information for a survey
         </Title>
       </div>
-      <Form className={styles['survey-form']} form={form} layout="vertical">
+      <Form className={styles['survey-form']} form={form} layout="vertical" onFinish={onFinish}>
         {Object.keys(surveyColumns)
           .filter(columnName => columnName !== 'id')
           .map(columnName => (
@@ -74,10 +74,12 @@ const SurveyForm = ({
               selectedExistingSurvey={selectedExistingSurvey}
             />
           ))}
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Next
+          </Button>
+        </Form.Item>
       </Form>
-      <Button type="primary" onClick={onFinish}>
-        Next
-      </Button>
     </div>
   );
 };

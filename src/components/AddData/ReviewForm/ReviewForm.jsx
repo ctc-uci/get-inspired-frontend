@@ -4,6 +4,7 @@ import { Row, Col, Button, Collapse, theme, Table, Form } from 'antd';
 import PropTypes from 'prop-types';
 
 import { UserInput } from './ReviewFormUtils';
+import EditableCell from '../ImportCSV/EditableCell';
 import { GSPBackend } from '../../../utils/utils';
 
 import styles from './ReviewForm.module.css';
@@ -73,17 +74,45 @@ function ReviewForm({
         <Panel header="Clams" key="2" style={panelStyle}>
           <Table
             className="review-ant-table"
-            dataSource={csvData.clam}
-            columns={csvData.clamCols}
+            dataSource={[...csvData.clam]}
+            columns={[
+              ...csvData.clamCols.map(column => ({
+                ...column,
+                render: (text, record, index) => (
+                  <EditableCell
+                    text={text}
+                    record={record}
+                    columnType={column.type}
+                    index={index}
+                    autoDisabled
+                  />
+                ),
+              })),
+            ]}
             pagination={{ pageSize: 8 }}
+            rowKey="index"
           />
         </Panel>
         <Panel header="Raker" key="3" style={panelStyle}>
           <Table
             className="review-ant-table"
-            dataSource={csvData.raker}
-            columns={csvData.rakerCols}
+            dataSource={[...csvData.raker]}
+            columns={[
+              ...csvData.rakerCols.map(column => ({
+                ...column,
+                render: (text, record, index) => (
+                  <EditableCell
+                    text={text}
+                    columnType={column.type}
+                    record={record}
+                    index={index}
+                    autoDisabled
+                  />
+                ),
+              })),
+            ]}
             pagination={{ pageSize: 8 }}
+            rowKey="index"
           />
         </Panel>
       </Collapse>

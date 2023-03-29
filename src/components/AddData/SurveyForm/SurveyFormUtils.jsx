@@ -36,7 +36,13 @@ export const UserInput = ({ columnName, columnType, selectedExistingSurvey }) =>
   const [, selectedExistingSurveyId] = selectedExistingSurvey;
   if (DataType.numericTypes.includes(columnType) || DataType.textTypes.includes(columnType)) {
     return (
-      <Form.Item style={{ flex: FLEX }} form={form} name={columnName} label={columnName}>
+      <Form.Item
+        rules={[{ required: true, message: 'Please input a value' }]}
+        style={{ flex: FLEX }}
+        form={form}
+        name={columnName}
+        label={columnName}
+      >
         <Input
           disabled={selectedExistingSurveyId}
           type={DataType.numericTypes.includes(columnType) ? 'number' : undefined}
@@ -47,7 +53,13 @@ export const UserInput = ({ columnName, columnType, selectedExistingSurvey }) =>
   // Boolean type requires dropdown with True and False options
   if (DataType.booleanTypes.includes(columnType)) {
     return (
-      <Form.Item style={{ flex: FLEX }} form={form} name={columnName} label={columnName}>
+      <Form.Item
+        rules={[{ required: true, message: 'Please input a boolean' }]}
+        style={{ flex: FLEX }}
+        form={form}
+        name={columnName}
+        label={columnName}
+      >
         <Select
           options={[
             { value: false, label: 'false' },
@@ -61,7 +73,12 @@ export const UserInput = ({ columnName, columnType, selectedExistingSurvey }) =>
   // Date type requires DatePicker
   if (DataType.dateTypes.includes(columnType)) {
     return (
-      <Form.Item style={{ flex: FLEX }} name={columnName} label={columnName}>
+      <Form.Item
+        rules={[{ required: true, message: 'Please input a date' }]}
+        style={{ flex: FLEX }}
+        name={columnName}
+        label={columnName}
+      >
         <DatePicker
           disabled={selectedExistingSurveyId}
           onChange={date => form.setFieldsValue({ [columnName]: date })}
@@ -71,7 +88,12 @@ export const UserInput = ({ columnName, columnType, selectedExistingSurvey }) =>
   }
   // Time type requires TimePicker
   return (
-    <Form.Item style={{ flex: FLEX }} name={columnName} label={columnName}>
+    <Form.Item
+      rules={[{ required: true, message: 'Please input a start time' }]}
+      style={{ flex: FLEX }}
+      name={columnName}
+      label={columnName}
+    >
       <TimePicker
         disabled={selectedExistingSurveyId}
         format="HH:mm"
