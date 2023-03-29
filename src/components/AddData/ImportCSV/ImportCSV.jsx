@@ -192,7 +192,7 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
           <Button
             type="primary"
             onClick={incrStep}
-            disabled={!noData && !csvData[typeOfData].length}
+            disabled={(!noData && !csvData[typeOfData].length) || selectedRowKeys.length}
           >
             Next
           </Button>
