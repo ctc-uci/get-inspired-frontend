@@ -63,7 +63,6 @@ const ManageData = () => {
         render: (text, record, index) =>
           col.title !== 'id' && col.title !== 'survey_id' && editingMode ? (
             <EditableCell
-              text={text}
               originalRecord={tableState.originalRows[index + (page - 1) * PAGE_SIZE]}
               record={record}
               index={index + (page - 1) * PAGE_SIZE}
@@ -73,8 +72,6 @@ const ManageData = () => {
               setEditingState={setEditingState}
               tableState={tableState}
               setTableState={setTableState}
-              editingMode={editingMode}
-              setEditingMode={setEditingMode}
             />
           ) : (
             <div>{humanizeCell(text, col.type)}</div>
@@ -255,6 +252,7 @@ const ManageData = () => {
           dataSource={[...tableState.rows]}
           scroll={{ x: true }}
           pagination={{
+            current: page,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
             onChange: value => setPage(value),
           }}

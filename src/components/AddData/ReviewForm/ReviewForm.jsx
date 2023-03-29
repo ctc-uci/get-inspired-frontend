@@ -1,4 +1,4 @@
-import { React } from 'react';
+import React, { useState } from 'react';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { Row, Col, Button, Collapse, theme, Table, Form } from 'antd';
 import PropTypes from 'prop-types';
@@ -11,16 +11,18 @@ import styles from './ReviewForm.module.css';
 
 const { Panel } = Collapse;
 
-function ReviewForm({
+const PAGE_SIZE = 8;
+const ReviewForm = ({
   incrStep,
   decrStep,
   surveyData,
   csvData,
   selectedExistingSurvey,
   surveyColumns,
-}) {
+}) => {
+  const [clamPage, setClamPage] = useState(1);
+  const [rakerPage, setRakerPage] = useState(1);
   const { token } = theme.useToken();
-
   const addData = async () => {
     const [, selectedExistingSurveyId] = selectedExistingSurvey;
     const surveyId =
@@ -80,16 +82,18 @@ function ReviewForm({
                 ...column,
                 render: (text, record, index) => (
                   <EditableCell
-                    text={text}
                     record={record}
+                    index={index + (clamPage - 1) * PAGE_SIZE}
+                    typeOfData="clam"
+                    csvData={csvData}
+                    columnName={column.title}
                     columnType={column.type}
-                    index={index}
                     autoDisabled
                   />
                 ),
               })),
             ]}
-            pagination={{ pageSize: 8 }}
+            pagination={{ pageSize: PAGE_SIZE, current: clamPage, onChange: setClamPage }}
             rowKey="index"
           />
         </Panel>
@@ -103,15 +107,18 @@ function ReviewForm({
                 render: (text, record, index) => (
                   <EditableCell
                     text={text}
+                    columnName={column.title}
                     columnType={column.type}
+                    typeOfData="raker"
                     record={record}
-                    index={index}
+                    csvData={csvData}
+                    index={index + (rakerPage - 1) * PAGE_SIZE}
                     autoDisabled
                   />
                 ),
               })),
             ]}
-            pagination={{ pageSize: 8 }}
+            pagination={{ pageSize: PAGE_SIZE, current: rakerPage, onChange: setRakerPage }}
             rowKey="index"
           />
         </Panel>
@@ -131,7 +138,7 @@ function ReviewForm({
       </Row>
     </div>
   );
-}
+};
 
 ReviewForm.propTypes = {
   incrStep: PropTypes.func.isRequired,

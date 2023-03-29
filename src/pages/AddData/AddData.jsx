@@ -34,14 +34,33 @@ const AddData = () => {
     });
   });
 
+  const computeColumnsFromSQL = columnData => {
+    return columnData
+      .filter(column => column.COLUMN_NAME !== 'id' && column.COLUMN_NAME !== 'survey_id')
+      .map(column => ({
+        title: column.COLUMN_NAME,
+        dataIndex: column.COLUMN_NAME,
+        key: column.COLUMN_NAME,
+        type: column.DATA_TYPE,
+      }));
+  };
+
   useEffect(async () => {
     const requests = [
+      GSPBackend.get('/tables/clam/columns'),
+      GSPBackend.get('tables/raker/columns'),
       GSPBackend.get('/tables/survey/columns'),
       GSPBackend.get('/surveys/existingSurveyOptions'),
     ];
-    const [{ data: columnData }, { data: map }] = await Promise.all(requests);
+    const [{ data: clamColumns }, { data: rakerColumns }, { data: surveyCols }, { data: map }] =
+      await Promise.all(requests);
+    setCsvData({
+      ...csvData,
+      clamCols: computeColumnsFromSQL(clamColumns),
+      rakerCols: computeColumnsFromSQL(rakerColumns),
+    });
     setSurveyColumns(
-      columnData.reduce((acc, col) => ({ ...acc, [col.COLUMN_NAME]: col.DATA_TYPE }), {}),
+      surveyCols.reduce((acc, col) => ({ ...acc, [col.COLUMN_NAME]: col.DATA_TYPE }), {}),
     );
     setExistingSurveyOptions([{ label: 'Create new survey' }, ...map]);
     setIsLoading(false);

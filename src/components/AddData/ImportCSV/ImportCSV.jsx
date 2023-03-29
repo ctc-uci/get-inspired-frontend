@@ -10,6 +10,7 @@ import { GSPBackend } from '../../../utils/utils';
 
 import styles from './ImportCSV.module.css';
 
+const PAGE_SIZE = 8;
 const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
   const { Dragger } = Upload;
   // eslint-disable-next-line
@@ -18,6 +19,7 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
 
   const [isDeleteDataModalOpen, setIsDeleteDataModalOpen] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [page, setPage] = useState(1);
 
   const rowSelection = {
     selectedRowKeys,
@@ -59,38 +61,13 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
     },
   };
 
-  const computeColumnsFromSQL = columnData => {
-    return columnData
-      .filter(column => column.COLUMN_NAME !== 'id' && column.COLUMN_NAME !== 'survey_id')
-      .map(column => ({
-        title: column.COLUMN_NAME,
-        dataIndex: column.COLUMN_NAME,
-        key: column.COLUMN_NAME,
-        type: column.DATA_TYPE,
-        render: (text, record, index) => (
-          <EditableCell
-            text={text}
-            record={record}
-            index={index}
-            typeOfData={typeOfData}
-            columnName={column.COLUMN_NAME}
-            columnType={column.DATA_TYPE}
-            csvData={csvData}
-            setCsvData={setCsvData}
-            autoDisabled={false}
-          />
-        ),
-      }));
-  };
-
   const computeColumnsFromExisting = columnData => {
     return columnData.map(column => ({
       ...column,
       render: (text, record, index) => (
         <EditableCell
-          text={text}
           record={record}
-          index={index}
+          index={index + (page - 1) * PAGE_SIZE}
           typeOfData={typeOfData}
           columnName={column.title}
           columnType={column.type}
@@ -113,20 +90,13 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
   };
 
   useEffect(() => {
-    setCsvData({
-      ...csvData,
-      [`${typeOfData}Cols`]: computeColumnsFromExisting(csvData[`${typeOfData}Cols`]),
-    });
-  }, [csvData[typeOfData], selectedRowKeys]);
-
-  // Get table columns on page load
-  useEffect(async () => {
-    const { data } = await GSPBackend.get(`/tables/${typeOfData}/columns`);
-    setCsvData({
-      ...csvData,
-      [`${typeOfData}Cols`]: computeColumnsFromSQL(data),
-    });
-  }, []);
+    if (csvData[typeOfData].length && csvData[`${typeOfData}Cols`].length) {
+      setCsvData({
+        ...csvData,
+        [`${typeOfData}Cols`]: computeColumnsFromExisting(csvData[`${typeOfData}Cols`]),
+      });
+    }
+  }, [csvData[typeOfData], page]);
 
   const showCSVTable = csvData[typeOfData].length > 0;
 
@@ -192,7 +162,12 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
             style={{ marginTop: '2%' }}
             dataSource={[...csvData[typeOfData]]}
             columns={[...csvData[`${typeOfData}Cols`]]}
-            pagination={{ pageSize: 8 }}
+            pagination={{
+              pageSize: PAGE_SIZE,
+              current: page,
+              showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+              onChange: setPage,
+            }}
             rowKey="index"
           />
           <Button type="primary" onClick={() => setCsvData({ ...csvData, [typeOfData]: [] })}>
