@@ -53,7 +53,6 @@ const AddData = () => {
   return (
     <div className={styles.addDataWrapper}>
       <div className={styles.appDataHeading}>
-        <h3 style={{ fontFamily: 'Roboto' }}>Add Data Form</h3>
         {curStep < 4 && (
           <StepsBar
             curStep={curStep}

@@ -167,7 +167,9 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
             <p style={{ marginTop: '-5px' }} className="ant-upload-hint">
               or drag and drop here
             </p>
-            <Button type="primary">Upload File</Button>
+            <Button type="primary" disabled={noData}>
+              Upload File
+            </Button>
           </Dragger>
           <Checkbox onClick={e => setNoData(e.target.checked)}>
             There is no {typeOfData} data to upload
