@@ -14,6 +14,7 @@ import styles from './ManageData.module.css';
 
 const { Title } = Typography;
 
+const PAGE_SIZE = 10;
 const ManageData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSurveyId, setSelectedSurveyId] = useState(null);
@@ -24,6 +25,8 @@ const ManageData = () => {
   const [isDeleteDataModalOpen, setIsDeleteDataModalOpen] = useState(false);
   const [isEditDataModalOpen, setIsEditDataModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+
+  const [page, setPage] = useState(1);
   const [editingState, setEditingState] = useState({
     selectedRowKeys: [],
     editedRows: {},
@@ -61,9 +64,9 @@ const ManageData = () => {
           col.title !== 'id' && col.title !== 'survey_id' && editingMode ? (
             <EditableCell
               text={text}
-              originalRecord={{ ...tableState.originalRows[index] }}
+              originalRecord={tableState.originalRows[index + (page - 1) * PAGE_SIZE]}
               record={record}
-              index={index}
+              index={index + (page - 1) * PAGE_SIZE}
               columnName={col.title}
               columnType={col.type}
               editingState={editingState}
@@ -86,8 +89,8 @@ const ManageData = () => {
             width: 100,
             render: (text, record, index) => (
               <UndoButton
-                originalRecord={{ ...tableState.originalRows[index] }}
-                index={index}
+                originalRecord={tableState.originalRows[index + (page - 1) * PAGE_SIZE]}
+                index={index + (page - 1) * PAGE_SIZE}
                 tableState={tableState}
                 setTableState={setTableState}
                 editingState={editingState}
@@ -189,7 +192,7 @@ const ManageData = () => {
     if (tableState.columns) {
       setTableState({ ...tableState, columns: computeColumnsFromExisting(tableState.columns) });
     }
-  }, [editingMode, editingState, tableState.rows]);
+  }, [editingMode, editingState, tableState.rows, page]);
 
   // Load table data when selected table or selected survey changes
   useEffect(async () => {
@@ -251,7 +254,10 @@ const ManageData = () => {
           columns={[...tableState.columns]}
           dataSource={[...tableState.rows]}
           scroll={{ x: true }}
-          pagination={{ showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items` }}
+          pagination={{
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+            onChange: value => setPage(value),
+          }}
           rowKey="id"
         />
       </div>

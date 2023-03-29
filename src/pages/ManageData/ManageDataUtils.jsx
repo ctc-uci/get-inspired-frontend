@@ -21,7 +21,6 @@ const equals = (record, newRecord) =>
 
 // eslint-disable-next-line import/prefer-default-export
 export const EditableCell = ({
-  text,
   record,
   originalRecord,
   index,
@@ -40,6 +39,7 @@ export const EditableCell = ({
     newTableState.rows[index][columnName] = value;
     setTableState(newTableState);
   };
+
   // Sets editingState.editedRows according to if the new value is different from the original value
   const saveData = value => {
     const newRecord = {
@@ -71,7 +71,7 @@ export const EditableCell = ({
     return (
       <Input
         style={{ width: DataType.numericTypes.includes(columnType) ? 75 : 175 }}
-        value={text}
+        value={tableState.rows[index][columnName]}
         onChange={e => onChange(e.target.value)}
         onBlur={e => saveData(e.target.value)}
         onPressEnter={e => saveData(e.target.value)}
@@ -84,7 +84,7 @@ export const EditableCell = ({
     return (
       <Space wrap>
         <Select
-          value={Boolean(text)}
+          value={tableState.rows[index][columnName]}
           options={[
             { value: false, label: 'false' },
             { value: true, label: 'true' },
@@ -96,14 +96,20 @@ export const EditableCell = ({
   }
   // Date type requires DatePicker
   if (DataType.dateTypes.includes(columnType)) {
-    return <DatePicker style={{ width: 125 }} value={dayjs(text)} onChange={saveData} />;
+    return (
+      <DatePicker
+        style={{ width: 125 }}
+        value={dayjs(tableState.rows[index][columnName])}
+        onChange={saveData}
+      />
+    );
   }
   // Time type requires TimePicker
   return (
     <TimePicker
       style={{ width: 80 }}
       format="HH:mm"
-      value={dayjs(text, 'HH:mm')}
+      value={dayjs(tableState.rows[index][columnName], 'HH:mm')}
       onChange={(time, timeString) => saveData(timeString)}
     />
   );
