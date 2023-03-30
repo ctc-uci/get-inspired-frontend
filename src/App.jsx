@@ -6,27 +6,26 @@ import Logout from './components/Logout';
 import Layout from './components/Layout/Layout';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Profile/Profile';
-import Data from './pages/Data/Data';
+import QueryData from './pages/QueryData/QueryData';
+import ManageData from './pages/ManageData/ManageData';
 import AddData from './pages/AddData/AddData';
 import ProtectedRoute from './utils/ProtectedRoute';
 import RegisterPage from './pages/Register/RegisterPage';
+import ManageColumnsPage from './pages/ManageColumns/ManageColumnsPage';
 import ManageUsersPage from './pages/ManageUsers/ManageUsersPage';
 import AUTH_ROLES from './utils/auth_config';
 import './module.css';
 
-const { ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE } = AUTH_ROLES.AUTH_ROLES;
+const { ADMIN_ROLE, INTERN_ROLE } = AUTH_ROLES.AUTH_ROLES;
 
+// TODO: Make routes role protected
 function App() {
   return (
     <CookiesProvider>
       <Router>
         <Routes>
           {/* Unprotected routes */}
-          <Route
-            exact
-            path="/login"
-            element={<Login roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]} />}
-          />
+          <Route exact path="/login" element={<Login />} />
 
           <Route exact path="/register" element={<RegisterPage />} />
           <Route element={<Layout />}>
@@ -37,7 +36,7 @@ function App() {
                 <ProtectedRoute
                   Component={Dashboard}
                   redirectPath="/login"
-                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />
               }
             />
@@ -48,18 +47,29 @@ function App() {
                 <ProtectedRoute
                   Component={Profile}
                   redirectPath="/login"
-                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />
               }
             />
             <Route
               exact
-              path="/manage-attributes"
+              path="/manage-columns"
               element={
                 <ProtectedRoute
-                  Component={Data}
+                  Component={ManageColumnsPage}
                   redirectPath="/login"
-                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
+                />
+              }
+            />
+            <Route
+              exact
+              path="/query-data"
+              element={
+                <ProtectedRoute
+                  Component={QueryData}
+                  redirectPath="/login"
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />
               }
             />
@@ -69,13 +79,12 @@ function App() {
               path="/manage-data"
               element={
                 <ProtectedRoute
-                  Component={Data}
+                  Component={ManageData}
                   redirectPath="/login"
-                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />
               }
             />
-
             <Route
               exact
               path="/add-data"
@@ -83,11 +92,10 @@ function App() {
                 <ProtectedRoute
                   Component={AddData}
                   redirectPath="/login"
-                  roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                  roles={[ADMIN_ROLE, INTERN_ROLE]}
                 />
               }
             />
-
             <Route
               exact
               path="/manage-users"
@@ -103,7 +111,7 @@ function App() {
               <ProtectedRoute
                 Component={Logout}
                 redirectPath="/login"
-                roles={[ADMIN_ROLE, VIEWER_ROLE, EDITOR_ROLE]}
+                roles={[ADMIN_ROLE, INTERN_ROLE]}
               />
             }
           />

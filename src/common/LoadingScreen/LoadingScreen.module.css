@@ -1,0 +1,13 @@
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  margin-top: 25%;
+  height: auto;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,30 @@
+.table {
+  position: flex;
+  margin-top: 20px;
+  width: 60%;
+}
+
+.title {
+  font-size: 150%;
+  position: flex;
+}
+
+.button {
+  position: absolute;
+  left: 14.8em;
+  top: 6em;
+}
+
+.addButton {
+  position: absolute;
+  right: 2vw;
+  top: 6em;
+}
+
+.divider {
+  border: solid white;
+}
+
+.window {
+  padding: 0 1rem 0 1rem;
+}
