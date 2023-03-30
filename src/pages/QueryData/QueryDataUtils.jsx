@@ -11,7 +11,7 @@ const subfieldType = {
 const columnToSubfield = column => {
   const numericTypes = ['int', 'double', 'decimal'];
   const textTypes = ['text', 'varchar'];
-  const booleanTypes = ['boolean'];
+  const booleanTypes = ['boolean', 'tinyint'];
   const dateTypes = ['date'];
   const timeTypes = ['time'];
   const dateTimeTypes = ['datetime', 'timestamp'];
@@ -54,9 +54,12 @@ const isIsoDate = str => {
   return d instanceof Date && !Number.isNaN(d) && d.toISOString() === str; // valid date
 };
 
-export const humanizeCell = text => {
+export const humanizeCell = (text, columnType) => {
   if (isIsoDate(text)) {
     return new Date(text).toLocaleDateString();
+  }
+  if (columnType === 'tinyint') {
+    return Boolean(text).toString();
   }
   return text;
 };
