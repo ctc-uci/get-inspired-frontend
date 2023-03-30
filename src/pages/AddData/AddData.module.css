@@ -34,6 +34,11 @@
   transition: all 0s ease-in-out;
 }
 
+.cascader {
+  margin-top: 2%;
+  width: 30%;
+}
+
 @media (max-width: 1200px) {
   .chooseSurveyBtns {
     margin: 15% 15% 15% 15%;

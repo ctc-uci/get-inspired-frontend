@@ -1,13 +1,17 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Cascader } from 'antd';
 import StepsBar from '../../components/AddData/StepsBar/StepsBar';
 import SurveyForm from '../../components/AddData/SurveyForm/SurveyForm';
 import ImportCSV from '../../components/AddData/ImportCSV/ImportCSV';
 import ReviewForm from '../../components/AddData/ReviewForm/ReviewForm';
 import UploadComplete from '../../components/AddData/UploadComplete/UploadComplete';
+import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 import { clamsTableCols, rakerTableCols } from '../../components/AddData/CSVTableData/CSVTableData';
+import { GSPBackend } from '../../utils/utils';
 import styles from './AddData.module.css';
 
 const AddData = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [surveyData, setSurveyData] = useState({});
   const [csvData, setCsvData] = useState({
     clam: [],
@@ -17,14 +21,8 @@ const AddData = () => {
   });
   const [curStep, setCurStep] = useState(0);
   const [showNewSurvey] = useState(true);
-  // const [showExistingSurvey, setShowExistingSurvey] = useState(false);
+  const [surveyOptions, setSurveyOptions] = useState([]);
 
-  // const handleCreateNewSurvey = () => {
-  //   setShowNewSurvey(true);
-  // };
-  // const handleAddToExistingSurvey = () => {
-  //   setShowExistingSurvey(true);
-  // };
   const incrStep = useCallback(() => {
     setCurStep(prevStep => {
       return prevStep + 1;
@@ -36,6 +34,16 @@ const AddData = () => {
     });
   });
 
+  // Load dropdown survey/cascader options on page load
+  useEffect(async () => {
+    const map = await GSPBackend.get('/surveys/manageDataOptions');
+    setSurveyOptions([...map.data]);
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
   return (
     <div className={styles.addDataWrapper}>
       <div className={styles.appDataHeading}>
@@ -57,6 +65,13 @@ const AddData = () => {
             titleArray={[{ title: 'Select' }, { title: 'Upload' }, { title: 'Preview' }]}
           />
         )} */}
+        {curStep === 0 && (
+          <Cascader
+            className={styles.cascader}
+            options={surveyOptions}
+            placeholder="Select existing form"
+          />
+        )}
       </div>
       {showNewSurvey && curStep === 0 && (
         <SurveyForm incrStep={incrStep} surveyData={surveyData} setSurveyData={setSurveyData} />
