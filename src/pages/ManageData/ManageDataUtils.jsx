@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, DatePicker, TimePicker, Select, Space, Button } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -21,7 +21,6 @@ const equals = (record, newRecord) =>
 
 // eslint-disable-next-line import/prefer-default-export
 export const EditableCell = ({
-  text,
   record,
   originalRecord,
   index,
@@ -32,24 +31,17 @@ export const EditableCell = ({
   tableState,
   setTableState,
 }) => {
-  const onChange = value => {
-    // For some reason this line has to be there so typing more than 2 characters doesn't re-render the table???
-    setEditingState({ ...editingState });
-    // Update the tableState with the new data value
-    const newTableState = { ...tableState };
-    newTableState.rows[index][columnName] = value;
-    setTableState(newTableState);
-  };
+  const [value, setValue] = useState(tableState.rows[index][columnName]);
+
   // Sets editingState.editedRows according to if the new value is different from the original value
-  const saveData = value => {
+  const saveData = newValue => {
     const newRecord = {
       ...(record.id in editingState.editedRows ? editingState.editedRows[record.id] : record),
-      [columnName]: value,
+      [columnName]: newValue,
     };
-
     // Update the tableState with the new data value
     const newTableState = { ...tableState };
-    newTableState.rows[index][columnName] = value;
+    newTableState.rows[index][columnName] = newValue;
     setTableState(newTableState);
     // If the new value is the same as the original value, remove the record from editedRows
     if (equals(originalRecord, newRecord)) {
@@ -67,13 +59,17 @@ export const EditableCell = ({
       });
     }
   };
+
+  useEffect(() => {
+    setValue(tableState.rows[index][columnName]);
+  }, [tableState]);
   // Date or time type requires input
   if (DataType.numericTypes.includes(columnType) || DataType.textTypes.includes(columnType)) {
     return (
       <Input
         style={{ width: DataType.numericTypes.includes(columnType) ? 75 : 175 }}
-        value={text}
-        onChange={e => onChange(e.target.value)}
+        value={value}
+        onChange={e => setValue(e.target.value)}
         onBlur={e => saveData(e.target.value)}
         onPressEnter={e => saveData(e.target.value)}
         type={DataType.numericTypes.includes(columnType) ? 'number' : undefined}
@@ -85,7 +81,7 @@ export const EditableCell = ({
     return (
       <Space wrap>
         <Select
-          value={Boolean(text)}
+          value={tableState.rows[index][columnName]}
           options={[
             { value: false, label: 'false' },
             { value: true, label: 'true' },
@@ -97,14 +93,20 @@ export const EditableCell = ({
   }
   // Date type requires DatePicker
   if (DataType.dateTypes.includes(columnType)) {
-    return <DatePicker style={{ width: 125 }} value={dayjs(text)} onChange={saveData} />;
+    return (
+      <DatePicker
+        style={{ width: 125 }}
+        value={dayjs(tableState.rows[index][columnName])}
+        onChange={saveData}
+      />
+    );
   }
   // Time type requires TimePicker
   return (
     <TimePicker
       style={{ width: 80 }}
       format="HH:mm"
-      value={dayjs(text, 'HH:mm')}
+      value={dayjs(tableState.rows[index][columnName], 'HH:mm')}
       onChange={(time, timeString) => saveData(timeString)}
     />
   );

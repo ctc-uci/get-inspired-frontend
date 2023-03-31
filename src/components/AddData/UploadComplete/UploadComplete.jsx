@@ -2,10 +2,11 @@ import { React } from 'react';
 import { Button, Result } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import styles from './UploadComplete.module.css';
 
 function UploadComplete() {
   return (
-    <div className="upload-complete">
+    <div className={styles.uploadComplete}>
       <Result
         style={{ backgroundColor: '#E6F7FF', borderRadius: '10px', width: '40%' }}
         icon={<CheckCircleOutlined style={{ marginBottom: '1%' }} />}

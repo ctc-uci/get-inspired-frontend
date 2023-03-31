@@ -14,6 +14,7 @@ import styles from './ManageData.module.css';
 
 const { Title } = Typography;
 
+const PAGE_SIZE = 10;
 const ManageData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSurveyId, setSelectedSurveyId] = useState(null);
@@ -24,6 +25,8 @@ const ManageData = () => {
   const [isDeleteDataModalOpen, setIsDeleteDataModalOpen] = useState(false);
   const [isEditDataModalOpen, setIsEditDataModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+
+  const [page, setPage] = useState(1);
   const [editingState, setEditingState] = useState({
     selectedRowKeys: [],
     editedRows: {},
@@ -60,18 +63,15 @@ const ManageData = () => {
         render: (text, record, index) =>
           col.title !== 'id' && col.title !== 'survey_id' && editingMode ? (
             <EditableCell
-              text={text}
-              originalRecord={{ ...tableState.originalRows[index] }}
+              originalRecord={tableState.originalRows[index + (page - 1) * PAGE_SIZE]}
               record={record}
-              index={index}
+              index={index + (page - 1) * PAGE_SIZE}
               columnName={col.title}
               columnType={col.type}
               editingState={editingState}
               setEditingState={setEditingState}
               tableState={tableState}
               setTableState={setTableState}
-              editingMode={editingMode}
-              setEditingMode={setEditingMode}
             />
           ) : (
             <div>{humanizeCell(text, col.type)}</div>
@@ -86,8 +86,8 @@ const ManageData = () => {
             width: 100,
             render: (text, record, index) => (
               <UndoButton
-                originalRecord={{ ...tableState.originalRows[index] }}
-                index={index}
+                originalRecord={tableState.originalRows[index + (page - 1) * PAGE_SIZE]}
+                index={index + (page - 1) * PAGE_SIZE}
                 tableState={tableState}
                 setTableState={setTableState}
                 editingState={editingState}
@@ -171,7 +171,7 @@ const ManageData = () => {
 
   // Load dropdown survey options on page load
   useEffect(async () => {
-    const map = await GSPBackend.get('/surveys/manageDataOptions');
+    const map = await GSPBackend.get('/surveys/existingSurveyOptions');
     setSurveyOptions([{ label: 'View all data' }, ...map.data]);
     setIsLoading(false);
   }, []);
@@ -186,10 +186,10 @@ const ManageData = () => {
 
   useEffect(() => {
     // Re-renders table columns -- needed because antd only computes column state based on state values when a column is rendered
-    if (tableState.columns) {
+    if (tableState.rows && tableState.columns) {
       setTableState({ ...tableState, columns: computeColumnsFromExisting(tableState.columns) });
     }
-  }, [editingMode, editingState, tableState.rows]);
+  }, [editingMode, editingState, tableState.rows, page]);
 
   // Load table data when selected table or selected survey changes
   useEffect(async () => {
@@ -251,6 +251,11 @@ const ManageData = () => {
           columns={[...tableState.columns]}
           dataSource={[...tableState.rows]}
           scroll={{ x: true }}
+          pagination={{
+            current: page,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+            onChange: value => setPage(value),
+          }}
           rowKey="id"
         />
       </div>

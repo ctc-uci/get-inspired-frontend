@@ -1,0 +1,47 @@
+.appDataHeading {
+  padding: 3% 3% 2% 3%;
+}
+
+.add-data-div {
+  text-align: center;
+  padding: 0.5% 3%;
+  align-items: center;
+  justify-content: center;
+  margin-top: -1%;
+}
+
+/* Fix heading cell color of Ant Table here */
+.addDataWrapper
+  .ant-table
+  .ant-table-container
+  .ant-table-content
+  table
+  thead.ant-table-thead
+  .ant-table-cell {
+  background-color: #e6f7ff;
+}
+
+.chooseSurveyBtnsDiv {
+  display: flex;
+  justify-content: center;
+  padding: 5%;
+  margin-top: 20%;
+  transition: all 0s ease-in-out;
+}
+
+.chooseSurveyBtns {
+  margin: 0 15% 0 15%;
+  transition: all 0s ease-in-out;
+}
+
+@media (max-width: 1200px) {
+  .chooseSurveyBtns {
+    margin: 15% 15% 15% 15%;
+  }
+
+  .chooseSurveyBtnsDiv {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10%;
+  }
+}

@@ -55,6 +55,7 @@ const QueryResults = ({ checkedLists, data, isLoading, query }) => {
   return (
     <div className={styles['query-results-container']}>
       <Table
+        pagination={{ showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items` }}
         rowKey="id"
         dataSource={data}
         columns={computeColumns(checkedLists, data, query)}
