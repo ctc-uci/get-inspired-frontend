@@ -10,7 +10,8 @@ import {
   SearchOutlined,
 } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
-import { getCurrentUser } from '../../utils/auth_utils';
+
+import { getCurrentUser, auth } from '../../utils/auth_utils';
 import { GSPBackend } from '../../utils/utils';
 
 import GSPLogo from '../../assets/images/GSPLogo.svg';
@@ -19,6 +20,7 @@ import GSPLogo from '../../assets/images/GSPLogo.svg';
 import styles from './Navbar.module.css';
 
 const SIDER_WIDTH = 200;
+const auth1 = auth;
 
 const { Sider } = Layout;
 const { Title } = Typography;
@@ -30,14 +32,16 @@ const Navbar = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const user = await getCurrentUser();
-      if (user) {
-        const response = await GSPBackend.get(`/users/${user.uid}`);
-        setCurrentUser(response.data);
+      if (auth1) {
+        const user = await getCurrentUser(auth1);
+        if (user) {
+          const response = await GSPBackend.get(`/users/${user.uid}`);
+          setCurrentUser(response.data);
+        }
       }
     };
     fetchUser();
-  }, []);
+  }, [auth]);
 
   const selectedKeys = [
     ...(path === '/' ? ['dashboard'] : []),
@@ -46,6 +50,7 @@ const Navbar = () => {
     ...(path === '/query-data' ? ['query-data'] : []),
     ...(path === '/manage-data' ? ['manage-data'] : []),
     ...(path === '/manage-users' ? ['manage-users'] : []),
+    ...(path === '/profile' ? ['profile'] : []),
   ];
   return (
     <Sider width={SIDER_WIDTH} className={styles.sider}>
@@ -78,13 +83,13 @@ const Navbar = () => {
         <Menu.Item key="manage-users" icon={<UsergroupAddOutlined />}>
           <Link to="/manage-users">Manage Users</Link>
         </Menu.Item>
-        {currentUser && (
-          <Menu.Item key="profile" className={styles['user-profile']}>
-            <div className={styles['user-profile-info']}>
-              <div className={styles['user-name']}>{currentUser.firstName}</div>
-            </div>
-          </Menu.Item>
-        )}
+        <Menu.Item
+          key="profile"
+          icon={<UsergroupAddOutlined />}
+          style={{ position: 'absolute', bottom: '0' }}
+        >
+          <Link to="/profile">{currentUser ? `${currentUser[0].firstName}` : 'Profile'}</Link>
+        </Menu.Item>
       </Menu>
     </Sider>
   );
