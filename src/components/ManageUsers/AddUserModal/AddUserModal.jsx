@@ -127,7 +127,7 @@ const AddUserModal = ({ isOpen, setIsOpen, fetchUsersFromDB }) => {
         </Form>
         <p>{errorMessage}</p>
         <Button type="primary" form="login-form" key="submit" htmlType="submit">
-          Sign Up
+          Add User
         </Button>
       </div>
     </Modal>

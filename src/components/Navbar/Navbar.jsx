@@ -1,3 +1,4 @@
+import React from 'react';
 import { Layout, Menu, Typography } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -7,20 +8,15 @@ import {
   FileAddOutlined,
   AppstoreOutlined,
   UsergroupAddOutlined,
+  UserOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
-import React, { useState, useEffect } from 'react';
-
-import { getCurrentUser, auth } from '../../utils/auth_utils';
-import { GSPBackend } from '../../utils/utils';
 
 import GSPLogo from '../../assets/images/GSPLogo.svg';
 
-// eslint-disable-next-line import/no-unresolved
 import styles from './Navbar.module.css';
 
 const SIDER_WIDTH = 200;
-const auth1 = auth;
 
 const { Sider } = Layout;
 const { Title } = Typography;
@@ -28,20 +24,6 @@ const { Title } = Typography;
 const Navbar = () => {
   const location = useLocation();
   const path = location.pathname;
-  const [currentUser, setCurrentUser] = useState(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (auth1) {
-        const user = await getCurrentUser(auth1);
-        if (user) {
-          const response = await GSPBackend.get(`/users/${user.uid}`);
-          setCurrentUser(response.data);
-        }
-      }
-    };
-    fetchUser();
-  }, [auth]);
 
   const selectedKeys = [
     ...(path === '/' ? ['dashboard'] : []),
@@ -83,12 +65,8 @@ const Navbar = () => {
         <Menu.Item key="manage-users" icon={<UsergroupAddOutlined />}>
           <Link to="/manage-users">Manage Users</Link>
         </Menu.Item>
-        <Menu.Item
-          key="profile"
-          icon={<UsergroupAddOutlined />}
-          style={{ position: 'absolute', bottom: '0' }}
-        >
-          <Link to="/profile">{currentUser ? `${currentUser[0].firstName}` : 'Profile'}</Link>
+        <Menu.Item key="profile" icon={<UserOutlined />}>
+          <Link to="/profile">Profile</Link>
         </Menu.Item>
       </Menu>
     </Sider>

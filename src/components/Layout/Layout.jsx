@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 import styles from './Layout.module.css';
 
 // eslint-disable-next-line import/no-unresolved
-import Navbar from '../NavBar/Navbar';
+import Navbar from '../Navbar/Navbar';
 
 const Layout = ({ isAdmin }) => (
   <div className={styles.wrapper}>
