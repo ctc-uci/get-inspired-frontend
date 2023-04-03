@@ -45,7 +45,7 @@ const Register = ({ cookies }) => {
         </h1>
       </div>
       <div className={styles.container}>
-        <Title>Sign Up</Title>
+        <Title>Add User</Title>
         <Form
           id="login-form"
           layout="vertical"

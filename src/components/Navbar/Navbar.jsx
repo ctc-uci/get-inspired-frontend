@@ -8,12 +8,12 @@ import {
   FileAddOutlined,
   AppstoreOutlined,
   UsergroupAddOutlined,
+  UserOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
 
 import GSPLogo from '../../assets/images/GSPLogo.svg';
 
-// eslint-disable-next-line import/no-unresolved
 import styles from './Navbar.module.css';
 
 const SIDER_WIDTH = 200;
@@ -32,6 +32,7 @@ const Navbar = () => {
     ...(path === '/query-data' ? ['query-data'] : []),
     ...(path === '/manage-data' ? ['manage-data'] : []),
     ...(path === '/manage-users' ? ['manage-users'] : []),
+    ...(path === '/profile' ? ['profile'] : []),
   ];
   return (
     <Sider width={SIDER_WIDTH} className={styles.sider}>
@@ -63,6 +64,9 @@ const Navbar = () => {
         </Menu.Item>
         <Menu.Item key="manage-users" icon={<UsergroupAddOutlined />}>
           <Link to="/manage-users">Manage Users</Link>
+        </Menu.Item>
+        <Menu.Item key="profile" icon={<UserOutlined />}>
+          <Link to="/profile">Profile</Link>
         </Menu.Item>
       </Menu>
     </Sider>

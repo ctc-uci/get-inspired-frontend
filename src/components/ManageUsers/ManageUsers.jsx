@@ -4,9 +4,9 @@ import EditUserModal from './EditUserModal/EditUserModal';
 import AddUserModal from './AddUserModal/AddUserModal';
 import DeleteUserModal from './DeleteUserModal/DeleteUserModal';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
-import { GSPBackend } from '../../utils/utils';
 
 import styles from './ManageUsers.module.css';
+import { GSPBackend } from '../../utils/utils';
 
 const { Column } = Table;
 

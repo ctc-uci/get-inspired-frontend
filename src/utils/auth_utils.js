@@ -70,16 +70,16 @@ const refreshToken = async () => {
   if (currentUser) {
     const refreshT = currentUser.refreshToken;
     const {
-      data: { access_token: idToken },
+      data: { access_token: accessToken },
     } = await axios.post(refreshUrl, {
       grant_type: 'refresh_token',
       refresh_token: refreshT,
     });
     // Sets the appropriate cookies after refreshing access token
-    setCookie(cookieKeys.ACCESS_TOKEN, idToken, cookieConfig);
+    setCookie(cookieKeys.ACCESS_TOKEN, accessToken, cookieConfig);
     const user = await GSPBackend.get(`/users/${auth.currentUser.uid}`);
     setCookie(cookieKeys.ROLE, user.data[0].role, cookieConfig);
-    return idToken;
+    return { accessToken, currentUser: user.data[0] };
   }
   return null;
 };
