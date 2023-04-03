@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Collapse } from 'antd';
-import CollapsePanel from 'antd/es/collapse/CollapsePanel';
+import { Modal, Tabs } from 'antd';
 import AttributeGroup from './AttributeGroup/AttributeGroup';
 
 const SelectAttributesModal = ({
@@ -15,7 +14,6 @@ const SelectAttributesModal = ({
   const { tableNames, columnInfo } = tableState;
 
   const onOk = () => {
-    // TODO: FETCH QUERY RESULTS
     setIsOpen(false);
   };
 
@@ -23,29 +21,33 @@ const SelectAttributesModal = ({
     setIsOpen(false);
   };
 
+  const items = columnInfo.map((columns, index) => {
+    const tableName = tableNames.at(index);
+    const formattedTableName = tableName.charAt(0).toUpperCase() + tableName.slice(1);
+    return {
+      key: formattedTableName,
+      label: `${formattedTableName} table`,
+      children: (
+        <AttributeGroup
+          key={tableName}
+          tableName={tableName}
+          columns={columns.map(column => column.COLUMN_NAME)}
+          checkedLists={checkedLists}
+          setCheckedLists={setCheckedLists}
+        />
+      ),
+    };
+  });
+
   return (
     <Modal
-      title="Display Attributes"
+      title="Select columns to display"
       open={isOpen}
       onOk={onOk}
       okText="Display Selected"
       onCancel={onCancel}
     >
-      <Collapse>
-        {columnInfo.map((columns, index) => {
-          return (
-            <CollapsePanel key={tableNames.at(index)} header={tableNames.at(index)}>
-              <AttributeGroup
-                key={tableNames.at(index)}
-                tableName={tableNames.at(index)}
-                columns={columns.map(column => column.COLUMN_NAME)}
-                checkedLists={checkedLists}
-                setCheckedLists={setCheckedLists}
-              />
-            </CollapsePanel>
-          );
-        })}
-      </Collapse>
+      <Tabs items={items} />
     </Modal>
   );
 };
