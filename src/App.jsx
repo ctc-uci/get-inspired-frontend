@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import Login from './components/Login/Login';
-import Logout from './components/Logout';
 import Layout from './components/Layout/Layout';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Profile/Profile';
@@ -110,17 +109,6 @@ function App() {
                 }
               />
             </Route>
-            <Route
-              exact
-              path="/logout"
-              element={
-                <ProtectedRoute
-                  Component={Logout}
-                  redirectPath="/login"
-                  roles={[ADMIN_ROLE, INTERN_ROLE]}
-                />
-              }
-            />
           </Routes>
         </Router>
       </AuthContextProvider>
