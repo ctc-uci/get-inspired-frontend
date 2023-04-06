@@ -1,70 +1,102 @@
-.buttons {
-    margin-bottom: 20px;
-    margin-left: 50px;
+.container {
+  margin: 0rem 5rem;
+  margin-top: 5.5rem;
 }
-​
-.allsections {
-    margin-left: 50px;
-    margin-right: 50px;
+
+.container > p {
+  margin-bottom: 50px;
 }
-​
-.beach-sections {
-    border-radius: 10px;
-}
-​
-.sortbuttons {
+
+.panelHeader {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  justify-content: space-between;
+  padding-right: 27px;
+  flex-direction: row-reverse;
 }
-​
-.leftbutton{
-  margin-left: 5px;
-}
-​
-.panelheader{
+
+.panelRow {
+  padding: 16px 16px;
+  padding-right: 50px;
+  border: solid;
+  border-width: 1px;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-color: #eeeeee;
   display: flex;
   justify-content: space-between;
 }
-​
-.firstRow td {
-  border-top: none;
+
+.panelRow > div {
+  display: flex;
+  grid-gap: 35px;
 }
-​
-.modalcontainer{
+
+.panelRow img {
+  vertical-align: middle;
+  margin-right: 10px;
+  height: 25px;
+}
+
+.panelRow:hover {
+  cursor: pointer;
+  background-color: #eeeeee;
+}
+
+.modalTitle {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 27px;
+  color: gray;
+  font-size: 14px;
+}
+
+.modalTitle > div {
   display: flex;
   flex-direction: column;
 }
-​
-.modalheader{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  font-size: larger;
-}
-​
-.modaltitle{
-  font-weight: bolder;
-}
-​
-.modalDate{
-  padding-bottom: 2%;
-}
-​
-.summaryContainer{
-  background: #FFFFFF;
-  box-shadow: 0px 4px 20px rgba(102, 102, 102, 0.15);
-  border-radius: 12px;
-}
-​
-.summaryTableTitle{
-  font-weight: bolder;
-  padding-left: 5%;
-  padding-top: 2%;
-  font-size: larger;
+
+.modalTitle b {
+  color: black;
+  font-size: 16px;
 }
 
-.totalClams{
-  float: right;
-  margin-right: 10px;
+.summary {
+  box-shadow: 0px 4px 20px rgba(102, 102, 102, 0.15);
+  border-radius: 12px;
+  padding: 1px 1.5rem;
+  margin-bottom: 35px;
+}
+
+.summaryCards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: 15px;
+  column-gap: 15px;
+  justify-content: center;
+  margin-bottom: 35px;
+}
+
+.summaryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  font-size: 25px;
+  line-height: 28px;
+  background: rgba(234, 234, 234, 0.6);
+  border-radius: 12px;
+}
+
+.summaryCard p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.summaryCard span {
+  font-size: 18px;
+  position: relative;
+  top: -40%;
+  margin-left: 2px;
 }

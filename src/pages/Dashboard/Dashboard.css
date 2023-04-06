@@ -1,0 +1,12 @@
+.ant-collapse-header {
+  flex-direction: row-reverse;
+}
+
+.ant-collapse-content-box {
+  background-color: white;
+  padding-top: 0px !important;
+}
+
+.ant-modal-footer {
+  text-align: center !important;
+}
