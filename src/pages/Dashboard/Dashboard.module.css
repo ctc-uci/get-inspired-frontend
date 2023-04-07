@@ -16,7 +16,6 @@
 
 .panelRow {
   padding: 16px 16px;
-  padding-right: 50px;
   border: solid;
   border-width: 1px;
   border-left: 0;
@@ -25,17 +24,23 @@
   border-color: #eeeeee;
   display: flex;
   justify-content: space-between;
+  margin-right: 40px;
 }
 
 .panelRow > div {
   display: flex;
-  grid-gap: 35px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.panelRow span {
+  padding-right: 10px;
 }
 
 .panelRow img {
   vertical-align: middle;
   margin-right: 10px;
-  height: 25px;
+  height: 23px;
 }
 
 .panelRow:hover {

@@ -10,3 +10,11 @@
 .ant-modal-footer {
   text-align: center !important;
 }
+
+.ant-collapse-content-box {
+  padding: 0px !important;
+}
+
+gray {
+  color: gray;
+}
