@@ -5,16 +5,19 @@ import LoadingScreen from '../common/LoadingScreen/LoadingScreen';
 import { GSPBackend } from './utils';
 import { withCookies, cookieKeys, Cookies, clearCookies } from './cookie_utils';
 import { refreshToken } from './auth_utils';
+import { useAuthContext } from '../common/AuthContext';
 
 const userIsAuthenticated = async (roles, cookies) => {
   try {
-    const accessToken = await refreshToken(cookies);
+    const { accessToken, currentUser } = await refreshToken(cookies);
     if (!accessToken) {
       return false;
     }
     const loggedIn = await GSPBackend.get(`/auth/verifyToken/${accessToken}`);
-
-    return roles.includes(cookies.get(cookieKeys.ROLE)) && loggedIn.status === 200;
+    return {
+      authenticated: roles.includes(cookies.get(cookieKeys.ROLE)) && loggedIn.status === 200,
+      currentUser,
+    };
   } catch (err) {
     clearCookies(cookies);
     return false;
@@ -32,10 +35,12 @@ const userIsAuthenticated = async (roles, cookies) => {
 const ProtectedRoute = ({ Component, redirectPath, roles, cookies }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { setCurrentUser } = useAuthContext();
 
   useEffect(async () => {
-    const authenticated = await userIsAuthenticated(roles, cookies);
+    const { authenticated, currentUser } = await userIsAuthenticated(roles, cookies);
     setIsAuthenticated(authenticated);
+    setCurrentUser(currentUser);
     setIsLoading(false);
   }, []);
 

@@ -1,0 +1,17 @@
+.reviewForm {
+  padding: 0 3% 3%;
+}
+
+#backNextButtons {
+  text-align: center;
+}
+
+.survey-form {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 15%;
+}
+
+.disabled-input {
+  flex: 40%;
+}

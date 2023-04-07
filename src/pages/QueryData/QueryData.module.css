@@ -1,0 +1,35 @@
+/* Generic search bar */
+.generic-search-bar {
+  width: 70%;
+}
+
+.generic-query,
+.advanced-query {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  padding-top: 10px;
+}
+
+.search-config-buttons {
+  display: flex;
+  column-gap: 10px;
+  align-self: flex-end;
+}
+/* Advanced query button */
+.advanced-query-button {
+  align-self: flex-end;
+}
+
+/* Query Results */
+.query-results-header {
+  margin: 2.1rem 0 2rem 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 95%;
+}
+.query-results-header h2 {
+  margin: 0;
+}

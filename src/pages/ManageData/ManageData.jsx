@@ -1,155 +1,286 @@
-/* eslint-disable */
-import React, { useState, useCallback, useEffect } from 'react';
-import { Utils as QbUtils, Query, Builder, AntdConfig } from '@react-awesome-query-builder/antd';
-import { Alert, Button } from 'antd';
-import '@react-awesome-query-builder/antd/css/styles.css';
+import React, { useState, useEffect } from 'react';
+import { Radio, Cascader, Table, Typography, Button } from 'antd';
 
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
-import SelectAttributesModal from './SelectAttributesModal/SelectAttributesModal';
-import QueryResults from './QueryResults/QueryResults';
-import { tableToWidget } from './ManageDataUtils';
-import { GSPBackend } from '../../utils/utils';
 
+import DeleteDataModal from './DeleteDataModal/DeleteDataModal';
+import EditDataModal from './EditDataModal/EditDataModal';
+import CancelModal from './CancelModal/CancelModal';
+
+import { EditableCell, UndoButton } from './ManageDataUtils';
+import { humanizeCell } from '../QueryData/QueryDataUtils';
+import { GSPBackend } from '../../utils/utils';
 import styles from './ManageData.module.css';
 
-class DefaultDict {
-  constructor(DefaultInit) {
-    return new Proxy(
-      {},
-      {
-        get: (target, name) =>
-          name in target
-            ? target[name]
-            : (target[name] =
-                typeof DefaultInit === 'function' ? new DefaultInit().valueOf() : DefaultInit),
-      },
-    );
-  }
-}
+const { Title } = Typography;
 
-const queryValue = { id: QbUtils.uuid(), type: 'group' };
-
+const PAGE_SIZE = 10;
 const ManageData = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [config, setConfig] = useState({ ...AntdConfig, fields: {} });
-  const [tableState, setTableState] = useState({
-    tableNames: [],
-    columnInfo: [],
+  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
+  const [selectedTable, setSelectedTable] = useState('survey');
+  const [editingMode, setEditingMode] = useState(false);
+  const [surveyOptions, setSurveyOptions] = useState([]);
+
+  const [isDeleteDataModalOpen, setIsDeleteDataModalOpen] = useState(false);
+  const [isEditDataModalOpen, setIsEditDataModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+
+  const [page, setPage] = useState(1);
+  const [editingState, setEditingState] = useState({
+    selectedRowKeys: [],
+    editedRows: {},
   });
-  const [queryState, setQueryState] = useState({
-    tree: QbUtils.checkTree(QbUtils.loadTree(queryValue), config),
-    config,
-    results: [],
-  });
-  const [errorState, setErrorState] = useState('');
-  const [checkedLists, setCheckedLists] = useState(new DefaultDict(Array));
 
-  const [isSelectAttributesModalOpen, setIsSelectedAttributesModalOpen] = useState(false);
+  const [tableState, setTableState] = useState({ originalRows: [], rows: [], columns: [] });
 
-  const onChange = useCallback((immutableTree, changeConfig) => {
-    setQueryState(prevState => ({ ...prevState, tree: immutableTree, config: changeConfig }));
-  }, []);
+  const onSurveyChange = ([, surveyId]) => {
+    setSelectedSurveyId(surveyId);
+  };
 
-  const onAdvancedSearch = async () => {
-    // only query if checkedLists is nonempty
-    if (Object.values(checkedLists).every(arr => arr.length === 0)) {
-      setErrorState('Please select at least one attribute to query');
-      return;
-    }
-    setErrorState('');
+  // Object with options to handle when user selects one or more rows
+  const rowSelection = {
+    onChange: selectedRowKeys => {
+      setEditingState({ ...editingState, selectedRowKeys });
+    },
+  };
 
-    // get rid of prev. results (find more elegant way to do this?)
-    setQueryState(prevState => ({ ...prevState, results: [] }));
+  // Creates columns for table based on SQL table columns
+  const computeColumnsFromSQL = columnData =>
+    columnData.map(col => ({
+      title: col.COLUMN_NAME,
+      key: col.COLUMN_NAME,
+      dataIndex: col.COLUMN_NAME,
+      type: col.DATA_TYPE,
+    }));
 
-    // get current state and make query
-    try {
-      const { tree: immutableTree, config: immutableConfig } = queryState;
-      const results = await GSPBackend.post('/query/advanced', {
-        jsonLogic: QbUtils.jsonLogicFormat(immutableTree, config).logic,
-        config: immutableConfig,
-        checkedFields: checkedLists,
-      });
+  // Creates columns for table based on existing columns (switches to input if in editing mode)
+  const computeColumnsFromExisting = columnData => [
+    ...columnData
+      .filter(col => col.key !== 'operation')
+      .map(col => ({
+        ...col,
+        render: (text, record, index) =>
+          col.title !== 'id' && col.title !== 'survey_id' && editingMode ? (
+            <EditableCell
+              text={text}
+              originalRecord={tableState.originalRows[index + (page - 1) * PAGE_SIZE]}
+              record={record}
+              index={index + (page - 1) * PAGE_SIZE}
+              columnName={col.title}
+              columnType={col.type}
+              editingState={editingState}
+              setEditingState={setEditingState}
+              tableState={tableState}
+              setTableState={setTableState}
+            />
+          ) : (
+            <div>{humanizeCell(text, col.type)}</div>
+          ),
+      })),
+    ...(editingMode
+      ? [
+          {
+            title: 'Action',
+            key: 'operation',
+            fixed: 'right',
+            width: 100,
+            render: (text, record, index) => (
+              <UndoButton
+                originalRecord={tableState.originalRows[index + (page - 1) * PAGE_SIZE]}
+                index={index + (page - 1) * PAGE_SIZE}
+                tableState={tableState}
+                setTableState={setTableState}
+                editingState={editingState}
+                setEditingState={setEditingState}
+              />
+            ),
+          },
+        ]
+      : []),
+  ];
 
-      setQueryState(prevState => ({ ...prevState, results: results.data }));
-    } catch (err) {
-      setErrorState(`${err.name}: ${err.message}`);
+  // Fetches table data based on selected survey and table
+  const fetchTableData = async () => {
+    const rowDataUrl = selectedSurveyId
+      ? `/${selectedTable}s/survey/${selectedSurveyId}`
+      : `/${selectedTable}s`;
+    const requests = [
+      GSPBackend.get(`/tables/${selectedTable}/columns`),
+      GSPBackend.get(rowDataUrl),
+    ];
+    const [{ data: columnData }, { data: rowData }] = await Promise.all(requests);
+
+    setTableState({
+      originalRows: rowData.map(row => ({ ...row })),
+      rows: rowData,
+      columns: computeColumnsFromSQL(columnData),
+    });
+  };
+
+  const cancelButtonClicked = () => {
+    // If there are edited rows, open the cancel modal
+    if (Object.keys(editingState.editedRows).length) {
+      setIsCancelModalOpen(true);
+      // Otherwise, exit editing mode
+    } else {
+      setEditingMode(false);
     }
   };
 
-  const renderBuilder = useCallback(
-    props => (
-      <div className="query-builder-container" style={{ padding: '10px' }}>
-        <div className="query-builder qb-lite">
-          <Builder {...props} />
-        </div>
-      </div>
-    ),
-    [],
-  );
+  const saveButtonClicked = () => {
+    // If there are edited rows, open the edit data modal
+    if (Object.keys(editingState.editedRows).length) {
+      setIsEditDataModalOpen(true);
+      // Otherwise, exit editing mode
+    } else {
+      setEditingMode(false);
+    }
+  };
 
-  // Build the config fields on page load
+  const deleteSelectedRows = async () => {
+    if (editingState.selectedRowKeys.length) {
+      const requests = editingState.selectedRowKeys.map(rowId =>
+        GSPBackend.delete(`/${selectedTable}s/${rowId}`),
+      );
+      await Promise.all(requests);
+      setTableState({
+        ...tableState,
+        rows: tableState.rows.filter(row => !editingState.selectedRowKeys.includes(row.id)),
+      });
+      setEditingState({
+        editedRows: Object.fromEntries(
+          Object.entries(editingState.editedRows).filter(
+            ([key]) => !editingState.selectedRowKeys.includes(Number.parseInt(key, 10)),
+          ),
+        ),
+        selectedRowKeys: [],
+      });
+    }
+  };
+
+  const saveEdits = async () => {
+    if (editingState.editedRows) {
+      const requests = Object.keys(editingState.editedRows).map(id =>
+        GSPBackend.put(`/${selectedTable}s/${id}`, editingState.editedRows[id]),
+      );
+      await Promise.all(requests);
+      await fetchTableData();
+    }
+    setEditingMode(false);
+  };
+
+  // Load dropdown survey options on page load
   useEffect(async () => {
-    // Get all the tables
-    const response = await GSPBackend.get('/tables');
-    const tableNames = response.data.map(tableInformation => tableInformation.TABLE_NAME);
-
-    // Get all the columns for each table
-    const columnInfoRequests = tableNames.map(tableName =>
-      GSPBackend.get(`/tables/${tableName}/columns`),
-    );
-    const columnInfo = (await Promise.all(columnInfoRequests)).map(
-      columnInfoResponse => columnInfoResponse.data,
-    );
-
-    // build configs and set states accordingly
-    setConfig({
-      ...config,
-      fields: Object.fromEntries(
-        tableNames.map((tableName, index) => [
-          tableName,
-          tableToWidget(tableName, columnInfo[index]),
-        ]),
-      ),
-    });
-    setTableState({ tableNames, columnInfo });
+    const map = await GSPBackend.get('/surveys/existingSurveyOptions');
+    setSurveyOptions([{ label: 'View all data' }, ...map.data]);
     setIsLoading(false);
   }, []);
+
+  // Clear the editing state every time editingMode is toggled
+  useEffect(async () => {
+    if (!editingMode) {
+      await fetchTableData();
+    }
+    setEditingState({ selectedRowKeys: [], editedRows: {} });
+  }, [editingMode]);
+
+  useEffect(() => {
+    // Re-renders table columns -- needed because antd only computes column state based on state values when a column is rendered
+    if (tableState.rows && tableState.columns) {
+      setTableState({ ...tableState, columns: computeColumnsFromExisting(tableState.columns) });
+    }
+  }, [page, editingMode, editingState, tableState.rows]);
+
+  // Load table data when selected table or selected survey changes
+  useEffect(async () => {
+    await fetchTableData();
+  }, [selectedTable, selectedSurveyId]);
 
   if (isLoading) {
     return <LoadingScreen />;
   }
-
   return (
-    <div className={styles['query-data-container']}>
-      <h1>Query Data</h1>
-      <Query
-        {...config}
-        value={queryState.tree}
-        onChange={onChange}
-        renderBuilder={renderBuilder}
-      />
-      <Button onClick={onAdvancedSearch}>Search</Button>
-      <SelectAttributesModal
-        tableState={tableState}
-        isOpen={isSelectAttributesModalOpen}
-        setIsOpen={setIsSelectedAttributesModalOpen}
-        checkedLists={checkedLists}
-        setCheckedLists={setCheckedLists}
-      />
-      <div className={styles['query-results-header']}>
-        <h2>Query Results</h2>
-        <div>
-          <Button>Export as CSV</Button>
-          <Button type="primary" onClick={() => setIsSelectedAttributesModalOpen(true)}>
-            Select Attributes
-          </Button>
-        </div>
+    <div className={styles['manage-data-container']}>
+      <Title>Manage Data</Title>
+      <Radio.Group
+        value={selectedTable}
+        buttonStyle="solid"
+        onChange={e => setSelectedTable(e.target.value)}
+        disabled={editingMode}
+      >
+        <Radio.Button value="computation">Computations Table</Radio.Button>
+        <Radio.Button value="survey">Survey Table</Radio.Button>
+        <Radio.Button value="clam">Clam Table</Radio.Button>
+        <Radio.Button value="raker">Raker Table</Radio.Button>
+      </Radio.Group>
+      <br />
+      <div className={styles['data-options']}>
+        <Cascader
+          className={styles.cascader}
+          options={surveyOptions}
+          placeholder="Select a survey"
+          onChange={onSurveyChange}
+          disabled={editingMode}
+        />
+        {editingMode ? (
+          <div className={styles['editing-mode-buttons']}>
+            {editingState.selectedRowKeys.length ? (
+              <Button
+                className={styles['delete-button']}
+                onClick={() => setIsDeleteDataModalOpen(true)}
+              >
+                Delete
+              </Button>
+            ) : (
+              <Button className={styles['save-button']} onClick={saveButtonClicked}>
+                Save
+              </Button>
+            )}
+            <Button className={styles['cancel-button']} onClick={cancelButtonClicked}>
+              Cancel
+            </Button>
+          </div>
+        ) : (
+          <Button onClick={() => setEditingMode(true)}>Edit {selectedTable} data</Button>
+        )}
       </div>
-      {
-        // temporary error banner
-        errorState !== '' && <Alert message={errorState} type="error" showIcon />
-      }
-      <QueryResults data={queryState.results} />
+      <div className={styles['table-container']}>
+        <Table
+          rowSelection={editingMode ? rowSelection : undefined}
+          bordered
+          columns={[...tableState.columns]}
+          dataSource={[...tableState.rows]}
+          scroll={{ x: true }}
+          pagination={{
+            current: page,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+            onChange: setPage,
+          }}
+          rowKey="id"
+        />
+      </div>
+      <DeleteDataModal
+        isOpen={isDeleteDataModalOpen}
+        setIsOpen={setIsDeleteDataModalOpen}
+        selectedTable={selectedTable}
+        selectedRowKeys={editingState.selectedRowKeys}
+        deleteSelectedRows={deleteSelectedRows}
+      />
+      <EditDataModal
+        isOpen={isEditDataModalOpen}
+        editedRows={editingState.editedRows}
+        setIsOpen={setIsEditDataModalOpen}
+        selectedRowKeys={editingState.editedRows}
+        selectedTable={selectedTable}
+        saveEdits={saveEdits}
+      />
+      <CancelModal
+        isOpen={isCancelModalOpen}
+        setIsOpen={setIsCancelModalOpen}
+        editedRows={editingState.editedRows}
+        setEditingMode={setEditingMode}
+      />
     </div>
   );
 };

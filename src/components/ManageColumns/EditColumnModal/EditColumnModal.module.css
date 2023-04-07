@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container h1 {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 25px;
+}
+
+.container form {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  width: 280px;
+}
+
+.container span {
+  text-align: center;
+}
+
+.container label {
+  font-weight: 500;
+  font-size: 17px !important;
+  line-height: 22px;
+}
+
+.container button {
+  align-self: flex-end;
+}

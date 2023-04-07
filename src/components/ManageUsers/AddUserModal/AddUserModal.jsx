@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, Form, Input, Radio } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { withCookies } from '../../../utils/cookie_utils';
+import { NotiMessage, NotiIcon, notify } from '../../../utils/utils';
 import { registerWithEmailAndPassword } from '../../../utils/auth_utils';
 
 import styles from './AddUserModal.module.css';
@@ -36,6 +37,7 @@ const AddUserModal = ({ isOpen, setIsOpen, fetchUsersFromDB }) => {
         '/manage-users',
       );
       await fetchUsersFromDB();
+      notify(NotiMessage.USER_ADDED, NotiIcon.SUCCESS);
       handleOk();
     } catch (error) {
       setErrorMessage(error.message);
@@ -51,13 +53,13 @@ const AddUserModal = ({ isOpen, setIsOpen, fetchUsersFromDB }) => {
           layout="vertical"
           name="login-form"
           onFinish={handleSubmit}
-          initialValues={{ role: 'viewer' }}
+          initialValues={{ role: 'intern' }}
         >
           <span>
             <Form.Item label="" name="role">
-              <Radio.Group initialValues="viewer">
-                <Radio value="viewer">Viewer</Radio>
-                <Radio value="editor">Editor</Radio>
+              <Radio.Group>
+                <Radio value="intern">Intern</Radio>
+                <Radio value="admin">Admin</Radio>
               </Radio.Group>
             </Form.Item>
           </span>
@@ -125,7 +127,7 @@ const AddUserModal = ({ isOpen, setIsOpen, fetchUsersFromDB }) => {
         </Form>
         <p>{errorMessage}</p>
         <Button type="primary" form="login-form" key="submit" htmlType="submit">
-          Sign Up
+          Add User
         </Button>
       </div>
     </Modal>
