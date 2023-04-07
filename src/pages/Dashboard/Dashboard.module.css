@@ -24,7 +24,7 @@
   border-color: #eeeeee;
   display: flex;
   justify-content: space-between;
-  margin-right: 40px;
+  padding-right: 40px;
 }
 
 .panelRow > div {
@@ -104,4 +104,8 @@
   position: relative;
   top: -40%;
   margin-left: 2px;
+}
+
+#gray {
+  color: gray;
 }

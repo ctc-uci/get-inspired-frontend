@@ -38,9 +38,7 @@ function Row(props) {
             alt="Placeholder owo"
           />
           <span>{props.location}</span>
-          <span>
-            <gray>{props.date}</gray>
-          </span>
+          <span id={styles.gray}>{props.date}</span>
         </div>
         <span>Total Clams: N/A</span>
       </div>
