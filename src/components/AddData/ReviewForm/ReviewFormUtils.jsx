@@ -42,7 +42,7 @@ export const UserInput = ({ columnName, value, columnType }) => {
   // Boolean type requires dropdown with True and False options
   if (DataType.booleanTypes.includes(columnType)) {
     return (
-      <Form.Item style={{ flex: FLEX }} name={columnName} label={columnName}>
+      <Form.Item style={{ flex: FLEX }} label={columnName}>
         <Select
           disabled
           value={fieldValueBuilder(value, columnType)}

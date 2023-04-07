@@ -63,6 +63,7 @@ const ManageData = () => {
         render: (text, record, index) =>
           col.title !== 'id' && col.title !== 'survey_id' && editingMode ? (
             <EditableCell
+              text={text}
               originalRecord={tableState.originalRows[index + (page - 1) * PAGE_SIZE]}
               record={record}
               index={index + (page - 1) * PAGE_SIZE}
@@ -189,7 +190,7 @@ const ManageData = () => {
     if (tableState.rows && tableState.columns) {
       setTableState({ ...tableState, columns: computeColumnsFromExisting(tableState.columns) });
     }
-  }, [editingMode, editingState, tableState.rows, page]);
+  }, [page, editingMode, editingState, tableState.rows]);
 
   // Load table data when selected table or selected survey changes
   useEffect(async () => {
@@ -254,7 +255,7 @@ const ManageData = () => {
           pagination={{
             current: page,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-            onChange: value => setPage(value),
+            onChange: setPage,
           }}
           rowKey="id"
         />

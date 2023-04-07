@@ -12,6 +12,7 @@ const DataType = {
 };
 
 const EditableCell = ({
+  text,
   index,
   typeOfData,
   columnName,
@@ -20,7 +21,7 @@ const EditableCell = ({
   setCsvData,
   autoDisabled = false,
 }) => {
-  const [value, setValue] = useState(csvData[typeOfData][index][columnName]);
+  const [value, setValue] = useState(text);
   const saveData = _value => {
     const newCsvRows = [...csvData[typeOfData]];
     newCsvRows[index][columnName] = _value;
@@ -28,7 +29,7 @@ const EditableCell = ({
   };
 
   useEffect(() => {
-    setValue(csvData[typeOfData][index][columnName]);
+    setValue(text);
   }, [csvData]);
 
   if (DataType.numericTypes.includes(columnType) || DataType.textTypes.includes(columnType)) {
@@ -48,7 +49,7 @@ const EditableCell = ({
     return (
       <Select
         disabled={autoDisabled}
-        value={Boolean(csvData[typeOfData][index][columnName])}
+        value={Boolean(value)}
         options={[
           { value: false, label: 'false' },
           { value: true, label: 'true' },
@@ -63,7 +64,7 @@ const EditableCell = ({
       <DatePicker
         disabled={autoDisabled}
         style={{ width: 125 }}
-        value={dayjs(csvData[typeOfData][index][columnName])}
+        value={dayjs(value)}
         onChange={saveData}
       />
     );
@@ -73,7 +74,7 @@ const EditableCell = ({
       disabled={autoDisabled}
       style={{ width: 80 }}
       format="HH:mm"
-      value={dayjs(csvData[typeOfData][index][columnName], 'HH:mm')}
+      value={dayjs(value, 'HH:mm')}
       onChange={(time, timeString) => saveData(timeString)}
     />
   );

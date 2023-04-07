@@ -66,6 +66,7 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
       ...column,
       render: (text, record, index) => (
         <EditableCell
+          text={text}
           record={record}
           index={index + (page - 1) * PAGE_SIZE}
           typeOfData={typeOfData}

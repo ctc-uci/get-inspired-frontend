@@ -82,6 +82,7 @@ const ReviewForm = ({
                 ...column,
                 render: (text, record, index) => (
                   <EditableCell
+                    text={text}
                     record={record}
                     index={index + (clamPage - 1) * PAGE_SIZE}
                     typeOfData="clam"

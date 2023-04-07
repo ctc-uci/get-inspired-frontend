@@ -21,6 +21,7 @@ const equals = (record, newRecord) =>
 
 // eslint-disable-next-line import/prefer-default-export
 export const EditableCell = ({
+  text,
   record,
   originalRecord,
   index,
@@ -31,7 +32,7 @@ export const EditableCell = ({
   tableState,
   setTableState,
 }) => {
-  const [value, setValue] = useState(tableState.rows[index][columnName]);
+  const [value, setValue] = useState(text);
 
   // Sets editingState.editedRows according to if the new value is different from the original value
   const saveData = newValue => {
@@ -61,7 +62,7 @@ export const EditableCell = ({
   };
 
   useEffect(() => {
-    setValue(tableState.rows[index][columnName]);
+    setValue(text);
   }, [tableState]);
   // Date or time type requires input
   if (DataType.numericTypes.includes(columnType) || DataType.textTypes.includes(columnType)) {
@@ -81,7 +82,7 @@ export const EditableCell = ({
     return (
       <Space wrap>
         <Select
-          value={tableState.rows[index][columnName]}
+          value={Boolean(value)}
           options={[
             { value: false, label: 'false' },
             { value: true, label: 'true' },
@@ -93,20 +94,14 @@ export const EditableCell = ({
   }
   // Date type requires DatePicker
   if (DataType.dateTypes.includes(columnType)) {
-    return (
-      <DatePicker
-        style={{ width: 125 }}
-        value={dayjs(tableState.rows[index][columnName])}
-        onChange={saveData}
-      />
-    );
+    return <DatePicker style={{ width: 125 }} value={dayjs(value)} onChange={saveData} />;
   }
   // Time type requires TimePicker
   return (
     <TimePicker
       style={{ width: 80 }}
       format="HH:mm"
-      value={dayjs(tableState.rows[index][columnName], 'HH:mm')}
+      value={dayjs(value, 'HH:mm')}
       onChange={(time, timeString) => saveData(timeString)}
     />
   );
@@ -130,7 +125,7 @@ export const UndoButton = ({
     setEditingState({ ...editingState, editedRows });
   };
   return (
-    <Button onClick={undoChanges} disabled={!(originalRecord.id in editingState.editedRows)}>
+    <Button onClick={undoChanges} disabled={!(originalRecord?.id in editingState.editedRows)}>
       Undo
     </Button>
   );
