@@ -94,7 +94,13 @@ export const EditableCell = ({
   }
   // Date type requires DatePicker
   if (DataType.dateTypes.includes(columnType)) {
-    return <DatePicker style={{ width: 125 }} value={dayjs(value)} onChange={saveData} />;
+    return (
+      <DatePicker
+        style={{ width: 125 }}
+        value={dayjs(value)}
+        onChange={(date, dateString) => saveData(dateString)}
+      />
+    );
   }
   // Time type requires TimePicker
   return (
