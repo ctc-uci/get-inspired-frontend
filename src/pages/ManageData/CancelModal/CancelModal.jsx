@@ -15,8 +15,8 @@ const CancelModal = ({ isOpen, setIsOpen, editedRows, setEditingMode }) => {
   };
 
   const cancelButtonClicked = () => {
-    setEditingMode(false);
     handleOk();
+    setEditingMode(false);
   };
 
   return (
