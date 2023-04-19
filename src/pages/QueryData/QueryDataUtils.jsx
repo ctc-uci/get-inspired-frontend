@@ -34,6 +34,7 @@ const columnToSubfield = column => {
   }
 
   const subfield = {
+    label: column.COLUMN_NAME,
     type: myType,
     valueSources: ['value'],
   };
@@ -44,7 +45,7 @@ export const tableToWidget = (table, columns) => ({
   label: table,
   type: '!group',
   subfields: Object.fromEntries(
-    columns.map(column => [column.COLUMN_NAME, columnToSubfield(column)]),
+    columns.map(column => [`\`${column.COLUMN_NAME}\``, columnToSubfield(column)]),
   ),
 });
 
