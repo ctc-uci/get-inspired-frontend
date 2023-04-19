@@ -1,4 +1,5 @@
 export const tableNames = {
+  computation: 'Computation',
   survey: 'Survey',
   clam: 'Clam',
   raker: 'Raker',
