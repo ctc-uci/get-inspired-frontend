@@ -18,7 +18,7 @@ const PAGE_SIZE = 10;
 const ManageData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSurveyId, setSelectedSurveyId] = useState(null);
-  const [selectedTable, setSelectedTable] = useState('survey');
+  const [selectedTable, setSelectedTable] = useState('computation');
   const [editingMode, setEditingMode] = useState(false);
   const [surveyOptions, setSurveyOptions] = useState([]);
 
