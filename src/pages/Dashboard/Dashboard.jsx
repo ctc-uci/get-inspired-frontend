@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
-import { Collapse, Button, Modal, theme } from 'antd';
+import { Collapse, Button, Modal, theme, Typography } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 import { GSPBackend } from '../../utils/utils';
@@ -9,6 +9,7 @@ import styles from './Dashboard.module.css';
 import './Dashboard.css';
 
 const { Panel } = Collapse;
+const { Title } = Typography;
 
 // Rows under each beach group, Each Row is a Survey
 const Row = props => {
@@ -171,11 +172,11 @@ const Dashboard = () => {
   }
   return (
     <div className={styles.container}>
-      <h2>Dashboard</h2>
-      <p>
+      <Title>Dashboard</Title>
+      <Title level={5}>
         The surveys displayed are only from the current season. To view surveys from past seasons,
         query data.
-      </p>
+      </Title>
       <Collapse
         accordion
         bordered={false}
