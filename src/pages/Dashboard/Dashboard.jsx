@@ -30,7 +30,7 @@ const Row = props => {
       <div className={styles.panelRow} onClick={showModal}>
         <div>
           <span>{props.Location}</span>
-          <span id={styles.gray}>{props.Date}</span>
+          <span id={styles.gray}>{new Date(props.Date).toLocaleDateString()}</span>
         </div>
         <span>Total Clams: {props['# clams found']}</span>
       </div>
@@ -108,6 +108,14 @@ const Row = props => {
                 <span>m</span>
               </div>
               <p>Clam Density</p>
+            </div>
+
+            <div className={styles.summaryCard}>
+              <div>
+                <b>{props['avg length']}</b>
+                <span>mm</span>
+              </div>
+              <p>Avg Length</p>
             </div>
 
             <div className={styles.summaryCard}>
