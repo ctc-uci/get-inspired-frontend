@@ -152,7 +152,6 @@ const Dashboard = () => {
   const fetchBeachesFromDB = async () => {
     const beachesFromDB = await getSurveyOptions();
     setBeaches(beachesFromDB);
-    console.log(beachesFromDB);
   };
 
   const { token } = theme.useToken();
