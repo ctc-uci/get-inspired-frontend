@@ -52,13 +52,23 @@ const SurveyForm = ({
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Cascader
-          className={styles.cascader}
-          options={existingSurveyOptions}
-          placeholder="Add data to existing survey"
-          value={selectedExistingSurvey}
-          onChange={onSurveyChange}
-        />
+        <div className={styles.buttons}>
+          <Cascader
+            className={styles.cascader}
+            options={existingSurveyOptions}
+            placeholder="Add data to existing survey"
+            value={selectedExistingSurvey}
+            onChange={onSurveyChange}
+          />
+          <Button
+            onClick={() => {
+              form.resetFields();
+              setSelectedExistingSurvey([]);
+            }}
+          >
+            Clear existing survey information
+          </Button>
+        </div>
         <Title className={styles['create-new-survey-header']} level={3}>
           Input information for a survey
         </Title>

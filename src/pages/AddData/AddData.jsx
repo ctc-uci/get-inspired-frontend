@@ -62,7 +62,7 @@ const AddData = () => {
     setSurveyColumns(
       surveyCols.reduce((acc, col) => ({ ...acc, [col.COLUMN_NAME]: col.DATA_TYPE }), {}),
     );
-    setExistingSurveyOptions([{ label: 'Create new survey' }, ...map]);
+    setExistingSurveyOptions(map);
     setIsLoading(false);
   }, []);
 

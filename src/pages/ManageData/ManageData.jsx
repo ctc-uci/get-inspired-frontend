@@ -17,6 +17,7 @@ const { Title } = Typography;
 const PAGE_SIZE = 10;
 const ManageData = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [year, setYear] = useState(null);
   const [selectedSurveyId, setSelectedSurveyId] = useState(null);
   const [selectedTable, setSelectedTable] = useState('computation');
   const [editingMode, setEditingMode] = useState(false);
@@ -34,7 +35,8 @@ const ManageData = () => {
 
   const [tableState, setTableState] = useState({ originalRows: [], rows: [], columns: [] });
 
-  const onSurveyChange = ([, surveyId]) => {
+  const onSurveyChange = ([newYear, surveyId]) => {
+    setYear(newYear);
     setSelectedSurveyId(surveyId);
   };
 
@@ -173,7 +175,7 @@ const ManageData = () => {
   // Load dropdown survey options on page load
   useEffect(async () => {
     const map = await GSPBackend.get('/surveys/existingSurveyOptions');
-    setSurveyOptions([{ label: 'View all data' }, ...map.data]);
+    setSurveyOptions(map.data);
     setIsLoading(false);
   }, []);
 
@@ -209,20 +211,24 @@ const ManageData = () => {
         onChange={e => setSelectedTable(e.target.value)}
         disabled={editingMode}
       >
-        <Radio.Button value="computation">Computations Table</Radio.Button>
+        <Radio.Button value="computation">Computation Table</Radio.Button>
         <Radio.Button value="survey">Survey Table</Radio.Button>
         <Radio.Button value="clam">Clam Table</Radio.Button>
         <Radio.Button value="raker">Raker Table</Radio.Button>
       </Radio.Group>
       <br />
       <div className={styles['data-options']}>
-        <Cascader
-          className={styles.cascader}
-          options={surveyOptions}
-          placeholder="Select a survey"
-          onChange={onSurveyChange}
-          disabled={editingMode}
-        />
+        <div className={styles['left-options']}>
+          <Cascader
+            className={styles.cascader}
+            options={surveyOptions}
+            placeholder="Select a survey"
+            onChange={onSurveyChange}
+            disabled={editingMode}
+            value={year && selectedSurveyId ? [year, selectedSurveyId] : []}
+          />
+          <Button onClick={() => setSelectedSurveyId(null)}>View all data</Button>
+        </div>
         {editingMode ? (
           <div className={styles['editing-mode-buttons']}>
             {editingState.selectedRowKeys.length ? (
@@ -242,7 +248,9 @@ const ManageData = () => {
             </Button>
           </div>
         ) : (
-          <Button onClick={() => setEditingMode(true)}>Edit {selectedTable} data</Button>
+          <Button onClick={() => setEditingMode(true)} disabled={selectedTable === 'computation'}>
+            Edit {selectedTable} data
+          </Button>
         )}
       </div>
       <div className={styles['table-container']}>

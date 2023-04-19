@@ -61,6 +61,7 @@ const QueryResults = ({ checkedLists, data, isLoading, query }) => {
         columns={computeColumns(checkedLists, data, query)}
         scroll={{ x: true }}
         size="middle"
+        bordered
       />
     </div>
   );

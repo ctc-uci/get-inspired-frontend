@@ -67,6 +67,7 @@ const keysToCamel = data => {
   return data;
 };
 const NotiMessage = {
+  ADD_DATA_ERROR: error => `Error adding data!: ${error}`,
   ACCOUNT_INFORMATION_EDITED: 'Account information edited!',
   ACCOUNT_INFORMATION_EDITED_ERROR: error => `Error editing account information: ${error}`,
   ROWS_DELETED: (numRows, table) =>

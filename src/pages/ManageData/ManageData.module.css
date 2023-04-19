@@ -11,8 +11,14 @@
   justify-content: space-between;
 }
 
+.left-options {
+  width: 50%;
+  display: flex;
+  column-gap: 10px;
+}
+
 .cascader {
-  width: 30%;
+  width: 50%;
 }
 
 .save-button,
