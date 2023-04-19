@@ -248,7 +248,9 @@ const ManageData = () => {
             </Button>
           </div>
         ) : (
-          <Button onClick={() => setEditingMode(true)}>Edit {selectedTable} data</Button>
+          <Button onClick={() => setEditingMode(true)} disabled={selectedTable === 'computation'}>
+            Edit {selectedTable} data
+          </Button>
         )}
       </div>
       <div className={styles['table-container']}>

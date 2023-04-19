@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import { UserInput } from './ReviewFormUtils';
 import EditableCell from '../ImportCSV/EditableCell';
-import { GSPBackend } from '../../../utils/utils';
+import { GSPBackend, NotiMessage, NotiIcon, notify } from '../../../utils/utils';
 
 import styles from './ReviewForm.module.css';
 
@@ -25,25 +25,38 @@ const ReviewForm = ({
   const { token } = theme.useToken();
   const addData = async () => {
     const [, selectedExistingSurveyId] = selectedExistingSurvey;
-    const surveyId =
-      selectedExistingSurveyId || (await GSPBackend.post('/surveys', surveyData)).data[0].insertId;
+    let surveyIdToDeleteOnError = null;
+    try {
+      const surveyId =
+        selectedExistingSurveyId ||
+        (await GSPBackend.post('/surveys', surveyData)).data[0].insertId;
+      surveyIdToDeleteOnError = surveyId;
+      const addClamAndRakerRequests = [
+        ...(csvData.clam
+          ? csvData.clam.map(clamData =>
+              GSPBackend.post('/clams', { survey_id: surveyId, ...clamData }),
+            )
+          : []),
+        ...(csvData.raker
+          ? csvData.raker.map(rakerData =>
+              GSPBackend.post('/rakers', { survey_id: surveyId, ...rakerData }),
+            )
+          : []),
+      ];
 
-    const addClamAndRakerRequests = [
-      ...(csvData.clam
-        ? csvData.clam.map(clamData =>
-            GSPBackend.post('/clams', { survey_id: surveyId, ...clamData }),
-          )
-        : []),
-      ...(csvData.raker
-        ? csvData.raker.map(rakerData =>
-            GSPBackend.post('/rakers', { survey_id: surveyId, ...rakerData }),
-          )
-        : []),
-    ];
+      await Promise.all(addClamAndRakerRequests);
 
-    await Promise.all(addClamAndRakerRequests);
-
-    incrStep();
+      incrStep();
+    } catch (error) {
+      notify(NotiMessage.ADD_DATA_ERROR(error), NotiIcon.ERROR);
+      // Delete the survey if it was created
+      if (
+        (selectedExistingSurveyId === null || selectedExistingSurveyId === undefined) &&
+        surveyIdToDeleteOnError
+      ) {
+        await GSPBackend.delete(`/surveys/${surveyIdToDeleteOnError}`);
+      }
+    }
   };
 
   const panelStyle = {
