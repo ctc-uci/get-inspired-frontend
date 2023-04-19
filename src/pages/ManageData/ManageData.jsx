@@ -211,7 +211,7 @@ const ManageData = () => {
         onChange={e => setSelectedTable(e.target.value)}
         disabled={editingMode}
       >
-        <Radio.Button value="computation">Computations Table</Radio.Button>
+        <Radio.Button value="computation">Computation Table</Radio.Button>
         <Radio.Button value="survey">Survey Table</Radio.Button>
         <Radio.Button value="clam">Clam Table</Radio.Button>
         <Radio.Button value="raker">Raker Table</Radio.Button>
