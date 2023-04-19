@@ -1,0 +1,111 @@
+.container {
+  margin: 0rem 5rem;
+  margin-top: 5.5rem;
+}
+
+.container > p {
+  margin-bottom: 50px;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 27px;
+  flex-direction: row-reverse;
+}
+
+.panelRow {
+  padding: 16px 16px;
+  border: solid;
+  border-width: 1px;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-color: #eeeeee;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 40px;
+}
+
+.panelRow > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.panelRow span {
+  padding-right: 10px;
+}
+
+.panelRow img {
+  vertical-align: middle;
+  margin-right: 10px;
+  height: 23px;
+}
+
+.panelRow:hover {
+  cursor: pointer;
+  background-color: #eeeeee;
+}
+
+.modalTitle {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 27px;
+  color: gray;
+  font-size: 14px;
+}
+
+.modalTitle > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.modalTitle b {
+  color: black;
+  font-size: 16px;
+}
+
+.summary {
+  box-shadow: 0px 4px 20px rgba(102, 102, 102, 0.15);
+  border-radius: 12px;
+  padding: 1px 1.5rem;
+  margin-bottom: 35px;
+}
+
+.summaryCards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: 15px;
+  column-gap: 15px;
+  justify-content: center;
+  margin-bottom: 35px;
+}
+
+.summaryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  font-size: 25px;
+  line-height: 28px;
+  background: rgba(234, 234, 234, 0.6);
+  border-radius: 12px;
+}
+
+.summaryCard p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.summaryCard span {
+  font-size: 18px;
+  position: relative;
+  top: -40%;
+  margin-left: 2px;
+}
+
+#gray {
+  color: gray;
+}
