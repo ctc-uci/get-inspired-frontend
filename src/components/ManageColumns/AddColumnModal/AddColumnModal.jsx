@@ -26,8 +26,10 @@ const AddColumnModal = ({ isOpen, setIsOpen, tableName }) => {
 
     if (typeString === 'numeric') {
       adjustString = 'Numeric';
-    } else if (typeString === 'datetime') {
-      adjustString = 'Datetime';
+    } else if (typeString === 'date') {
+      adjustString = 'Date';
+    } else if (typeString === 'time') {
+      adjustString = 'Time';
     } else if (typeString === 'boolean') {
       adjustString = 'BOOL';
     } else {
@@ -94,7 +96,8 @@ const AddColumnModal = ({ isOpen, setIsOpen, tableName }) => {
               <Option value="text">Text</Option>
               <Option value="numeric">Numeric</Option>
               <Option value="boolean">Boolean</Option>
-              <Option value="datetime">Datetime</Option>
+              <Option value="date">Date</Option>
+              <Option value="time">Time</Option>
             </Select>
           </Form.Item>
           <Button type="primary" htmlType="submit" className={styles['add-column-button']}>

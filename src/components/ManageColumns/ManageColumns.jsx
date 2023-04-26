@@ -12,6 +12,7 @@ import styles from './ManageColumns.module.css';
 const { Title } = Typography;
 
 const ManageAttributes = () => {
+  const [page, setPage] = useState(1);
   const [isAddAttributeModalOpen, setIsAttributeModalOpen] = useState(false);
   const [isEditAttributeModalOpen, setIsEditAttributeModalOpen] = useState(false);
   const [isDeleteAttributeModalOpen, setIsDeleteAttributeModalOpen] = useState(false);
@@ -44,6 +45,11 @@ const ManageAttributes = () => {
       }),
     );
     return res;
+  };
+
+  const onTableChange = e => {
+    setPage(1);
+    setTableState({ ...tableState, table: e.target.value });
   };
 
   // Update table with columns every time a modal is opened/closed or selected table is changed
@@ -121,11 +127,7 @@ const ManageAttributes = () => {
         <div>
           <Title className={styles.title}>Manage Columns</Title>
           <div>
-            <Radio.Group
-              defaultValue="survey"
-              buttonStyle="solid"
-              onChange={e => setTableState({ ...tableState, table: e.target.value })}
-            >
+            <Radio.Group defaultValue="survey" buttonStyle="solid" onChange={onTableChange}>
               {Object.values(tableNames).map(name => (
                 <Radio.Button key={name} value={name.toLowerCase()}>
                   {name} Table
@@ -145,7 +147,12 @@ const ManageAttributes = () => {
             </div>
           </div>
           <div className={styles.table}>
-            <Table dataSource={tableState.data} columns={columns} bordered />
+            <Table
+              dataSource={tableState.data}
+              columns={columns}
+              bordered
+              pagination={{ onChange: setPage, current: page }}
+            />
           </div>
         </div>
       </div>

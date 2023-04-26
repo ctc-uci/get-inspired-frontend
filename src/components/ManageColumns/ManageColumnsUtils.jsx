@@ -9,13 +9,16 @@ export const adjustDataType = typeString => {
   const numericTypes = ['int', 'double', 'decimal'];
   const textTypes = ['text', 'varchar'];
   const booleanTypes = ['boolean', 'tinyint'];
-  const timeTypes = ['datetime', 'timestamp', 'time', 'date'];
+  const dateTypes = ['date'];
+  const timeTypes = ['time'];
 
   let adjustString = '';
   if (numericTypes.includes(typeString)) {
     adjustString = 'Number';
   } else if (timeTypes.includes(typeString)) {
-    adjustString = 'Datetime';
+    adjustString = 'Time';
+  } else if (dateTypes.includes(typeString)) {
+    adjustString = 'Date';
   } else if (booleanTypes.includes(typeString)) {
     adjustString = 'Boolean';
   } else if (textTypes.includes(typeString)) {
