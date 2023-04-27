@@ -57,7 +57,7 @@ const isIsoDate = str => {
 
 export const humanizeCell = (text, columnType) => {
   if (isIsoDate(text)) {
-    return new Date(text).toLocaleDateString('en-US');
+    return new Date(text).toDateString();
   }
   if (columnType === 'tinyint') {
     return Boolean(text).toString();
