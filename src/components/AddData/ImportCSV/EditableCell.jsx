@@ -36,6 +36,7 @@ const EditableCell = ({
     return (
       <Input
         disabled={autoDisabled}
+        style={{ width: DataType.numericTypes.includes(columnType) ? 85 : 175 }}
         value={value}
         onBlur={() => saveData(value)}
         onPressEnter={() => saveData(value)}
