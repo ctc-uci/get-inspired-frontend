@@ -21,7 +21,6 @@ const computeColumns = (checkedLists, data, query = '') => {
   }
 
   const cols = Object.keys(data[0]).filter(value => !TABLE_PRIMARY_KEYS.includes(value));
-
   return [
     ...cols.map(field => ({
       title: field,
