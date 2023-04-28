@@ -159,6 +159,7 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
             Delete selected rows
           </Button>
           <Table
+            scroll={{ x: true }}
             rowSelection={rowSelection}
             style={{ marginTop: '2%' }}
             dataSource={[...csvData[typeOfData]]}
