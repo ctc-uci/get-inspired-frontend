@@ -31,7 +31,7 @@ const computeColumns = (checkedLists, data, query = '') => {
           props: {
             style: {
               background:
-                query.length && text && text.toString().toLowerCase().includes(query)
+                query.length && text && text.toString().toLowerCase().includes(query.toLowerCase())
                   ? 'yellow'
                   : 'white',
             },
