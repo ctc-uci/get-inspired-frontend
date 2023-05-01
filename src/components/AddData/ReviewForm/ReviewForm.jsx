@@ -32,16 +32,12 @@ const ReviewForm = ({
         (await GSPBackend.post('/surveys', surveyData)).data[0].insertId;
       surveyIdToDeleteOnError = surveyId;
       const addClamAndRakerRequests = [
-        ...(csvData.clam
-          ? csvData.clam.map(clamData =>
-              GSPBackend.post('/clams', { survey_id: surveyId, ...clamData }),
-            )
-          : []),
-        ...(csvData.raker
-          ? csvData.raker.map(rakerData =>
-              GSPBackend.post('/rakers', { survey_id: surveyId, ...rakerData }),
-            )
-          : []),
+        csvData.clam
+          ? GSPBackend.post('/clams', { survey_id: surveyId, rakers: csvData.clam })
+          : [],
+        csvData.raker
+          ? GSPBackend.post('/rakers', { survey_id: surveyId, rakers: csvData.raker })
+          : [],
       ];
 
       await Promise.all(addClamAndRakerRequests);
