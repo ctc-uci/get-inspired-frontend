@@ -66,6 +66,17 @@ const keysToCamel = data => {
   }
   return data;
 };
+
+// given two inputs of unknown time, compares the two for sorting
+const getSorterCompareFn = (colName, colType) => {
+  if (colType) {
+    return (a, b) => {
+      return String(a[colName]) - String(b[colName]);
+    };
+  }
+  return (a, b) => a + b;
+};
+
 const NotiMessage = {
   ADD_DATA_ERROR: error => `Error adding data!: ${error}`,
   ACCOUNT_INFORMATION_EDITED: 'Account information edited!',
@@ -105,4 +116,4 @@ const notify = (message, icon) => {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export { GSPBackend, NotiMessage, NotiIcon, notify, keysToCamel, toCamel };
+export { GSPBackend, NotiMessage, NotiIcon, notify, keysToCamel, toCamel, getSorterCompareFn };

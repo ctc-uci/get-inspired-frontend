@@ -9,7 +9,7 @@ import CancelModal from './CancelModal/CancelModal';
 
 import { EditableCell, UndoButton } from './ManageDataUtils';
 import { humanizeCell } from '../QueryData/QueryDataUtils';
-import { GSPBackend } from '../../utils/utils';
+import { getSorterCompareFn, GSPBackend } from '../../utils/utils';
 import styles from './ManageData.module.css';
 
 const { Title } = Typography;
@@ -54,6 +54,8 @@ const ManageData = () => {
       key: col.COLUMN_NAME,
       dataIndex: col.COLUMN_NAME,
       type: col.DATA_TYPE,
+      sorter: getSorterCompareFn(col.COLUMN_NAME, col.DATA_TYPE),
+      sortDirections: ['ascend', 'descend'],
     }));
 
   // Creates columns for table based on existing columns (switches to input if in editing mode)
