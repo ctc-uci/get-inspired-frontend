@@ -186,7 +186,7 @@ const ImportCSV = ({ incrStep, decrStep, typeOfData, csvData, setCsvData }) => {
 
       <Row gutter={16} id="back-next-buttons">
         <Col span={12}>
-          <Button type="primary" style={{ background: 'gray' }} onClick={decrStep}>
+          <Button type="default" onClick={decrStep}>
             Back
           </Button>
         </Col>
