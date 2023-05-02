@@ -6,6 +6,7 @@ import LoadingScreen from '../../../common/LoadingScreen/LoadingScreen';
 import { TABLE_PRIMARY_KEYS, humanizeCell } from '../QueryDataUtils';
 
 import styles from './QueryResults.module.css';
+import { getSorterCompareFn } from '../../../utils/utils';
 const computeColumns = (checkedLists, data, query = '') => {
   // if no data, use checkedLists to determine column names
   if (data.length === 0 || data[0].length <= TABLE_PRIMARY_KEYS.length) {
@@ -21,11 +22,14 @@ const computeColumns = (checkedLists, data, query = '') => {
   }
 
   const cols = Object.keys(data[0]).filter(value => !TABLE_PRIMARY_KEYS.includes(value));
+  console.log(data[0]);
   return [
     ...cols.map(field => ({
       title: field,
       dataIndex: field,
       key: field,
+      sorter: getSorterCompareFn(field),
+      sortDirections: ['ascend', 'descend'],
       render: text => {
         return {
           props: {

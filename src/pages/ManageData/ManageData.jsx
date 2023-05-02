@@ -54,7 +54,7 @@ const ManageData = () => {
       key: col.COLUMN_NAME,
       dataIndex: col.COLUMN_NAME,
       type: col.DATA_TYPE,
-      sorter: getSorterCompareFn(col.COLUMN_NAME, col.DATA_TYPE),
+      sorter: getSorterCompareFn(col.COLUMN_NAME),
       sortDirections: ['ascend', 'descend'],
     }));
 

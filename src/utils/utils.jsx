@@ -67,14 +67,27 @@ const keysToCamel = data => {
   return data;
 };
 
-// given two inputs of unknown time, compares the two for sorting
-const getSorterCompareFn = (colName, colType) => {
-  if (colType) {
-    return (a, b) => {
-      return String(a[colName]) - String(b[colName]);
-    };
-  }
-  return (a, b) => a + b;
+// given two inputs of unknown type, compares the two for sorting
+const getSorterCompareFn = colName => {
+  return (a, b) => {
+    const [valueA, valueB] = [a[colName], b[colName]];
+    if (valueA === null) {
+      return -1;
+    }
+    if (valueB === null) {
+      return 1;
+    }
+    if (typeof valueA !== typeof valueB) {
+      console.log({ valueA, valueB });
+    }
+    if (typeof valueA === 'number') {
+      return valueA - valueB;
+    }
+    if (typeof valueA === 'string') {
+      return valueA.localeCompare(valueB);
+    }
+    return String(valueA).localeCompare(valueB);
+  };
 };
 
 const NotiMessage = {
