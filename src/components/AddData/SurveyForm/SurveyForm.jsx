@@ -18,26 +18,9 @@ const SurveyForm = ({
   setSelectedExistingSurvey,
 }) => {
   const [form] = Form.useForm();
-  // Formats date / time values for SQL
-  // Date: YYYY-MM-DD
-  // Time: HH:MM
-  const formatSurveyValuesForSQL = values => {
-    return Object.keys(values).reduce((acc, key) => {
-      let currentValue = values[key];
-      if (surveyColumns[key] === 'time') {
-        currentValue = currentValue.format('HH:mm');
-      } else if (surveyColumns[key] === 'date') {
-        currentValue = currentValue.format('YYYY-MM-DD');
-      }
-      return {
-        ...acc,
-        [key]: currentValue,
-      };
-    }, {});
-  };
 
   const onFinish = () => {
-    setSurveyData(formatSurveyValuesForSQL(form.getFieldsValue()));
+    setSurveyData(form.getFieldsValue());
     incrStep();
   };
 
