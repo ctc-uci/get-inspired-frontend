@@ -23,13 +23,32 @@ const ReviewForm = ({
   const [clamPage, setClamPage] = useState(1);
   const [rakerPage, setRakerPage] = useState(1);
   const { token } = theme.useToken();
+
+  // Formats date / time values for SQL
+  // Date: YYYY-MM-DD
+  // Time: HH:MM
+  const formatSurveyValuesForSQL = values => {
+    return Object.keys(values).reduce((acc, key) => {
+      let currentValue = values[key];
+      if (surveyColumns[key] === 'time') {
+        currentValue = currentValue.format('HH:mm');
+      } else if (surveyColumns[key] === 'date') {
+        currentValue = currentValue.format('YYYY-MM-DD');
+      }
+      return {
+        ...acc,
+        [key]: currentValue,
+      };
+    }, {});
+  };
+
   const addData = async () => {
     const [, selectedExistingSurveyId] = selectedExistingSurvey;
     let surveyIdToDeleteOnError = null;
     try {
       const surveyId =
         selectedExistingSurveyId ||
-        (await GSPBackend.post('/surveys', surveyData)).data[0].insertId;
+        (await GSPBackend.post('/surveys', formatSurveyValuesForSQL(surveyData))).data[0].insertId;
       surveyIdToDeleteOnError = surveyId;
       const addClamAndRakerRequests = [
         ...(csvData.clam
