@@ -5,7 +5,7 @@ import { useAuthContext } from '../../common/AuthContext';
 
 import DiscardAccountInfoModal from './DiscardAccountInfoModal/DiscardAccountInfoModal';
 import EditAccountInfoModal from './EditAccountInfoModal/EditAccountInfoModal';
-import LogoutModal from './LogoutModal/LogoutModal';
+import LogoutModal from '../../components/Navbar/LogoutModal/LogoutModal';
 
 import { GSPBackend } from '../../utils/utils';
 

@@ -29,7 +29,7 @@ function App() {
             <Route exact path="/login" element={<Login />} />
 
             <Route exact path="/register" element={<RegisterPage />} />
-            <Route element={<Layout isAdmin />}>
+            <Route element={<Layout />}>
               {/* Protected routes */}
               <Route
                 path="/"
