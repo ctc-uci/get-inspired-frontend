@@ -1,3 +1,7 @@
+.query-data-container{
+  padding: 0 1rem 0 1rem;
+}
+
 /* Generic search bar */
 .generic-search-bar {
   width: 70%;

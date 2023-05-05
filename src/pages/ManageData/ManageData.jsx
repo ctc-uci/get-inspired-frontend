@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Radio, Cascader, Table, Typography, Button } from 'antd';
 
+import { useLocation } from 'react-router-dom';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
 import DeleteDataModal from './DeleteDataModal/DeleteDataModal';
@@ -16,9 +17,13 @@ const { Title } = Typography;
 
 const PAGE_SIZE = 10;
 const ManageData = () => {
+  const routeLocation = useLocation();
+  const initSurveyId =
+    routeLocation.state && routeLocation.state.survey_id ? routeLocation.state.survey_id : null;
+
   const [isLoading, setIsLoading] = useState(true);
   const [year, setYear] = useState(null);
-  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
+  const [selectedSurveyId, setSelectedSurveyId] = useState(initSurveyId);
   const [selectedTable, setSelectedTable] = useState('computation');
   const [editingMode, setEditingMode] = useState(false);
   const [surveyOptions, setSurveyOptions] = useState([]);
