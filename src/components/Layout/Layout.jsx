@@ -19,13 +19,6 @@ const Layout = ({ isAdmin }) => (
       </div>
     </Content>
   </AntdLayout>
-  // <div className={styles.wrapper}>
-  //   <div className={styles.navbar}>
-  //   </div>
-  //   <div className={styles.layout}>
-  //     <Outlet />
-  //   </div>
-  // </div>
 );
 
 Layout.propTypes = {

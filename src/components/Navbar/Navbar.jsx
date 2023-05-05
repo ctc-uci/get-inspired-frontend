@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout, Menu, Typography } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
-
+import PropTypes from 'prop-types';
 import {
   HomeOutlined,
   DatabaseOutlined,
   FileAddOutlined,
   AppstoreOutlined,
   UsergroupAddOutlined,
-  UserOutlined,
   SearchOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
+import LogoutModal from './LogoutModal/LogoutModal';
 
 import GSPLogo from '../../assets/images/GSPLogo.svg';
 
@@ -21,10 +22,11 @@ const SIDER_WIDTH = 200;
 const { Sider } = Layout;
 const { Title } = Typography;
 
-const Navbar = () => {
+const Navbar = ({ isAdmin }) => {
   const location = useLocation();
   const path = location.pathname;
 
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const selectedKeys = [
     ...(path === '/' ? ['dashboard'] : []),
     ...(path === '/manage-columns' ? ['manage-columns'] : []),
@@ -34,8 +36,10 @@ const Navbar = () => {
     ...(path === '/manage-users' ? ['manage-users'] : []),
     ...(path === '/profile' ? ['profile'] : []),
   ];
+
   return (
     <Sider width={SIDER_WIDTH} className={styles.sider} theme="light">
+      <LogoutModal isOpen={isLogoutModalOpen} setIsOpen={setIsLogoutModalOpen} />
       <div className={styles['sider-wrapper']}>
         <div className={styles['logo-wrapper']}>
           <img src={GSPLogo} alt="GSP Logo" className={styles['logo-picture']} />
@@ -63,16 +67,32 @@ const Navbar = () => {
           <Menu.Item key="query-data" icon={<SearchOutlined />}>
             <Link to="/query-data">Query Data</Link>
           </Menu.Item>
-          <Menu.Item key="manage-users" icon={<UsergroupAddOutlined />}>
-            <Link to="/manage-users">Manage Users</Link>
-          </Menu.Item>
-          <Menu.Item key="profile" icon={<UserOutlined />}>
-            <Link to="/profile">Profile</Link>
+          {isAdmin && (
+            <Menu.Item key="manage-users" icon={<UsergroupAddOutlined />}>
+              <Link to="/manage-users">Manage Users</Link>
+            </Menu.Item>
+          )}
+          <Menu.Item
+            key="logout"
+            icon={<LogoutOutlined />}
+            danger
+            style={{ position: 'absolute', bottom: 0 }}
+            onClick={() => setIsLogoutModalOpen(true)}
+          >
+            Logout
           </Menu.Item>
         </Menu>
       </div>
     </Sider>
   );
+};
+
+Navbar.propTypes = {
+  isAdmin: PropTypes.bool,
+};
+
+Navbar.defaultProps = {
+  isAdmin: false,
 };
 
 export default Navbar;
