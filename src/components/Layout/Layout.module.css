@@ -1,15 +1,13 @@
-.wrapper {
-  display: flex;
-  height: 100vh;
+.content{
+  background-color:white;
 }
 
-.navbar {
-  z-index: 999;
-}
-
-.layout {
-  margin: 0 auto;
-
-  width: calc(100vw - 250px);
-  height: 100vh;
+.sider{
+  overflow: 'auto';
+  height: '100vh';
+  position: 'fixed';
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: red;
 }

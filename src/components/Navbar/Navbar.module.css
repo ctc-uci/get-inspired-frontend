@@ -1,6 +1,13 @@
 .sider {
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
   height: 100vh;
+}
+
+.sider-wrapper{
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .logo-wrapper {

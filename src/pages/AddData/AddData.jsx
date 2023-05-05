@@ -81,6 +81,10 @@ const AddData = () => {
               { title: 'Raker' },
               { title: 'Review' },
             ]}
+            // (TODO andrew): you can just do this to make it selectable,
+            //  but we should be careful to make sure that you can only select
+            //  tabs when appropraite
+            // setStepFunc={setCurStep}
           />
         )}
       </div>

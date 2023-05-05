@@ -77,9 +77,6 @@ const getSorterCompareFn = colName => {
     if (valueB === null) {
       return 1;
     }
-    if (typeof valueA !== typeof valueB) {
-      console.log({ valueA, valueB });
-    }
     if (typeof valueA === 'number') {
       return valueA - valueB;
     }
