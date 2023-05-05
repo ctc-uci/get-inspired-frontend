@@ -101,7 +101,8 @@ SurveyForm.propTypes = {
   setSurveyData: PropTypes.func.isRequired,
   setSelectedExistingSurvey: PropTypes.func.isRequired,
   existingSurveyOptions: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  selectedExistingSurvey: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  selectedExistingSurvey: PropTypes.array.isRequired,
 };
 
 export default SurveyForm;
