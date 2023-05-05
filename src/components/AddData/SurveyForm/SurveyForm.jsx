@@ -84,8 +84,8 @@ const SurveyForm = ({
               selectedExistingSurvey={selectedExistingSurvey}
             />
           ))}
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
+        <Form.Item style={{ width: '100%' }}>
+          <Button type="primary" htmlType="submit" style={{ float: 'right' }}>
             Next
           </Button>
         </Form.Item>
