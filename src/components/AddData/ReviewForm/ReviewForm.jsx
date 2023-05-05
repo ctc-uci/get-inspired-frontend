@@ -26,18 +26,19 @@ const ReviewForm = ({
   const addData = async () => {
     const [, selectedExistingSurveyId] = selectedExistingSurvey;
     let surveyIdToDeleteOnError = null;
+    console.log(csvData.raker);
     try {
       const surveyId =
         selectedExistingSurveyId ||
         (await GSPBackend.post('/surveys', surveyData)).data[0].insertId;
       surveyIdToDeleteOnError = surveyId;
       const addClamAndRakerRequests = [
-        // ...(csvData.clam
-        //   ? csvData.clam.map(clamData =>
-        //       GSPBackend.post('/clams', { survey_id: surveyId, ...clamData }),
-        //     )
-        //   : []),
-        csvData.raker
+        ...(csvData.clam
+          ? csvData.clam.map(clamData =>
+              GSPBackend.post('/clams', { survey_id: surveyId, ...clamData }),
+            )
+          : []),
+        csvData.raker && csvData.raker.length > 0
           ? GSPBackend.post('/rakers', { survey_id: surveyId, rakers: csvData.raker })
           : [],
       ];
