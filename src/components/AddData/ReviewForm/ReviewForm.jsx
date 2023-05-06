@@ -81,6 +81,7 @@ const ReviewForm = ({
         </Panel>
         <Panel header="Clams" key="2" style={panelStyle}>
           <Table
+            scroll={{ x: true }}
             className="review-ant-table"
             dataSource={[...csvData.clam]}
             columns={[
@@ -106,6 +107,7 @@ const ReviewForm = ({
         </Panel>
         <Panel header="Raker" key="3" style={panelStyle}>
           <Table
+            scroll={{ x: true }}
             className="review-ant-table"
             dataSource={[...csvData.raker]}
             columns={[
