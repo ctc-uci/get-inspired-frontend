@@ -32,17 +32,13 @@ const ReviewForm = ({
         selectedExistingSurveyId ||
         (await GSPBackend.post('/surveys', surveyData)).data[0].insertId;
       surveyIdToDeleteOnError = surveyId;
-      const addClamAndRakerRequests = [
-        csvData.clam && csvData.clam.length > 0
-          ? GSPBackend.post('/clams', { survey_id: surveyId, clams: csvData.clam })
-          : [],
-        csvData.raker && csvData.raker.length > 0
-          ? GSPBackend.post('/rakers', { survey_id: surveyId, rakers: csvData.raker })
-          : [],
-      ];
+      if (csvData.clam && csvData.clam.length > 0) {
+        await GSPBackend.post('/clams', { survey_id: surveyId, clams: csvData.clam });
+      }
 
-      await Promise.all(addClamAndRakerRequests);
-
+      if (csvData.raker && csvData.raker.length > 0) {
+        await GSPBackend.post('/rakers', { survey_id: surveyId, rakers: csvData.raker });
+      }
       incrStep();
     } catch (error) {
       notify(NotiMessage.ADD_DATA_ERROR(error), NotiIcon.ERROR);
