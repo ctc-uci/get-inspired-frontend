@@ -27,3 +27,8 @@
   margin: 0 0 0 0;
   padding-left: 10px;
 }
+
+.logout-menu{
+  position: absolute;
+  bottom: 0;
+}

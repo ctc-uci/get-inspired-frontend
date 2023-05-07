@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Outlet } from 'react-router-dom';
 
 import { Layout as AntdLayout } from 'antd';
@@ -11,8 +10,7 @@ import { useAuthContext } from '../../common/AuthContext';
 
 const { Content } = AntdLayout;
 
-const Layout = ({ isAdmin }) => {
-  console.log({ isAdmin });
+const Layout = () => {
   const { currentUser } = useAuthContext();
   return (
     <AntdLayout hasSider>
@@ -27,14 +25,6 @@ const Layout = ({ isAdmin }) => {
       </Content>
     </AntdLayout>
   );
-};
-
-Layout.propTypes = {
-  isAdmin: PropTypes.bool,
-};
-
-Layout.defaultProps = {
-  isAdmin: false,
 };
 
 export default Layout;

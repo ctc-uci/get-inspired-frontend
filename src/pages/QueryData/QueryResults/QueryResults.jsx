@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'antd';
+import { yellow } from '@ant-design/colors';
 import LoadingScreen from '../../../common/LoadingScreen/LoadingScreen';
 import { TABLE_PRIMARY_KEYS, humanizeCell } from '../QueryDataUtils';
 
@@ -22,7 +23,6 @@ const computeColumns = (checkedLists, data, query = '') => {
   }
 
   const cols = Object.keys(data[0]).filter(value => !TABLE_PRIMARY_KEYS.includes(value));
-  console.log(data[0]);
   return [
     ...cols.map(field => ({
       title: field,
@@ -36,7 +36,7 @@ const computeColumns = (checkedLists, data, query = '') => {
             style: {
               background:
                 query.length && text && text.toString().toLowerCase().includes(query.toLowerCase())
-                  ? 'yellow'
+                  ? yellow[1]
                   : 'white',
             },
           },
@@ -63,7 +63,6 @@ const QueryResults = ({ checkedLists, data, isLoading, query }) => {
         dataSource={data}
         columns={computeColumns(checkedLists, data, query)}
         scroll={{ x: true }}
-        size="middle"
         bordered
       />
     </div>

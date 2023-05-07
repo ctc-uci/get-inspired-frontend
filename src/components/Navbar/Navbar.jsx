@@ -72,11 +72,16 @@ const Navbar = ({ isAdmin }) => {
               <Link to="/manage-users">Manage Users</Link>
             </Menu.Item>
           )}
+        </Menu>
+        <Menu
+          className={styles['logout-menu']}
+          mode="inline"
+          selectedKeys={isLogoutModalOpen ? ['logout'] : []}
+        >
           <Menu.Item
             key="logout"
             icon={<LogoutOutlined />}
             danger
-            style={{ position: 'absolute', bottom: 0 }}
             onClick={() => setIsLogoutModalOpen(true)}
           >
             Logout
