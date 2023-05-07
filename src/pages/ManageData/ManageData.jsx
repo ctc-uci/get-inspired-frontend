@@ -162,10 +162,7 @@ const ManageData = () => {
 
   const saveEdits = async () => {
     if (editingState.editedRows) {
-      const requests = Object.keys(editingState.editedRows).map(id =>
-        GSPBackend.put(`/${selectedTable}s/${id}`, editingState.editedRows[id]),
-      );
-      await Promise.all(requests);
+      await GSPBackend.put(`/${selectedTable}s/`, editingState.editedRows);
       await fetchTableData();
     }
     setEditingMode(false);
