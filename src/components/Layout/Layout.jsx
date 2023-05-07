@@ -1,29 +1,30 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Outlet } from 'react-router-dom';
 
+import { Layout as AntdLayout } from 'antd';
 import styles from './Layout.module.css';
 
 // eslint-disable-next-line import/no-unresolved
 import Navbar from '../Navbar/Navbar';
+import { useAuthContext } from '../../common/AuthContext';
 
-const Layout = ({ isAdmin }) => (
-  <div className={styles.wrapper}>
-    <div className={styles.navbar}>
-      <Navbar isAdmin={isAdmin} />
-    </div>
-    <div className={styles.layout}>
-      <Outlet />
-    </div>
-  </div>
-);
+const { Content } = AntdLayout;
 
-Layout.propTypes = {
-  isAdmin: PropTypes.bool,
-};
-
-Layout.defaultProps = {
-  isAdmin: false,
+const Layout = () => {
+  const { currentUser } = useAuthContext();
+  return (
+    <AntdLayout hasSider>
+      <Navbar
+        isAdmin={currentUser != null && currentUser.role === 'admin'}
+        className={styles.sider}
+      />
+      <Content className={styles.content}>
+        <div>
+          <Outlet />
+        </div>
+      </Content>
+    </AntdLayout>
+  );
 };
 
 export default Layout;

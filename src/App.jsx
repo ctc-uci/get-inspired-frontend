@@ -4,7 +4,6 @@ import { CookiesProvider } from 'react-cookie';
 import Login from './components/Login/Login';
 import Layout from './components/Layout/Layout';
 import Dashboard from './pages/Dashboard/Dashboard';
-import Profile from './pages/Profile/Profile';
 import QueryData from './pages/QueryData/QueryData';
 import ManageData from './pages/ManageData/ManageData';
 import AddData from './pages/AddData/AddData';
@@ -36,17 +35,6 @@ function App() {
                 element={
                   <ProtectedRoute
                     Component={Dashboard}
-                    redirectPath="/login"
-                    roles={[ADMIN_ROLE, INTERN_ROLE]}
-                  />
-                }
-              />
-              <Route
-                exact
-                path="/profile"
-                element={
-                  <ProtectedRoute
-                    Component={Profile}
                     redirectPath="/login"
                     roles={[ADMIN_ROLE, INTERN_ROLE]}
                   />

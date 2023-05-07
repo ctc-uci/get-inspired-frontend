@@ -184,7 +184,7 @@ const QueryData = () => {
 
   return (
     <div className={styles['query-data-container']}>
-      <h1>Query Data</h1>
+      <Title>Query Data</Title>
       <Radio.Group
         onChange={onSelectSearch}
         defaultValue="generic"

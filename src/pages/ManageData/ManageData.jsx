@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Radio, Cascader, Table, Typography, Button } from 'antd';
 
+import { useLocation } from 'react-router-dom';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
 import DeleteDataModal from './DeleteDataModal/DeleteDataModal';
@@ -9,16 +10,20 @@ import CancelModal from './CancelModal/CancelModal';
 
 import { EditableCell, UndoButton } from './ManageDataUtils';
 import { humanizeCell } from '../QueryData/QueryDataUtils';
-import { GSPBackend } from '../../utils/utils';
+import { getSorterCompareFn, GSPBackend } from '../../utils/utils';
 import styles from './ManageData.module.css';
 
 const { Title } = Typography;
 
 const PAGE_SIZE = 10;
 const ManageData = () => {
+  const routeLocation = useLocation();
+  const initSurveyId =
+    routeLocation.state && routeLocation.state.survey_id ? routeLocation.state.survey_id : null;
+
   const [isLoading, setIsLoading] = useState(true);
   const [year, setYear] = useState(null);
-  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
+  const [selectedSurveyId, setSelectedSurveyId] = useState(initSurveyId);
   const [selectedTable, setSelectedTable] = useState('computation');
   const [editingMode, setEditingMode] = useState(false);
   const [surveyOptions, setSurveyOptions] = useState([]);
@@ -54,6 +59,8 @@ const ManageData = () => {
       key: col.COLUMN_NAME,
       dataIndex: col.COLUMN_NAME,
       type: col.DATA_TYPE,
+      sorter: getSorterCompareFn(col.COLUMN_NAME),
+      sortDirections: ['ascend', 'descend'],
     }));
 
   // Creates columns for table based on existing columns (switches to input if in editing mode)

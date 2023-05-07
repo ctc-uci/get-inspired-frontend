@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import StepsBar from '../../components/AddData/StepsBar/StepsBar';
+import { Steps } from 'antd';
+// import StepsBar from '../../components/AddData/StepsBar/StepsBar';
 import SurveyForm from '../../components/AddData/SurveyForm/SurveyForm';
 import ImportCSV from '../../components/AddData/ImportCSV/ImportCSV';
 import ReviewForm from '../../components/AddData/ReviewForm/ReviewForm';
@@ -22,6 +23,12 @@ const AddData = () => {
     clamCols: [],
     rakerCols: [],
   });
+  const [stepsState, setStepsState] = useState([
+    { title: 'Survey' },
+    { title: 'Clams', disabled: true },
+    { title: 'Raker', disabled: true },
+    { title: 'Review', disabled: true },
+  ]);
   const [curStep, setCurStep] = useState(0);
   const incrStep = useCallback(() => {
     setCurStep(prevStep => {
@@ -33,6 +40,21 @@ const AddData = () => {
       return prevStep - 1;
     });
   });
+  useEffect(async () => {
+    if (curStep > 0 || !stepsState[1].disabled) {
+      setStepsState(
+        stepsState.map(steps => {
+          return { ...steps, disabled: false };
+        }),
+      );
+    } else {
+      setStepsState(
+        stepsState.map(steps => {
+          return { ...steps, disabled: true };
+        }),
+      );
+    }
+  }, [curStep, surveyData]);
 
   const computeColumnsFromSQL = columnData => {
     return columnData
@@ -44,7 +66,6 @@ const AddData = () => {
         type: column.DATA_TYPE,
       }));
   };
-
   useEffect(async () => {
     const requests = [
       GSPBackend.get('/tables/clam/columns'),
@@ -73,15 +94,7 @@ const AddData = () => {
     <div className={styles.addDataWrapper}>
       <div className={styles.appDataHeading}>
         {curStep < 4 && (
-          <StepsBar
-            curStep={curStep}
-            titleArray={[
-              { title: 'Survey' },
-              { title: 'Clams' },
-              { title: 'Raker' },
-              { title: 'Review' },
-            ]}
-          />
+          <Steps size="small" current={curStep} items={stepsState} onChange={setCurStep} />
         )}
       </div>
       {curStep === 0 && (

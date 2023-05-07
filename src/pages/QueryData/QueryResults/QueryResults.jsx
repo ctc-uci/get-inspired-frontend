@@ -2,10 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'antd';
+import { yellow } from '@ant-design/colors';
 import LoadingScreen from '../../../common/LoadingScreen/LoadingScreen';
 import { TABLE_PRIMARY_KEYS, humanizeCell } from '../QueryDataUtils';
 
 import styles from './QueryResults.module.css';
+import { getSorterCompareFn } from '../../../utils/utils';
 const computeColumns = (checkedLists, data, query = '') => {
   // if no data, use checkedLists to determine column names
   if (data.length === 0 || data[0].length <= TABLE_PRIMARY_KEYS.length) {
@@ -26,13 +28,15 @@ const computeColumns = (checkedLists, data, query = '') => {
       title: field,
       dataIndex: field,
       key: field,
+      sorter: getSorterCompareFn(field),
+      sortDirections: ['ascend', 'descend'],
       render: text => {
         return {
           props: {
             style: {
               background:
                 query.length && text && text.toString().toLowerCase().includes(query.toLowerCase())
-                  ? 'yellow'
+                  ? yellow[1]
                   : 'white',
             },
           },
@@ -59,7 +63,6 @@ const QueryResults = ({ checkedLists, data, isLoading, query }) => {
         dataSource={data}
         columns={computeColumns(checkedLists, data, query)}
         scroll={{ x: true }}
-        size="middle"
         bordered
       />
     </div>
