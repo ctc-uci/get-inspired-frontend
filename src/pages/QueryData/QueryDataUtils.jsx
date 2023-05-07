@@ -55,10 +55,18 @@ const isIsoDate = str => {
   return d instanceof Date && !Number.isNaN(d) && d.toISOString() === str; // valid date
 };
 
+const dateOptions = {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+};
+
 export const humanizeCell = (text, columnType) => {
   if (isIsoDate(text)) {
     // (TODO andrew): fix eventually: js time is funky
-    return text;
+    return new Date(text).toLocaleDateString(undefined, dateOptions);
   }
   if (columnType === 'tinyint') {
     return Boolean(text).toString();
