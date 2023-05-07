@@ -142,10 +142,9 @@ const ManageData = () => {
 
   const deleteSelectedRows = async () => {
     if (editingState.selectedRowKeys.length) {
-      const requests = editingState.selectedRowKeys.map(rowId =>
-        GSPBackend.delete(`/${selectedTable}s/${rowId}`),
-      );
-      await Promise.all(requests);
+      const queryParams = editingState.selectedRowKeys.join(',');
+      await GSPBackend.delete(`/${selectedTable}s/?ids=${queryParams}`);
+
       setTableState({
         ...tableState,
         rows: tableState.rows.filter(row => !editingState.selectedRowKeys.includes(row.id)),
