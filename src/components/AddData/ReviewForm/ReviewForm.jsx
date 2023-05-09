@@ -90,7 +90,7 @@ const ReviewForm = ({
       <Collapse
         bordered={false}
         expandIcon={({ isActive }) => <CaretDownOutlined rotate={isActive ? 180 : 0} />}
-        expandIconPosition="end"
+        expandIconPosition="start"
         style={{ background: token.colorBgContainer }}
       >
         <Panel header="Survey" key="1" style={panelStyle}>
@@ -159,7 +159,7 @@ const ReviewForm = ({
 
       <Row gutter={16} id={styles.backNextButtons}>
         <Col span={12}>
-          <Button type="default" onClick={decrStep}>
+          <Button type="primary" onClick={decrStep}>
             Back
           </Button>
         </Col>
