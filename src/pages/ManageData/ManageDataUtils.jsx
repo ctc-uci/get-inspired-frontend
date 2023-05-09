@@ -17,7 +17,7 @@ const DataType = {
 const equals = (record, newRecord) =>
   record &&
   newRecord &&
-  Object.keys(record).every(key => record[key].toString() === newRecord[key].toString());
+  Object.keys(record).every(key => record[key]?.toString() === newRecord[key]?.toString());
 
 // eslint-disable-next-line import/prefer-default-export
 export const EditableCell = ({
