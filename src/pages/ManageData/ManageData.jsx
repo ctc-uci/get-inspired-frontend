@@ -149,10 +149,9 @@ const ManageData = () => {
 
   const deleteSelectedRows = async () => {
     if (editingState.selectedRowKeys.length) {
-      const requests = editingState.selectedRowKeys.map(rowId =>
-        GSPBackend.delete(`/${selectedTable}s/${rowId}`),
-      );
-      await Promise.all(requests);
+      const queryParams = editingState.selectedRowKeys.join(',');
+      await GSPBackend.delete(`/${selectedTable}s/?ids=${queryParams}`);
+
       setTableState({
         ...tableState,
         rows: tableState.rows.filter(row => !editingState.selectedRowKeys.includes(row.id)),
@@ -170,10 +169,7 @@ const ManageData = () => {
 
   const saveEdits = async () => {
     if (editingState.editedRows) {
-      const requests = Object.keys(editingState.editedRows).map(id =>
-        GSPBackend.put(`/${selectedTable}s/${id}`, editingState.editedRows[id]),
-      );
-      await Promise.all(requests);
+      await GSPBackend.put(`/${selectedTable}s/`, editingState.editedRows);
       await fetchTableData();
     }
     setEditingMode(false);

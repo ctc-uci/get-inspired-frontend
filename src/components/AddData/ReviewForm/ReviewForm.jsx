@@ -45,26 +45,19 @@ const ReviewForm = ({
   const addData = async () => {
     const [, selectedExistingSurveyId] = selectedExistingSurvey;
     let surveyIdToDeleteOnError = null;
+
     try {
       const surveyId =
         selectedExistingSurveyId ||
         (await GSPBackend.post('/surveys', formatSurveyValuesForSQL(surveyData))).data[0].insertId;
       surveyIdToDeleteOnError = surveyId;
-      const addClamAndRakerRequests = [
-        ...(csvData.clam
-          ? csvData.clam.map(clamData =>
-              GSPBackend.post('/clams', { survey_id: surveyId, ...clamData }),
-            )
-          : []),
-        ...(csvData.raker
-          ? csvData.raker.map(rakerData =>
-              GSPBackend.post('/rakers', { survey_id: surveyId, ...rakerData }),
-            )
-          : []),
-      ];
+      if (csvData.clam && csvData.clam.length > 0) {
+        await GSPBackend.post('/clams', { survey_id: surveyId, clams: csvData.clam });
+      }
 
-      await Promise.all(addClamAndRakerRequests);
-
+      if (csvData.raker && csvData.raker.length > 0) {
+        await GSPBackend.post('/rakers', { survey_id: surveyId, rakers: csvData.raker });
+      }
       incrStep();
     } catch (error) {
       notify(NotiMessage.ADD_DATA_ERROR(error), NotiIcon.ERROR);
@@ -107,6 +100,7 @@ const ReviewForm = ({
         </Panel>
         <Panel header="Clams" key="2" style={panelStyle}>
           <Table
+            scroll={{ x: true }}
             className="review-ant-table"
             dataSource={[...csvData.clam]}
             columns={[
@@ -132,6 +126,7 @@ const ReviewForm = ({
         </Panel>
         <Panel header="Raker" key="3" style={panelStyle}>
           <Table
+            scroll={{ x: true }}
             className="review-ant-table"
             dataSource={[...csvData.raker]}
             columns={[
