@@ -7,6 +7,8 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(customParseFormat);
 
+const requiredColumns = ['Date', 'Beach', 'Location'];
+
 const DataType = {
   numericTypes: ['int', 'double', 'decimal'],
   textTypes: ['text', 'varchar'],
@@ -37,7 +39,11 @@ export const UserInput = ({ columnName, columnType, selectedExistingSurvey }) =>
   if (DataType.numericTypes.includes(columnType) || DataType.textTypes.includes(columnType)) {
     return (
       <Form.Item
-        rules={[{ required: true, message: 'Please input a value' }]}
+        rules={
+          requiredColumns.includes(columnName)
+            ? [{ required: true, message: 'Please input a value' }]
+            : []
+        }
         style={{ flex: FLEX }}
         form={form}
         name={columnName}
@@ -54,7 +60,11 @@ export const UserInput = ({ columnName, columnType, selectedExistingSurvey }) =>
   if (DataType.booleanTypes.includes(columnType)) {
     return (
       <Form.Item
-        rules={[{ required: true, message: 'Please input a boolean' }]}
+        rules={
+          requiredColumns.includes(columnName)
+            ? [{ required: true, message: 'Please input a value' }]
+            : []
+        }
         style={{ flex: FLEX }}
         form={form}
         name={columnName}
@@ -74,7 +84,11 @@ export const UserInput = ({ columnName, columnType, selectedExistingSurvey }) =>
   if (DataType.dateTypes.includes(columnType)) {
     return (
       <Form.Item
-        rules={[{ required: true, message: 'Please input a date' }]}
+        rules={
+          requiredColumns.includes(columnName)
+            ? [{ required: true, message: 'Please input a value' }]
+            : []
+        }
         style={{ flex: FLEX }}
         name={columnName}
         label={columnName}
@@ -89,7 +103,11 @@ export const UserInput = ({ columnName, columnType, selectedExistingSurvey }) =>
   // Time type requires TimePicker
   return (
     <Form.Item
-      rules={[{ required: true, message: 'Please input a start time' }]}
+      rules={
+        requiredColumns.includes(columnName)
+          ? [{ required: true, message: 'Please input a value' }]
+          : []
+      }
       style={{ flex: FLEX }}
       name={columnName}
       label={columnName}

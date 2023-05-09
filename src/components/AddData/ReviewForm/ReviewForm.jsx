@@ -31,9 +31,9 @@ const ReviewForm = ({
     return Object.keys(values).reduce((acc, key) => {
       let currentValue = values[key];
       if (surveyColumns[key] === 'time') {
-        currentValue = currentValue.format('HH:mm');
+        currentValue = currentValue?.format('HH:mm');
       } else if (surveyColumns[key] === 'date') {
-        currentValue = currentValue.format('YYYY-MM-DD');
+        currentValue = currentValue?.format('YYYY-MM-DD');
       }
       return {
         ...acc,
