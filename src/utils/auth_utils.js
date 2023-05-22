@@ -36,7 +36,7 @@ const refreshUrl = `https://securetoken.googleapis.com/v1/token?key=${process.en
  * @param {cookieConfig} config cookie config to use
  */
 const setCookie = (key, value, config) => {
-  let cookie = `${key}=${value}; max-age=${config.maxAge}; path=${config.path}`;
+  let cookie = `${key}=${value}; max-age=${config.maxAge}; path=${config.path}; SameSite=None`;
   if (config.domain) {
     cookie += `; domain=${config.domain}`;
   }

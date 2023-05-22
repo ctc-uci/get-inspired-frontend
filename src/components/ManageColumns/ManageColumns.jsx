@@ -3,6 +3,7 @@ import { Radio, Space, Table, Button, Typography } from 'antd';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 import { adjustDataType, tableNames } from './ManageColumnsUtils';
 import { GSPBackend } from '../../utils/utils';
+import { useAuthContext } from '../../common/AuthContext';
 import AddAttributeModal from './AddColumnModal/AddColumnModal';
 import EditColumnModal from './EditColumnModal/EditColumnModal';
 import DeleteColumnModal from './DeleteColumnModal/DeleteColumnModal';
@@ -12,6 +13,7 @@ import styles from './ManageColumns.module.css';
 const { Title } = Typography;
 
 const ManageAttributes = () => {
+  const { currentUser } = useAuthContext();
   const [page, setPage] = useState(1);
   const [isAddAttributeModalOpen, setIsAttributeModalOpen] = useState(false);
   const [isEditAttributeModalOpen, setIsEditAttributeModalOpen] = useState(false);
@@ -108,25 +110,66 @@ const ManageAttributes = () => {
     return <LoadingScreen />;
   }
 
+  if (currentUser?.role === 'admin') {
+    return (
+      <>
+        <AddAttributeModal
+          isOpen={isAddAttributeModalOpen}
+          setIsOpen={setIsAttributeModalOpen}
+          tableName={tableNames[tableState.table]}
+        />
+        <EditColumnModal
+          isOpen={isEditAttributeModalOpen}
+          setIsOpen={setIsEditAttributeModalOpen}
+          tableName={tableNames[tableState.table]}
+          columnName={attributeNameToEdit}
+        />
+        <DeleteColumnModal
+          isOpen={isDeleteAttributeModalOpen}
+          setIsOpen={setIsDeleteAttributeModalOpen}
+          tableName={tableNames[tableState.table]}
+          columnName={attributeNameToEdit}
+        />
+        <div className={styles.window}>
+          <div>
+            <Title className={styles.title}>Manage Columns</Title>
+            <div>
+              <Radio.Group defaultValue="survey" buttonStyle="solid" onChange={onTableChange}>
+                {Object.values(tableNames).map(name => (
+                  <Radio.Button key={name} value={name.toLowerCase()}>
+                    {name} Table
+                  </Radio.Button>
+                ))}
+              </Radio.Group>
+              <div className={styles.addButton}>
+                <form>
+                  <Button
+                    key="add-attribute"
+                    type="primary"
+                    onClick={() => setIsAttributeModalOpen(true)}
+                  >
+                    + Add Column
+                  </Button>
+                </form>
+              </div>
+            </div>
+            <div className={styles.table}>
+              <Table
+                dataSource={tableState.data}
+                columns={columns}
+                bordered
+                pagination={{ onChange: setPage, current: page }}
+              />
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Intern View
   return (
     <>
-      <AddAttributeModal
-        isOpen={isAddAttributeModalOpen}
-        setIsOpen={setIsAttributeModalOpen}
-        tableName={tableNames[tableState.table]}
-      />
-      <EditColumnModal
-        isOpen={isEditAttributeModalOpen}
-        setIsOpen={setIsEditAttributeModalOpen}
-        tableName={tableNames[tableState.table]}
-        columnName={attributeNameToEdit}
-      />
-      <DeleteColumnModal
-        isOpen={isDeleteAttributeModalOpen}
-        setIsOpen={setIsDeleteAttributeModalOpen}
-        tableName={tableNames[tableState.table]}
-        columnName={attributeNameToEdit}
-      />
       <div className={styles.window}>
         <div>
           <Title className={styles.title}>Manage Columns</Title>
@@ -138,22 +181,11 @@ const ManageAttributes = () => {
                 </Radio.Button>
               ))}
             </Radio.Group>
-            <div className={styles.addButton}>
-              <form>
-                <Button
-                  key="add-attribute"
-                  type="primary"
-                  onClick={() => setIsAttributeModalOpen(true)}
-                >
-                  + Add Column
-                </Button>
-              </form>
-            </div>
           </div>
           <div className={styles.table}>
             <Table
               dataSource={tableState.data}
-              columns={columns}
+              columns={columns.filter(column => column.title !== 'Actions')}
               bordered
               pagination={{ onChange: setPage, current: page }}
             />
