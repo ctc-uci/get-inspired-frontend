@@ -58,9 +58,11 @@ const Navbar = ({ isAdmin }) => {
           <Menu.Item key="manage-columns" icon={<DatabaseOutlined />}>
             <Link to="/manage-columns">Manage Columns</Link>
           </Menu.Item>
-          <Menu.Item key="add-data" icon={<FileAddOutlined />}>
-            <Link to="/add-data">Add Data</Link>
-          </Menu.Item>
+          {isAdmin && (
+            <Menu.Item key="add-data" icon={<FileAddOutlined />}>
+              <Link to="/add-data">Add Data</Link>
+            </Menu.Item>
+          )}
           <Menu.Item key="manage-data" icon={<AppstoreOutlined />}>
             <Link to="/manage-data">Manage Data</Link>
           </Menu.Item>

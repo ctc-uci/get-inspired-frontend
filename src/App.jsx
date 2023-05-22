@@ -62,7 +62,6 @@ function App() {
                   />
                 }
               />
-
               <Route
                 exact
                 path="/manage-data"
@@ -78,11 +77,7 @@ function App() {
                 exact
                 path="/add-data"
                 element={
-                  <ProtectedRoute
-                    Component={AddData}
-                    redirectPath="/login"
-                    roles={[ADMIN_ROLE, INTERN_ROLE]}
-                  />
+                  <ProtectedRoute Component={AddData} redirectPath="/login" roles={[ADMIN_ROLE]} />
                 }
               />
               <Route

@@ -11,6 +11,7 @@ import CancelModal from './CancelModal/CancelModal';
 import { EditableCell, UndoButton } from './ManageDataUtils';
 import { humanizeCell } from '../QueryData/QueryDataUtils';
 import { getSorterCompareFn, GSPBackend } from '../../utils/utils';
+import { useAuthContext } from '../../common/AuthContext';
 import styles from './ManageData.module.css';
 
 const { Title } = Typography;
@@ -39,6 +40,7 @@ const ManageData = () => {
   });
 
   const [tableState, setTableState] = useState({ originalRows: [], rows: [], columns: [] });
+  const { currentUser } = useAuthContext();
 
   const onSurveyChange = ([newYear, surveyId]) => {
     setYear(newYear);
@@ -206,6 +208,100 @@ const ManageData = () => {
   if (isLoading) {
     return <LoadingScreen />;
   }
+
+  if (currentUser != null && currentUser.role === 'admin') {
+    return (
+      <div className={styles['manage-data-container']}>
+        <Title>Manage Data</Title>
+        <Radio.Group
+          value={selectedTable}
+          buttonStyle="solid"
+          onChange={e => setSelectedTable(e.target.value)}
+          disabled={editingMode}
+        >
+          <Radio.Button value="computation">Computation Table</Radio.Button>
+          <Radio.Button value="survey">Survey Table</Radio.Button>
+          <Radio.Button value="clam">Clam Table</Radio.Button>
+          <Radio.Button value="raker">Raker Table</Radio.Button>
+        </Radio.Group>
+        <br />
+        <div className={styles['data-options']}>
+          <div className={styles['left-options']}>
+            <Cascader
+              className={styles.cascader}
+              options={surveyOptions}
+              placeholder="Select a survey"
+              onChange={onSurveyChange}
+              disabled={editingMode}
+              value={year && selectedSurveyId ? [year, selectedSurveyId] : []}
+            />
+            <Button onClick={() => setSelectedSurveyId(null)}>View all data</Button>
+          </div>
+          {editingMode ? (
+            <div className={styles['editing-mode-buttons']}>
+              {editingState.selectedRowKeys.length ? (
+                <Button
+                  className={styles['delete-button']}
+                  onClick={() => setIsDeleteDataModalOpen(true)}
+                >
+                  Delete
+                </Button>
+              ) : (
+                <Button className={styles['save-button']} onClick={saveButtonClicked}>
+                  Save
+                </Button>
+              )}
+              <Button className={styles['cancel-button']} onClick={cancelButtonClicked}>
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <Button onClick={() => setEditingMode(true)} disabled={selectedTable === 'computation'}>
+              Edit {selectedTable} data
+            </Button>
+          )}
+        </div>
+        <div className={styles['table-container']}>
+          <Table
+            rowSelection={editingMode ? rowSelection : undefined}
+            bordered
+            columns={[...tableState.columns]}
+            dataSource={[...tableState.rows]}
+            scroll={{ x: true }}
+            pagination={{
+              current: page,
+              showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+              onChange: setPage,
+            }}
+            rowKey="id"
+          />
+        </div>
+        <DeleteDataModal
+          isOpen={isDeleteDataModalOpen}
+          setIsOpen={setIsDeleteDataModalOpen}
+          selectedTable={selectedTable}
+          selectedRowKeys={editingState.selectedRowKeys}
+          deleteSelectedRows={deleteSelectedRows}
+        />
+        <EditDataModal
+          isOpen={isEditDataModalOpen}
+          editedRows={editingState.editedRows}
+          setIsOpen={setIsEditDataModalOpen}
+          selectedRowKeys={editingState.editedRows}
+          selectedTable={selectedTable}
+          saveEdits={saveEdits}
+        />
+        <CancelModal
+          isOpen={isCancelModalOpen}
+          setIsOpen={setIsCancelModalOpen}
+          editedRows={editingState.editedRows}
+          setEditingMode={setEditingMode}
+        />
+      </div>
+    );
+  }
+
+  // Intern View
   return (
     <div className={styles['manage-data-container']}>
       <Title>Manage Data</Title>
@@ -233,29 +329,6 @@ const ManageData = () => {
           />
           <Button onClick={() => setSelectedSurveyId(null)}>View all data</Button>
         </div>
-        {editingMode ? (
-          <div className={styles['editing-mode-buttons']}>
-            {editingState.selectedRowKeys.length ? (
-              <Button
-                className={styles['delete-button']}
-                onClick={() => setIsDeleteDataModalOpen(true)}
-              >
-                Delete
-              </Button>
-            ) : (
-              <Button className={styles['save-button']} onClick={saveButtonClicked}>
-                Save
-              </Button>
-            )}
-            <Button className={styles['cancel-button']} onClick={cancelButtonClicked}>
-              Cancel
-            </Button>
-          </div>
-        ) : (
-          <Button onClick={() => setEditingMode(true)} disabled={selectedTable === 'computation'}>
-            Edit {selectedTable} data
-          </Button>
-        )}
       </div>
       <div className={styles['table-container']}>
         <Table
@@ -272,27 +345,6 @@ const ManageData = () => {
           rowKey="id"
         />
       </div>
-      <DeleteDataModal
-        isOpen={isDeleteDataModalOpen}
-        setIsOpen={setIsDeleteDataModalOpen}
-        selectedTable={selectedTable}
-        selectedRowKeys={editingState.selectedRowKeys}
-        deleteSelectedRows={deleteSelectedRows}
-      />
-      <EditDataModal
-        isOpen={isEditDataModalOpen}
-        editedRows={editingState.editedRows}
-        setIsOpen={setIsEditDataModalOpen}
-        selectedRowKeys={editingState.editedRows}
-        selectedTable={selectedTable}
-        saveEdits={saveEdits}
-      />
-      <CancelModal
-        isOpen={isCancelModalOpen}
-        setIsOpen={setIsCancelModalOpen}
-        editedRows={editingState.editedRows}
-        setEditingMode={setEditingMode}
-      />
     </div>
   );
 };
