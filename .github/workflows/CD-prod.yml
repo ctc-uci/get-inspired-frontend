@@ -1,0 +1,44 @@
+name: S3 Deploy Prod
+on:
+  push:
+    branches:
+      - dev
+env:
+  NODE_ENV: ${{ secrets.NODE_ENV }}
+  REACT_APP_FIREBASE_APIKEY: ${{ secrets.PROD_REACT_APP_FIREBASE_APIKEY }}
+  REACT_APP_FIREBASE_AUTHDOMAIN: ${{ secrets.PROD_REACT_APP_FIREBASE_AUTHDOMAIN }}
+  REACT_APP_FIREBASE_PROJECTID: ${{ secrets.PROD_REACT_APP_FIREBASE_PROJECTID }}
+  REACT_APP_FIREBASE_STORAGEBUCKET: ${{ secrets.PROD_REACT_APP_FIREBASE_STORAGEBUCKET }}
+  REACT_APP_FIREBASE_MESSAGINGSENDERID: ${{ secrets.PROD_REACT_APP_FIREBASE_MESSAGINGSENDERID }}
+  REACT_APP_FIREBASE_APPID: ${{ secrets.PROD_REACT_APP_FIREBASE_APPID }}
+  REACT_APP_BASE_URL: ${{ secrets.PROD_REACT_APP_BASE_URL }}
+  REACT_APP_BACKEND_HOST: ${{ secrets.PROD_REACT_APP_BACKEND_HOST }}
+  REACT_APP_BACKEND_HOST_PROD: ${{ secrets.PROD_REACT_APP_BACKEND_HOST_PROD }}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build
+        run: yarn build
+
+      - name: Deploy
+        uses: reggionick/s3-deploy@v3
+        with:
+          folder: build
+          bucket: ${{ secrets.PROD_S3_BUCKET }}
+          bucket-region: ${{ secrets.PROD_S3_BUCKET_REGION }}
+          dist-id: ${{ secrets.PROD_CLOUDFRONT_DISTRIBUTION_ID }}
+          invalidation: /
+          delete-removed: true
+          no-cache: true
+          private: true
+          filesToInclude: ".*/*,*/*,**"
