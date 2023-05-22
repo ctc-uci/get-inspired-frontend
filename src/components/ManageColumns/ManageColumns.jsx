@@ -52,6 +52,10 @@ const ManageAttributes = () => {
     setTableState({ ...tableState, table: e.target.value });
   };
 
+  useEffect(() => {
+    document.title = 'Manage Columns';
+  }, []);
+
   // Update table with columns every time a modal is opened/closed or selected table is changed
   useEffect(async () => {
     const cols = await getTableColsFromDB(tableState.table);

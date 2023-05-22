@@ -67,6 +67,7 @@ const AddData = () => {
       }));
   };
   useEffect(async () => {
+    document.title = 'Add Data';
     const requests = [
       GSPBackend.get('/tables/clam/columns'),
       GSPBackend.get('tables/raker/columns'),

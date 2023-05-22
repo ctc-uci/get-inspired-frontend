@@ -51,6 +51,7 @@ const ManageUsers = () => {
   };
 
   useEffect(() => {
+    document.title = 'Manage Users';
     const fetchUsers = async () => {
       await fetchUsersFromDB();
       setIsLoading(false);

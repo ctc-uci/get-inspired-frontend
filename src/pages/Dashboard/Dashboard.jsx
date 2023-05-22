@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import { Collapse, Button, Modal, theme, Typography } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
@@ -22,7 +22,6 @@ const Row = props => {
   const handleOk = () => {
     setLoading(true);
     setOpen(false);
-
   };
   const handleCancel = () => {
     setOpen(false);
@@ -57,7 +56,7 @@ const Row = props => {
         onCancel={handleCancel}
         footer={[
           <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
-            <Link to="/manage-data" state={{survey_id: props.survey_id}}>
+            <Link to="/manage-data" state={{ survey_id: props.survey_id }}>
               View More Details
             </Link>
           </Button>,
@@ -167,6 +166,7 @@ const Dashboard = () => {
   };
 
   useEffect(async () => {
+    document.title = 'Get Inspired';
     await fetchBeachesFromDB();
     setIsLoading(false);
   }, []);
