@@ -35,6 +35,7 @@ const Login = ({ roles, cookies }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(async () => {
+    document.title = 'Log In';
     const authenticated = await userIsAuthenticated(roles, cookies);
     setIsAuthenticated(authenticated);
     setIsLoading(false);
