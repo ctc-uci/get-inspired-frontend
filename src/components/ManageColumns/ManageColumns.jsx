@@ -110,7 +110,7 @@ const ManageAttributes = () => {
     return <LoadingScreen />;
   }
 
-  if (currentUser != null && currentUser.role === 'admin') {
+  if (currentUser?.role === 'admin') {
     return (
       <>
         <AddAttributeModal

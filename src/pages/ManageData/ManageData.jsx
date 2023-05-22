@@ -209,7 +209,7 @@ const ManageData = () => {
     return <LoadingScreen />;
   }
 
-  if (currentUser != null && currentUser.role === 'admin') {
+  if (currentUser?.role === 'admin') {
     return (
       <div className={styles['manage-data-container']}>
         <Title>Manage Data</Title>
