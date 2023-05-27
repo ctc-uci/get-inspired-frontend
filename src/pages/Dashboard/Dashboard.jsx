@@ -14,13 +14,11 @@ const { Title } = Typography;
 
 // Rows under each beach group, Each Row is a Survey
 const Row = props => {
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
   const handleOk = () => {
-    setLoading(true);
     setOpen(false);
   };
   const handleCancel = () => {
@@ -55,11 +53,11 @@ const Row = props => {
         onOk={handleOk}
         onCancel={handleCancel}
         footer={[
-          <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
-            <Link to="/manage-data" state={{ survey_id: props.survey_id }}>
+          <Link to="/manage-data" state={{ survey_id: props.survey_id }}>
+            <Button key="submit" type="primary" onClick={handleOk}>
               View More Details
-            </Link>
-          </Button>,
+            </Button>
+          </Link>,
         ]}
       >
         <div className={styles.summary}>
