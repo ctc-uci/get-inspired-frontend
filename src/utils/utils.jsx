@@ -147,7 +147,7 @@ export {
   getSorterCompareFn,
 };
 
-const dateOptions = {
+const fullDateOptions = {
   weekday: 'long',
   year: 'numeric',
   month: 'long',
@@ -155,10 +155,26 @@ const dateOptions = {
   timeZone: 'UTC',
 };
 
+const shortDateOptions = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  timeZone: 'UTC',
+};
+
+export const getUTCDateString = (date, shorten = false) => {
+  return new Date(date).toLocaleDateString(undefined, shorten ? shortDateOptions : fullDateOptions);
+};
+
 export const humanizeCell = (text, columnType) => {
-  if (isISODate(text)) {
+  const isIsoDate = str => {
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
+    const d = new Date(str);
+    return d instanceof Date && !Number.isNaN(d) && d.toISOString() === str; // valid date
+  };
+  if (isIsoDate(text)) {
     // (TODO andrew): fix eventually: js time is funky
-    return new Date(text).toLocaleDateString(undefined, dateOptions);
+    return getUTCDateString(text);
   }
   if (columnType === 'tinyint') {
     return Boolean(text).toString();

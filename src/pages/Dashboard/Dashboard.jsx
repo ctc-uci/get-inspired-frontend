@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Collapse, Button, Modal, theme, Typography } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
-import { GSPBackend } from '../../utils/utils';
+import { GSPBackend, getUTCDateString, humanizeCell } from '../../utils/utils';
 
 import styles from './Dashboard.module.css';
 import './Dashboard.css';
@@ -30,7 +30,7 @@ const Row = props => {
       <div className={styles.panelRow} onClick={showModal}>
         <div>
           <span>{props.Location}</span>
-          <span id={styles.gray}>{new Date(props.Date).toLocaleDateString()}</span>
+          <span id={styles.gray}>{getUTCDateString(props.Date, true)}</span>
         </div>
         <span>Total Clams: {props['# clams found']}</span>
       </div>
@@ -45,7 +45,7 @@ const Row = props => {
               <b>
                 {props.Beach} / {props.Location}
               </b>
-              <span>{props.Date}</span>
+              <span>{getUTCDateString(props.Date)}</span>
             </div>
             <span>{`Total Clams: ${props['# clams found']}`}</span>
           </div>
