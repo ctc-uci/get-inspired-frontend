@@ -9,8 +9,12 @@ import EditDataModal from './EditDataModal/EditDataModal';
 import CancelModal from './CancelModal/CancelModal';
 
 import { EditableCell, UndoButton } from './ManageDataUtils';
-import { humanizeCell } from '../QueryData/QueryDataUtils';
-import { getSorterCompareFn, GSPBackend, TABLE_PRIMARY_KEYS } from '../../utils/utils';
+import {
+  getSorterCompareFn,
+  GSPBackend,
+  TABLE_PRIMARY_KEYS,
+  humanizeCell,
+} from '../../utils/utils';
 import { useAuthContext } from '../../common/AuthContext';
 import styles from './ManageData.module.css';
 

@@ -143,3 +143,22 @@ export {
   toCamel,
   getSorterCompareFn,
 };
+
+const dateOptions = {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+};
+
+export const humanizeCell = (text, columnType) => {
+  if (isISODate(text)) {
+    // (TODO andrew): fix eventually: js time is funky
+    return new Date(text).toLocaleDateString(undefined, dateOptions);
+  }
+  if (columnType === 'tinyint') {
+    return Boolean(text).toString();
+  }
+  return text;
+};

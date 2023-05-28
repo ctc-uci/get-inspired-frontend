@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import { Table } from 'antd';
 import { yellow } from '@ant-design/colors';
 import LoadingScreen from '../../../common/LoadingScreen/LoadingScreen';
-import { TABLE_PRIMARY_KEYS, humanizeCell } from '../QueryDataUtils';
+import { QUERY_PRIMARY_KEYS } from '../QueryDataUtils';
 
 import styles from './QueryResults.module.css';
-import { getSorterCompareFn } from '../../../utils/utils';
+import { getSorterCompareFn, humanizeCell } from '../../../utils/utils';
+
 const computeColumns = (checkedLists, data, query = '') => {
   // if no data, use checkedLists to determine column names
-  if (data.length === 0 || data[0].length <= TABLE_PRIMARY_KEYS.length) {
+  if (data.length === 0 || data[0].length <= QUERY_PRIMARY_KEYS.length) {
     return Object.keys(checkedLists)
       .map(table => {
         return checkedLists[table].map(field => ({
@@ -22,7 +23,7 @@ const computeColumns = (checkedLists, data, query = '') => {
       .flat();
   }
 
-  const cols = Object.keys(data[0]).filter(value => !TABLE_PRIMARY_KEYS.includes(value));
+  const cols = Object.keys(data[0]).filter(value => !QUERY_PRIMARY_KEYS.includes(value));
   return [
     ...cols.map(field => ({
       title: field,
