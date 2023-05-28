@@ -13,12 +13,18 @@ import styles from './ManageColumns.module.css';
 const { Title } = Typography;
 
 const ManageAttributes = () => {
+  const restrictedCols = {
+    survey: ['id', 'Duration', 'Distance'],
+    clam: ['id', 'survey_id', 'Length', 'Width', 'Weight'],
+    raker: ['id', 'survey_id', 'Start Time', 'End Time', 'Rake Distance', 'Rake Width'],
+  };
   const { currentUser } = useAuthContext();
   const [page, setPage] = useState(1);
   const [isAddAttributeModalOpen, setIsAttributeModalOpen] = useState(false);
   const [isEditAttributeModalOpen, setIsEditAttributeModalOpen] = useState(false);
   const [isDeleteAttributeModalOpen, setIsDeleteAttributeModalOpen] = useState(false);
   const [attributeNameToEdit, setAttributeNameToEdit] = useState('');
+  const [columns, setColumns] = useState([]);
   const [tableState, setTableState] = useState({
     table: 'survey',
     data: [],
@@ -49,6 +55,49 @@ const ManageAttributes = () => {
     return res;
   };
 
+  const getColumns = tableName => {
+    let newColumns = [
+      {
+        title: 'Column Name',
+        dataIndex: 'attributeName',
+        key: 'attributeName',
+      },
+      {
+        title: 'Data Type',
+        dataIndex: 'dataType',
+        key: 'dataType',
+      },
+    ];
+
+    if (tableName !== 'computation') {
+      newColumns = [
+        ...newColumns,
+        {
+          title: 'Actions',
+          key: 'action',
+          render: (_, record) => (
+            <Space size="middle">
+              {!restrictedCols[tableName].includes(record.attributeName) && (
+                <>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a href="#" onClick={() => editAttributeLabelClicked(record.attributeName)}>
+                    Edit
+                  </a>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a href="#" onClick={() => deleteAttributeButtonClicked(record.attributeName)}>
+                    Delete
+                  </a>
+                </>
+              )}
+            </Space>
+          ),
+        },
+      ];
+    }
+
+    return newColumns;
+  };
+
   const onTableChange = e => {
     setPage(1);
     setTableState({ ...tableState, table: e.target.value });
@@ -62,6 +111,10 @@ const ManageAttributes = () => {
   useEffect(async () => {
     const cols = await getTableColsFromDB(tableState.table);
     setTableState({ ...tableState, data: cols });
+
+    const newColumns = getColumns(tableState.table);
+    setColumns(newColumns);
+
     setIsLoading(false);
   }, [
     tableState.table,
@@ -69,42 +122,6 @@ const ManageAttributes = () => {
     isDeleteAttributeModalOpen,
     isEditAttributeModalOpen,
   ]);
-
-  // Columns for table
-  const columns = [
-    {
-      title: 'Column Name',
-      dataIndex: 'attributeName',
-      key: 'attributeName',
-    },
-    {
-      title: 'Data Type',
-      dataIndex: 'dataType',
-      key: 'dataType',
-    },
-    {
-      title: 'Actions',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="middle">
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          {record.attributeName !== 'id' && record.attributeName !== 'survey_id' && (
-            // eslint-disable-next-line jsx-a11y/anchor-is-valid
-            <a href="#" onClick={() => editAttributeLabelClicked(record.attributeName)}>
-              Edit
-            </a>
-          )}
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          {record.attributeName !== 'id' && record.attributeName !== 'survey_id' && (
-            // eslint-disable-next-line jsx-a11y/anchor-is-valid
-            <a href="#" onClick={() => deleteAttributeButtonClicked(record.attributeName)}>
-              Delete
-            </a>
-          )}
-        </Space>
-      ),
-    },
-  ];
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -147,6 +164,7 @@ const ManageAttributes = () => {
                     key="add-attribute"
                     type="primary"
                     onClick={() => setIsAttributeModalOpen(true)}
+                    disabled={tableState.table === 'computation'} // Disable the button if the table is "computation"
                   >
                     + Add Column
                   </Button>

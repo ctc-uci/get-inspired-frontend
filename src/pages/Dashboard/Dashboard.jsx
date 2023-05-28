@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Collapse, Button, Modal, theme, Typography } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
-import { GSPBackend } from '../../utils/utils';
+import { GSPBackend, getUTCDateString, humanizeCell } from '../../utils/utils';
 
 import styles from './Dashboard.module.css';
 import './Dashboard.css';
@@ -14,13 +14,11 @@ const { Title } = Typography;
 
 // Rows under each beach group, Each Row is a Survey
 const Row = props => {
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
   const handleOk = () => {
-    setLoading(true);
     setOpen(false);
   };
   const handleCancel = () => {
@@ -32,7 +30,7 @@ const Row = props => {
       <div className={styles.panelRow} onClick={showModal}>
         <div>
           <span>{props.Location}</span>
-          <span id={styles.gray}>{new Date(props.Date).toLocaleDateString()}</span>
+          <span id={styles.gray}>{getUTCDateString(props.Date, true)}</span>
         </div>
         <span>Total Clams: {props['# clams found']}</span>
       </div>
@@ -47,7 +45,7 @@ const Row = props => {
               <b>
                 {props.Beach} / {props.Location}
               </b>
-              <span>{props.Date}</span>
+              <span>{getUTCDateString(props.Date)}</span>
             </div>
             <span>{`Total Clams: ${props['# clams found']}`}</span>
           </div>
@@ -55,11 +53,11 @@ const Row = props => {
         onOk={handleOk}
         onCancel={handleCancel}
         footer={[
-          <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
-            <Link to="/manage-data" state={{ survey_id: props.survey_id }}>
+          <Link to="/manage-data" state={{ surveyId: props.survey_id, year: `${new Date(props.Date).getUTCFullYear()}` }}>
+            <Button key="submit" type="primary" onClick={handleOk}>
               View More Details
-            </Link>
-          </Button>,
+            </Button>
+          </Link>,
         ]}
       >
         <div className={styles.summary}>

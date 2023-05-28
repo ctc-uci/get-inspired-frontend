@@ -9,22 +9,26 @@ import EditDataModal from './EditDataModal/EditDataModal';
 import CancelModal from './CancelModal/CancelModal';
 
 import { EditableCell, UndoButton } from './ManageDataUtils';
-import { humanizeCell } from '../QueryData/QueryDataUtils';
-import { getSorterCompareFn, GSPBackend } from '../../utils/utils';
+import {
+  getSorterCompareFn,
+  GSPBackend,
+  TABLE_PRIMARY_KEYS,
+  humanizeCell,
+} from '../../utils/utils';
 import { useAuthContext } from '../../common/AuthContext';
 import styles from './ManageData.module.css';
 
 const { Title } = Typography;
 
 const PAGE_SIZE = 10;
+
 const ManageData = () => {
   const routeLocation = useLocation();
-  const initSurveyId =
-    routeLocation.state && routeLocation.state.survey_id ? routeLocation.state.survey_id : null;
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isTableLoading, setIsTableLoading] = useState(true);
   const [year, setYear] = useState(null);
-  const [selectedSurveyId, setSelectedSurveyId] = useState(initSurveyId);
+  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
   const [selectedTable, setSelectedTable] = useState('computation');
   const [editingMode, setEditingMode] = useState(false);
   const [surveyOptions, setSurveyOptions] = useState([]);
@@ -124,7 +128,7 @@ const ManageData = () => {
 
     setTableState({
       originalRows: rowData.map(row => ({ ...row })),
-      rows: rowData,
+      rows: rowData.map(row => ({ ...row, key: row[TABLE_PRIMARY_KEYS[selectedTable]] })),
       columns: computeColumnsFromSQL(columnData),
     });
   };
@@ -182,6 +186,12 @@ const ManageData = () => {
     document.title = 'Manage Data';
     const map = await GSPBackend.get('/surveys/existingSurveyOptions');
     setSurveyOptions(map.data);
+
+    if (routeLocation.state && routeLocation.state.year && routeLocation.state.surveyId) {
+      const { year: initYear, surveyId: initSurveyId } = routeLocation.state;
+      onSurveyChange([initYear, initSurveyId]);
+    }
+
     setIsLoading(false);
   }, []);
 
@@ -202,7 +212,9 @@ const ManageData = () => {
 
   // Load table data when selected table or selected survey changes
   useEffect(async () => {
+    setIsTableLoading(true);
     await fetchTableData();
+    setIsTableLoading(false);
   }, [selectedTable, selectedSurveyId]);
 
   if (isLoading) {
@@ -233,6 +245,11 @@ const ManageData = () => {
               placeholder="Select a survey"
               onChange={onSurveyChange}
               disabled={editingMode}
+              defaultValue={
+                routeLocation.state && routeLocation.state.year && routeLocation.state.surveyId
+                  ? [routeLocation.state.year, routeLocation.state.surveyId]
+                  : null
+              }
               value={year && selectedSurveyId ? [year, selectedSurveyId] : []}
             />
             <Button onClick={() => setSelectedSurveyId(null)}>View all data</Button>
@@ -268,12 +285,13 @@ const ManageData = () => {
             columns={[...tableState.columns]}
             dataSource={[...tableState.rows]}
             scroll={{ x: true }}
+            loading={isTableLoading}
             pagination={{
               current: page,
               showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
               onChange: setPage,
             }}
-            rowKey="id"
+            rowKey="key"
           />
         </div>
         <DeleteDataModal
@@ -305,6 +323,7 @@ const ManageData = () => {
   return (
     <div className={styles['manage-data-container']}>
       <Title>Manage Data</Title>
+
       <Radio.Group
         value={selectedTable}
         buttonStyle="solid"
@@ -337,12 +356,13 @@ const ManageData = () => {
           columns={[...tableState.columns]}
           dataSource={[...tableState.rows]}
           scroll={{ x: true }}
+          loading={isTableLoading}
           pagination={{
             current: page,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
             onChange: setPage,
           }}
-          rowKey="id"
+          rowKey="key"
         />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Menu, Typography } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -22,20 +22,26 @@ const SIDER_WIDTH = 200;
 const { Sider } = Layout;
 const { Title } = Typography;
 
+const PATH_TO_KEYS = {
+  '/': ['dashboard'],
+  '/manage-columns': ['manage-columns'],
+  '/add-data': ['add-data'],
+  '/query-data': ['query-data'],
+  '/manage-data': ['manage-data'],
+  '/manage-users': ['manage-users'],
+  '/profile': ['profile'],
+};
+
 const Navbar = ({ isAdmin }) => {
   const location = useLocation();
   const path = location.pathname;
 
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const selectedKeys = [
-    ...(path === '/' ? ['dashboard'] : []),
-    ...(path === '/manage-columns' ? ['manage-columns'] : []),
-    ...(path === '/add-data' ? ['add-data'] : []),
-    ...(path === '/query-data' ? ['query-data'] : []),
-    ...(path === '/manage-data' ? ['manage-data'] : []),
-    ...(path === '/manage-users' ? ['manage-users'] : []),
-    ...(path === '/profile' ? ['profile'] : []),
-  ];
+  const [selectedKeys, setSelectedKeys] = useState(PATH_TO_KEYS[path]);
+
+  useEffect(() => {
+    setSelectedKeys(PATH_TO_KEYS[path]);
+  }, [location]);
 
   return (
     <Sider width={SIDER_WIDTH} className={styles.sider} theme="light">
@@ -47,11 +53,7 @@ const Navbar = ({ isAdmin }) => {
             Get Inspired
           </Title>
         </div>
-        <Menu
-          mode="inline"
-          defaultSelectedKeys={selectedKeys}
-          style={{ height: '100%', borderRight: 0 }}
-        >
+        <Menu mode="inline" selectedKeys={selectedKeys} style={{ height: '100%', borderRight: 0 }}>
           <Menu.Item key="dashboard" icon={<HomeOutlined />}>
             <Link to="/">Dashboard</Link>
           </Menu.Item>

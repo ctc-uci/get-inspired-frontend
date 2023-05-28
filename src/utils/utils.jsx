@@ -88,6 +88,9 @@ const getSorterCompareFn = colName => {
 };
 
 const NotiMessage = {
+  GENERIC_SEARCH_ERROR: 'Error: Must select at least 1 table to search!',
+  ADVANCED_SEARCH_ERROR: 'Error: Must select at least 1 column to display!',
+  QUERY_ERROR: error => `Error querying data!: ${error}`,
   ADD_DATA_ERROR: error => `Error adding data!: ${error}`,
   ACCOUNT_INFORMATION_EDITED: 'Account information edited!',
   ACCOUNT_INFORMATION_EDITED_ERROR: error => `Error editing account information: ${error}`,
@@ -125,5 +128,56 @@ const notify = (message, icon) => {
   });
 };
 
+const TABLE_PRIMARY_KEYS = {
+  computation: 'survey_id',
+  survey: 'id',
+  clam: 'id',
+  raker: 'id',
+};
+
 // eslint-disable-next-line import/prefer-default-export
-export { GSPBackend, NotiMessage, NotiIcon, notify, keysToCamel, toCamel, getSorterCompareFn };
+export {
+  GSPBackend,
+  NotiMessage,
+  NotiIcon,
+  TABLE_PRIMARY_KEYS,
+  notify,
+  keysToCamel,
+  toCamel,
+  getSorterCompareFn,
+};
+
+const fullDateOptions = {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+};
+
+const shortDateOptions = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  timeZone: 'UTC',
+};
+
+export const getUTCDateString = (date, shorten = false) => {
+  return new Date(date).toLocaleDateString(undefined, shorten ? shortDateOptions : fullDateOptions);
+};
+
+export const humanizeCell = (text, columnType) => {
+  const isIsoDate = str => {
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
+    const d = new Date(str);
+    return d instanceof Date && !Number.isNaN(d) && d.toISOString() === str; // valid date
+  };
+  if (isIsoDate(text)) {
+    // (TODO andrew): fix eventually: js time is funky
+    return getUTCDateString(text);
+  }
+  if (columnType === 'tinyint') {
+    return Boolean(text).toString();
+  }
+  return text;
+};
