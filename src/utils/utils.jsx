@@ -125,5 +125,21 @@ const notify = (message, icon) => {
   });
 };
 
+const TABLE_PRIMARY_KEYS = {
+  computation: 'survey_id',
+  survey: 'id',
+  clam: 'id',
+  raker: 'id',
+};
+
 // eslint-disable-next-line import/prefer-default-export
-export { GSPBackend, NotiMessage, NotiIcon, notify, keysToCamel, toCamel, getSorterCompareFn };
+export {
+  GSPBackend,
+  NotiMessage,
+  NotiIcon,
+  TABLE_PRIMARY_KEYS,
+  notify,
+  keysToCamel,
+  toCamel,
+  getSorterCompareFn,
+};
