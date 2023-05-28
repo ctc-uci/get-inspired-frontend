@@ -53,7 +53,7 @@ const Row = props => {
         onOk={handleOk}
         onCancel={handleCancel}
         footer={[
-          <Link to="/manage-data" state={{ survey_id: props.survey_id }}>
+          <Link to="/manage-data" state={{ surveyId: props.survey_id, year: `${new Date(props.Date).getUTCFullYear()}` }}>
             <Button key="submit" type="primary" onClick={handleOk}>
               View More Details
             </Button>

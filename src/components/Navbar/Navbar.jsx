@@ -40,7 +40,6 @@ const Navbar = ({ isAdmin }) => {
   const [selectedKeys, setSelectedKeys] = useState(PATH_TO_KEYS[path]);
 
   useEffect(() => {
-    console.log({ path, keys: PATH_TO_KEYS[path] });
     setSelectedKeys(PATH_TO_KEYS[path]);
   }, [location]);
 
