@@ -10,7 +10,7 @@ import SelectAttributesModal from './SelectAttributesModal/SelectAttributesModal
 import SelectTablesModal from './SelectTablesModal/SelectTablesModal';
 import QueryResults from './QueryResults/QueryResults';
 import { tableToWidget } from './QueryDataUtils';
-import { GSPBackend } from '../../utils/utils';
+import { GSPBackend, NotiIcon, NotiMessage, notify } from '../../utils/utils';
 
 import styles from './QueryData.module.css';
 // Used ONLY to overrule default styling of react-awesome-query-builder
@@ -50,7 +50,6 @@ const QueryData = () => {
     queryResultsLoading: false,
     results: [],
   });
-  const [errorState, setErrorState] = useState('');
   const [checkedLists, setCheckedLists] = useState(new DefaultDict(Array));
   const [checkedTables, setCheckedTables] = useState(new Set());
 
@@ -73,10 +72,10 @@ const QueryData = () => {
   const onAdvancedSearch = async () => {
     // only query if checkedLists is nonempty
     if (Object.values(checkedLists).every(arr => arr.length === 0)) {
-      setErrorState('Please select at least one column to display');
+      notify(NotiMessage.ADVANCED_SEARCH_ERROR, NotiIcon.ERROR);
+      setIsSelectedAttributesModalOpen(true);
       return;
     }
-    setErrorState('');
 
     // get rid of prev. results (find more elegant way to do this?)
     setQueryState(prevState => ({ ...prevState, queryResultsLoading: true }));
@@ -96,18 +95,16 @@ const QueryData = () => {
         queryResultsLoading: false,
       }));
     } catch (err) {
-      setErrorState(`${err.name}: ${err.message}`);
-      setQueryState(prevState => ({ ...prevState, queryResultsLoading: false }));
-      throw err;
+      notify(NotiMessage.QUERY_ERROR, NotiIcon.ERROR);
     }
   };
 
   const onGenericSearch = async () => {
     if (!checkedTables.length) {
-      setErrorState('Please select at least one table to query');
+      notify(NotiMessage.GENERIC_SEARCH_ERROR, NotiIcon.ERROR);
+      setIsSelectedTablesModalOpen(true);
       return;
     }
-    setErrorState('');
 
     // get rid of prev. results (find more elegant way to do this?)
     setQueryState(prevState => ({
@@ -129,8 +126,7 @@ const QueryData = () => {
         queryResultsLoading: false,
       }));
     } catch (err) {
-      setErrorState(`${err.name}: ${err.message}`);
-      setQueryState(prevState => ({ ...prevState, queryResultsLoading: false }));
+      notify(NotiMessage.QUERY_ERROR, NotiIcon.ERROR);
     }
   };
 
@@ -255,14 +251,18 @@ const QueryData = () => {
       />
       <div className={styles['query-results-header']}>
         <Title level={2}>Query Results</Title>
-        <CSVLink filename="data.csv" data={queryState.results}>
+        <CSVLink
+          filename="data.csv"
+          data={queryState.results}
+          onClick={e => {
+            if (!queryState.results.length) {
+              e.preventDefault();
+            }
+          }}
+        >
           <Button disabled={!queryState.results.length}>Download CSV</Button>
         </CSVLink>
       </div>
-      {
-        // temporary error banner
-        errorState !== '' && <Alert message={errorState} type="error" showIcon />
-      }
       <QueryResults
         checkedLists={checkedLists}
         data={queryState.results}
