@@ -1,24 +1,9 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .buttons {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   column-gap: 2em;
-  margin-top: 10px;
+  margin-top: 2em;
 }
 
-.warning {
-  background-color: yellow;
-}
-
-.delete-button {
-  background-color: red;
-  color: white;
-}
