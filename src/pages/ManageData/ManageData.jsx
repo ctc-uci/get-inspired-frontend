@@ -214,6 +214,7 @@ const ManageData = () => {
   useEffect(async () => {
     setIsTableLoading(true);
     await fetchTableData();
+    setPage(1);
     setIsTableLoading(false);
   }, [selectedTable, selectedSurveyId]);
 
@@ -360,7 +361,11 @@ const ManageData = () => {
           pagination={{
             current: page,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-            onChange: setPage,
+            onChange: pageNum => {
+              setIsTableLoading(true);
+              setPage(pageNum);
+              setIsTableLoading(false);
+            },
           }}
           rowKey="key"
         />
