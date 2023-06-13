@@ -4,9 +4,9 @@ import { Radio, Cascader, Table, Typography, Button } from 'antd';
 import { useLocation } from 'react-router-dom';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
-import DeleteDataModal from './DeleteDataModal/DeleteDataModal';
-import EditDataModal from './EditDataModal/EditDataModal';
-import CancelModal from './CancelModal/CancelModal';
+import DeleteDataModal from '../../components/ManageData/DeleteDataModal/DeleteDataModal';
+import EditDataModal from '../../components/ManageData/EditDataModal/EditDataModal';
+import CancelModal from '../../components/ManageData/CancelModal/CancelModal';
 
 import { EditableCell, UndoButton } from './ManageDataUtils';
 import {
