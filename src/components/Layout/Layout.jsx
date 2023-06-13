@@ -14,7 +14,11 @@ const Layout = () => {
   const { currentUser } = useAuthContext();
   return (
     <AntdLayout hasSider>
-      <Navbar isAdmin={currentUser?.role === 'admin'} className={styles.sider} />
+      <Navbar
+        hasLoaded={currentUser != null}
+        isAdmin={currentUser?.role === 'admin'}
+        className={styles.sider}
+      />
       <Content className={styles.content}>
         <div>
           <Outlet />
