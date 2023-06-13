@@ -2,14 +2,13 @@
   position: absolute;
   display: flex;
   flex-direction: row;
-  column-gap: 15px;
-  font-size: 20px;
+  column-gap: 1em;
   padding: 0.5% 1.5%;
 }
 
 .logo-container h1 {
   font-weight: 400;
-  font-size: 18px;
+  font-size: 1.25em;
 }
 
 .container {
@@ -26,7 +25,8 @@
 }
 
 .login-form {
-  width: 280px;
+  width: 40ch;
+  max-width: 300px;
 }
 
 .login-form label {

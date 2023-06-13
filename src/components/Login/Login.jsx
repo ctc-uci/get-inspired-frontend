@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Typography } from 'antd';
 import { PropTypes, instanceOf } from 'prop-types';
 import { Navigate } from 'react-router-dom';
-
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 import { GSPBackend } from '../../utils/utils';
 import { withCookies, cookieKeys, Cookies, clearCookies } from '../../utils/cookie_utils';
 import { logInWithEmailAndPassword, useNavigate, refreshToken } from '../../utils/auth_utils';
 
 import GSPLogo from '../../assets/images/GSPLogo.svg';
-
 import styles from './Login.module.css';
+import ForgotPasswordModal from './ForgotPasswordModal/ForgotPasswordModal';
+
+const { Title, Paragraph } = Typography;
 
 const userIsAuthenticated = async (roles, cookies) => {
   try {
@@ -27,9 +28,9 @@ const userIsAuthenticated = async (roles, cookies) => {
   }
 };
 
-const { Title } = Typography;
 const Login = ({ roles, cookies }) => {
   const navigate = useNavigate();
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -63,6 +64,10 @@ const Login = ({ roles, cookies }) => {
     return <Navigate to="/" />;
   }
 
+  const onResetButtonClick = () => {
+    setIsResetModalOpen(true);
+  };
+
   return (
     <>
       <div className={styles['logo-container']}>
@@ -73,7 +78,7 @@ const Login = ({ roles, cookies }) => {
       </div>
       <div className={styles.container}>
         <Title>Login</Title>
-        {errorMessage && <p>{errorMessage}</p>}
+        {errorMessage && <Paragraph type="danger">{errorMessage}</Paragraph>}
         <Form onFinish={handleSubmit} layout="vertical" className={styles['login-form']}>
           <Form.Item
             label="Email"
@@ -100,12 +105,17 @@ const Login = ({ roles, cookies }) => {
           >
             <Input.Password type="password" />
           </Form.Item>
+
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Log In
             </Button>
           </Form.Item>
         </Form>
+        <Button type="link" onClick={onResetButtonClick}>
+          Forgot your password?
+        </Button>
+        <ForgotPasswordModal isOpen={isResetModalOpen} setIsOpen={setIsResetModalOpen} />
       </div>
     </>
   );
