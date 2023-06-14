@@ -45,7 +45,14 @@ const AddUserModal = ({ isOpen, setIsOpen, fetchUsersFromDB }) => {
   };
 
   return (
-    <Modal open={isOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
+    <Modal
+      centered
+      open={isOpen}
+      okText="Submit"
+      onOk={handleOk}
+      onCancel={handleCancel}
+      footer={[]}
+    >
       <div className={styles.container}>
         <h1>Add User</h1>
         <Form

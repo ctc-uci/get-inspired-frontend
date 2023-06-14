@@ -29,15 +29,25 @@
   max-width: 300px;
 }
 
-.login-form label {
-  font-weight: 500;
-  font-size: 20px !important;
-  line-height: 22px;
+.error-message{
+  width: 48ch;
+  max-width: calc(300px + 8ch);
+  margin-bottom: 1em;
 }
 
-.login-form button {
+.login-form label {
+  font-weight: 500;
+  font-size: 1.25em !important;
+  line-height: 1.3em;
+}
+
+.login-buttons{
+  width: 100%;
+}
+
+/* .login-form button {
   border-radius: 3px;
   height: 40px;
   font-weight: 500;
   left: calc(50% - 35.875px);
-}
+} */

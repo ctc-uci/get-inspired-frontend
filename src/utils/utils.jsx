@@ -128,6 +128,21 @@ const notify = (message, icon) => {
   });
 };
 
+const HUMANIZED_FIREBASE_ERRORS = {
+  'auth/invalid-login-credentials': {
+    title: 'Invalid login credentials',
+    desc: 'Please check your email and password before trying again',
+  },
+  'auth/too-many-requests': {
+    title: 'Too many attempts',
+    desc: 'Further log in attempts have been blocked due to unusual activity. Please reset your password or wait before trying again.',
+  },
+};
+export const humanizeFirebaseError = err => {
+  if (err.code in HUMANIZED_FIREBASE_ERRORS) return HUMANIZED_FIREBASE_ERRORS[err.code];
+  return { title: `Error: ${err.code}`, desc: err.message };
+};
+
 const TABLE_PRIMARY_KEYS = {
   computation: 'survey_id',
   survey: 'id',
