@@ -4,9 +4,9 @@ import { Radio, Cascader, Table, Typography, Button } from 'antd';
 import { useLocation } from 'react-router-dom';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
-import DeleteDataModal from './DeleteDataModal/DeleteDataModal';
-import EditDataModal from './EditDataModal/EditDataModal';
-import CancelModal from './CancelModal/CancelModal';
+import DeleteDataModal from '../../components/ManageData/DeleteDataModal/DeleteDataModal';
+import EditDataModal from '../../components/ManageData/EditDataModal/EditDataModal';
+import CancelModal from '../../components/ManageData/CancelModal/CancelModal';
 
 import { EditableCell, UndoButton } from './ManageDataUtils';
 import {
@@ -162,14 +162,18 @@ const ManageData = () => {
         ...tableState,
         rows: tableState.rows.filter(row => !editingState.selectedRowKeys.includes(row.id)),
       });
-      setEditingState({
-        editedRows: Object.fromEntries(
-          Object.entries(editingState.editedRows).filter(
-            ([key]) => !editingState.selectedRowKeys.includes(Number.parseInt(key, 10)),
-          ),
-        ),
-        selectedRowKeys: [],
-      });
+
+      // (andrew): previous code for behavior to allow for continued edits after deleting was replaced
+      //    in favor of code that exits editing mode: swap the two if the behavior should be modified
+      setEditingMode(false);
+      // setEditingState({
+      //   editedRows: Object.fromEntries(
+      //     Object.entries(editingState.editedRows).filter(
+      //       ([key]) => !editingState.selectedRowKeys.includes(Number.parseInt(key, 10)),
+      //     ),
+      //   ),
+      //   selectedRowKeys: [],
+      // });
     }
   };
 
@@ -214,6 +218,7 @@ const ManageData = () => {
   useEffect(async () => {
     setIsTableLoading(true);
     await fetchTableData();
+    setPage(1);
     setIsTableLoading(false);
   }, [selectedTable, selectedSurveyId]);
 
@@ -258,7 +263,9 @@ const ManageData = () => {
             <div className={styles['editing-mode-buttons']}>
               {editingState.selectedRowKeys.length ? (
                 <Button
+                  danger
                   className={styles['delete-button']}
+                  type="primary"
                   onClick={() => setIsDeleteDataModalOpen(true)}
                 >
                   Delete
@@ -289,7 +296,11 @@ const ManageData = () => {
             pagination={{
               current: page,
               showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-              onChange: setPage,
+              onChange: pageNum => {
+                setIsTableLoading(true);
+                setPage(pageNum);
+                setIsTableLoading(false);
+              },
             }}
             rowKey="key"
           />
@@ -360,7 +371,11 @@ const ManageData = () => {
           pagination={{
             current: page,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-            onChange: setPage,
+            onChange: pageNum => {
+              setIsTableLoading(true);
+              setPage(pageNum);
+              setIsTableLoading(false);
+            },
           }}
           rowKey="key"
         />

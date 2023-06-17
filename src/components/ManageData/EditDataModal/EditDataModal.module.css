@@ -11,14 +11,5 @@
   justify-content: center;
   align-items: center;
   column-gap: 2em;
-  margin-top: 10px;
-}
-
-.warning {
-  background-color: yellow;
-}
-
-.delete-button {
-  background-color: red;
-  color: white;
+  margin-top: 3em;
 }

@@ -23,15 +23,10 @@
 
 .save-button,
 .delete-button {
-  margin-right: 10px;
-}
-
-.delete-button {
-  background-color: red;
-  color: white;
+  margin-right: 1em;
 }
 
 .table-container {
-  margin-top: 20px;
+  margin-top: 2em;
   max-width: 95%;
 }

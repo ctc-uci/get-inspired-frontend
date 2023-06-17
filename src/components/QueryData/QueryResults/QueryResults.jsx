@@ -3,8 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'antd';
 import { yellow } from '@ant-design/colors';
-import LoadingScreen from '../../../common/LoadingScreen/LoadingScreen';
-import { QUERY_PRIMARY_KEYS } from '../QueryDataUtils';
+import { QUERY_PRIMARY_KEYS } from '../../../pages/QueryData/QueryDataUtils';
 
 import styles from './QueryResults.module.css';
 import { getSorterCompareFn, humanizeCell } from '../../../utils/utils';
@@ -49,13 +48,6 @@ const computeColumns = (checkedLists, data, query = '') => {
 };
 
 const QueryResults = ({ checkedLists, data, isLoading, query }) => {
-  if (isLoading) {
-    return (
-      <div className={styles['query-results-container']}>
-        <LoadingScreen />
-      </div>
-    );
-  }
   return (
     <div className={styles['query-results-container']}>
       <Table
@@ -65,6 +57,7 @@ const QueryResults = ({ checkedLists, data, isLoading, query }) => {
         columns={computeColumns(checkedLists, data, query)}
         scroll={{ x: true }}
         bordered
+        loading={isLoading}
       />
     </div>
   );

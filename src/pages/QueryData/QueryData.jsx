@@ -6,9 +6,9 @@ import { CSVLink } from 'react-csv';
 import '@react-awesome-query-builder/antd/css/styles.css';
 
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
-import SelectAttributesModal from './SelectAttributesModal/SelectAttributesModal';
-import SelectTablesModal from './SelectTablesModal/SelectTablesModal';
-import QueryResults from './QueryResults/QueryResults';
+import SelectAttributesModal from '../../components/QueryData/SelectAttributesModal/SelectAttributesModal';
+import SelectTablesModal from '../../components/QueryData/SelectTablesModal/SelectTablesModal';
+import QueryResults from '../../components/QueryData/QueryResults/QueryResults';
 import { tableToWidget } from './QueryDataUtils';
 import { GSPBackend, NotiIcon, NotiMessage, notify } from '../../utils/utils';
 

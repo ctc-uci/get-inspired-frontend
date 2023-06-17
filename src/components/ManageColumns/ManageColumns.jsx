@@ -19,18 +19,18 @@ const ManageAttributes = () => {
     raker: ['id', 'survey_id', 'Start Time', 'End Time', 'Rake Distance', 'Rake Width'],
   };
   const { currentUser } = useAuthContext();
-  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isTableLoading, setIsTableLoading] = useState(false);
   const [isAddAttributeModalOpen, setIsAttributeModalOpen] = useState(false);
   const [isEditAttributeModalOpen, setIsEditAttributeModalOpen] = useState(false);
   const [isDeleteAttributeModalOpen, setIsDeleteAttributeModalOpen] = useState(false);
   const [attributeNameToEdit, setAttributeNameToEdit] = useState('');
-  const [columns, setColumns] = useState([]);
   const [tableState, setTableState] = useState({
     table: 'survey',
     data: [],
+    cols: [],
+    page: 1,
   });
-
-  const [isLoading, setIsLoading] = useState(true);
 
   const editAttributeLabelClicked = id => {
     setAttributeNameToEdit(id);
@@ -99,8 +99,14 @@ const ManageAttributes = () => {
   };
 
   const onTableChange = e => {
-    setPage(1);
-    setTableState({ ...tableState, table: e.target.value });
+    setIsTableLoading(true);
+    setTableState({ ...tableState, table: e.target.value, page: 1 });
+  };
+
+  const onPageChange = pageNum => {
+    setIsTableLoading(true);
+    setTableState({ ...tableState, page: pageNum });
+    setIsTableLoading(false);
   };
 
   useEffect(() => {
@@ -109,13 +115,13 @@ const ManageAttributes = () => {
 
   // Update table with columns every time a modal is opened/closed or selected table is changed
   useEffect(async () => {
+    if (!isTableLoading) setIsTableLoading(true);
     const cols = await getTableColsFromDB(tableState.table);
-    setTableState({ ...tableState, data: cols });
-
-    const newColumns = getColumns(tableState.table);
-    setColumns(newColumns);
+    const newCols = getColumns(tableState.table);
+    setTableState({ ...tableState, columns: newCols, data: cols });
 
     setIsLoading(false);
+    setIsTableLoading(false);
   }, [
     tableState.table,
     isAddAttributeModalOpen,
@@ -174,9 +180,10 @@ const ManageAttributes = () => {
             <div className={styles.table}>
               <Table
                 dataSource={tableState.data}
-                columns={columns}
+                columns={tableState.columns}
+                loading={isTableLoading}
                 bordered
-                pagination={{ onChange: setPage, current: page }}
+                pagination={{ onChange: onPageChange, current: tableState.page }}
               />
             </div>
           </div>
@@ -203,9 +210,13 @@ const ManageAttributes = () => {
           <div className={styles.table}>
             <Table
               dataSource={tableState.data}
-              columns={columns.filter(column => column.title !== 'Actions')}
+              columns={tableState.columns.filter(column => column.title !== 'Actions')}
               bordered
-              pagination={{ onChange: setPage, current: page }}
+              loading={isTableLoading}
+              pagination={{
+                onChange: onPageChange,
+                current: tableState.page,
+              }}
             />
           </div>
         </div>
