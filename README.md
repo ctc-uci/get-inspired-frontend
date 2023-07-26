@@ -1,9 +1,9 @@
 # Get Inspired
-<div style="text-align: center;">
-  <img src="https://github.com/ctc-uci/get-inspired-frontend/blob/13a35ad183b5420b2db7255b068640b03ddc3f84/src/assets/images/GSPLogo.svg" alt-text="Get Inspired Logo" style="width: 250px; height: auto;"/>
-</div>
+<p align="center">
+<img width=200 height=200 src="https://github.com/ctc-uci/get-inspired-frontend/blob/13a35ad183b5420b2db7255b068640b03ddc3f84/src/assets/images/GSPLogo.svg" alt="Get Inspired Logo" />
+</p>
 
-<p style="text-align: center;">
+<p align="center">
     <b>🌐</b><a href="https://getinspiredinc.org/">Website</a> |
     <a href="https://www.facebook.com/GetInspired20/">Facebook</a> |
     <a href="https://www.instagram.com/getinspiredinc/">Instagram</a> |
@@ -12,8 +12,9 @@
 
 <b>Get Inspired promotes ocean restoration awareness and education among youths through engaging the community in environmental stewardship. They host programs that educate students on marine life and provide volunteer opportunities to restore and preserve marine ecosystems.</b>
 
-
-![Dashboard](public/readme-images/dashboard.png)
+<p align="center">
+<img src="./public/readme-images/dashboard.png" alt="The Get Inspired Prismo Clam Database Dashboard"/>
+</p>
 
 ## 🔎 About the Project
 
@@ -21,19 +22,16 @@
 
 🆙 We built a web application and database to store and display a variety of information about Pismo clams, including their color, location, date and time of survey, and other key characteristics. Our interface allows Nancy to easily input, view, and query the data as necessary. The dashboard shows each survey's automatically calculated statistics, which will be used to identify ways to restore the clam population.    
 
-![Dashboard Popup page](public/readme-images/dashboard-popup.png)
-
-![Upload Data page](public/readme-images/upload-data.png)
-
+<p align="center">
+<img src="./public/readme-images/dashboard-popup.png" alt="Dashboard Popup Page"/>
+<img src="./public/readme-images/upload-data.png" alt="Upload Data Page"/>
 <!-- insert manage data pic here -->
-
-![Query Data page](public/readme-images/query-data.png)
-
-
+<img src="./public/readme-images/query-data.png" alt="Query Data Page"/>
+</p>
 
 ### Tech Stack
 
-**🔼 Frontend:** React (UI Kit: [AntDesign](https://ant.design/)) + Firebase (Authentication)
+**🔼 [Frontend](https://github.com/ctc-uci/get-inspired-frontend/):** React (UI Kit: [AntDesign](https://ant.design/)) + Firebase (Authentication)
 
 **🔽 [Backend](https://github.com/ctc-uci/get-inspired-backend):** NodeJS + MySQL
 
