@@ -1,6 +1,16 @@
-# Get Inspired Frontend
+# Get Inspired
 
-This is the frontend for the Get Inspired project!
+![Get Inspired Logo](https://github.com/ctc-uci/get-inspired-frontend/blob/13a35ad183b5420b2db7255b068640b03ddc3f84/src/assets/images/GSPLogo.svg)
+
+#### Get Inspired promotes ocean restoration awareness and education among youths through engaging the community in environmental stewardship. They host programs that educate students on marine life and provide volunteer opportunities to restore and preserve marine ecosystems.
+
+**🌐** [Website](https://getinspiredinc.org/) | [Facebook](https://www.facebook.com/GetInspired20/) | [Instagram](https://www.instagram.com/getinspiredinc/) | [Youtube](https://www.youtube.com/user/TheKelplady)
+
+## 🔎 About the Project
+
+*Most of Way
+
+🆙 We built an online system for Waymakers to track their internal inventory, store and look up volunteer information, and create events for volunteers to participat
 
 ## Setting up development environment
 
