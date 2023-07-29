@@ -12,7 +12,26 @@ const GSPBackend = axios.create({
   withCredentials: true,
 });
 
-// toCamel, isArray, and isObject are helper functions
+// =~=~=~=~=~=~=~=~=~= //
+//  HELPER FUNCTIONS   //
+// =~=~=~=~=~=~=~=~=~= //
+
+/**
+ * Splits a string on the given parameter, then capitalizes each token
+ * and rejoins them.
+ */
+const capitalizeString = (str, splitOn = ' ', joinWith = ' ') => {
+  if (!str) return str;
+  return str
+    .split(splitOn)
+    .map(token => {
+      if (token.length === 0) return token;
+      if (token.length === 1) return token.toUpperCase;
+      return token[0].toUpperCase() + token.substr(1);
+    })
+    .join(joinWith);
+};
+
 const toCamel = s => {
   if (!s) return s;
   return s.replace(/([-_][a-zA-Z])/g, $1 => {
@@ -157,6 +176,7 @@ export {
   NotiIcon,
   TABLE_PRIMARY_KEYS,
   notify,
+  capitalizeString,
   keysToCamel,
   toCamel,
   getSorterCompareFn,

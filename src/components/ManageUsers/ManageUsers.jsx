@@ -6,7 +6,7 @@ import DeleteUserModal from './DeleteUserModal/DeleteUserModal';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
 import styles from './ManageUsers.module.css';
-import { GSPBackend } from '../../utils/utils';
+import { GSPBackend, capitalizeString } from '../../utils/utils';
 
 const { Column } = Table;
 
@@ -20,6 +20,7 @@ const ManageUsers = () => {
   const getUsersFromDB = async () => {
     const res = (await GSPBackend.get('/users')).data.map(user => ({
       ...user,
+      role: `${capitalizeString(user.role)}`,
       fullName: `${user.firstName} ${user.lastName}`,
     }));
     return res;
