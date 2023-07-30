@@ -100,7 +100,9 @@ const ManageAttributes = () => {
 
   const onTableChange = e => {
     setIsTableLoading(true);
-    setTableState({ ...tableState, table: e.target.value, page: 1 });
+    setTableState({ ...tableState, table: e.target.value, page: 1 }, () => {
+      setIsTableLoading(false);
+    });
   };
 
   const onPageChange = pageNum => {
