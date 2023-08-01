@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Space, Button } from 'antd';
+import { useLocation } from 'react-router-dom';
 import EditUserModal from './EditUserModal/EditUserModal';
 import AddUserModal from './AddUserModal/AddUserModal';
 import DeleteUserModal from './DeleteUserModal/DeleteUserModal';
@@ -11,6 +12,7 @@ import { GSPBackend, capitalizeString } from '../../utils/utils';
 const { Column } = Table;
 
 const ManageUsers = () => {
+  const routeLocation = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
@@ -59,6 +61,16 @@ const ManageUsers = () => {
     };
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    console.log(routeLocation);
+    if (routeLocation.state && routeLocation.state.userIdToEdit) {
+      setIdToEditOrDelete(routeLocation.state.userIdToEdit);
+      setIsEditUserModalOpen(true);
+      routeLocation.state.userIdToEdit = '';
+    }
+  }, [routeLocation.state]);
+
   if (isLoading) {
     return <LoadingScreen />;
   }

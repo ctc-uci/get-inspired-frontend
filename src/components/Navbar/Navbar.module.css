@@ -28,7 +28,14 @@
   padding-left: 10px;
 }
 
-.logout-menu{
+.profile-menu {
   position: absolute;
-  bottom: 0;
+  bottom: 0.5em;
+  width: 100%;
+  user-select: none;
+}
+
+.profile-submenu {
+  width: 100%;
+  user-select: none;
 }
