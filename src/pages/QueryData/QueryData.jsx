@@ -134,7 +134,7 @@ const QueryData = () => {
 
   // Build the config fields on page load
   useEffect(async () => {
-    document.title = 'Query Data';
+    document.title = 'Query Data - Get Inspired: Prismo Clam Database';
     // Get all the tables
     const response = await GSPBackend.get('/tables');
     const tableNames = response.data;

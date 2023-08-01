@@ -167,7 +167,7 @@ const Dashboard = () => {
   };
 
   useEffect(async () => {
-    document.title = 'Get Inspired';
+    document.title = 'Get Inspired: Prismo Clam Database';
     await fetchBeachesFromDB();
     setIsLoading(false);
   }, []);

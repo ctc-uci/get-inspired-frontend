@@ -54,7 +54,7 @@ const ManageUsers = () => {
   };
 
   useEffect(() => {
-    document.title = 'Manage Users';
+    document.title = 'Manage Users - Get Inspired: Prismo Clam Database';
     const fetchUsers = async () => {
       await fetchUsersFromDB();
       setIsLoading(false);
@@ -63,7 +63,6 @@ const ManageUsers = () => {
   }, []);
 
   useEffect(() => {
-    console.log(routeLocation);
     if (routeLocation.state && routeLocation.state.userIdToEdit) {
       setIdToEditOrDelete(routeLocation.state.userIdToEdit);
       setIsEditUserModalOpen(true);
