@@ -18,7 +18,7 @@ import { AuthContextProvider } from './common/AuthContext';
 const { ADMIN_ROLE, INTERN_ROLE } = AUTH_ROLES.AUTH_ROLES;
 
 // TODO: Make routes role protected
-function App() {
+const App = () => {
   return (
     <CookiesProvider>
       <AuthContextProvider>
@@ -97,6 +97,6 @@ function App() {
       </AuthContextProvider>
     </CookiesProvider>
   );
-}
+};
 
 export default App;

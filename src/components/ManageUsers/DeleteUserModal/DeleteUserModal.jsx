@@ -19,24 +19,22 @@ const DeleteUsersModal = ({ isOpen, setIsOpen, deleteUser, id, fetchUsersFromDB 
   };
 
   return (
-    <>
-      <Modal
-        title="Confirm Delete"
-        open={isOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[
-          <Button key="cancel" onClick={handleCancel}>
-            Cancel
-          </Button>,
-          <Button key="delete" type="primary" danger onClick={handleOk}>
-            Delete
-          </Button>,
-        ]}
-      >
-        <p>Are you sure you want to delete this user?</p>
-      </Modal>
-    </>
+    <Modal
+      title="Confirm Delete"
+      open={isOpen}
+      onOk={handleOk}
+      onCancel={handleCancel}
+      footer={[
+        <Button key="cancel" onClick={handleCancel}>
+          Cancel
+        </Button>,
+        <Button key="delete" type="primary" danger onClick={handleOk}>
+          Delete
+        </Button>,
+      ]}
+    >
+      <p>Are you sure you want to delete this user?</p>
+    </Modal>
   );
 };
 

@@ -4,7 +4,7 @@ import { CheckCircleOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import styles from './UploadComplete.module.css';
 
-function UploadComplete() {
+const UploadComplete = () => {
   return (
     <div className={styles.uploadComplete}>
       <Result
@@ -25,6 +25,6 @@ function UploadComplete() {
       />
     </div>
   );
-}
+};
 
 export default UploadComplete;

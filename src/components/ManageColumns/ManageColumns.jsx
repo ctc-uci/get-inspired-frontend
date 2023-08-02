@@ -196,34 +196,32 @@ const ManageAttributes = () => {
 
   // Intern View
   return (
-    <>
-      <div className={styles.window}>
+    <div className={styles.window}>
+      <div>
+        <Title className={styles.title}>Manage Columns</Title>
         <div>
-          <Title className={styles.title}>Manage Columns</Title>
-          <div>
-            <Radio.Group defaultValue="survey" buttonStyle="solid" onChange={onTableChange}>
-              {Object.values(tableNames).map(name => (
-                <Radio.Button key={name} value={name.toLowerCase()}>
-                  {name} Table
-                </Radio.Button>
-              ))}
-            </Radio.Group>
-          </div>
-          <div className={styles.table}>
-            <Table
-              dataSource={tableState.data}
-              columns={tableState.columns.filter(column => column.title !== 'Actions')}
-              bordered
-              loading={isTableLoading}
-              pagination={{
-                onChange: onPageChange,
-                current: tableState.page,
-              }}
-            />
-          </div>
+          <Radio.Group defaultValue="survey" buttonStyle="solid" onChange={onTableChange}>
+            {Object.values(tableNames).map(name => (
+              <Radio.Button key={name} value={name.toLowerCase()}>
+                {name} Table
+              </Radio.Button>
+            ))}
+          </Radio.Group>
+        </div>
+        <div className={styles.table}>
+          <Table
+            dataSource={tableState.data}
+            columns={tableState.columns.filter(column => column.title !== 'Actions')}
+            bordered
+            loading={isTableLoading}
+            pagination={{
+              onChange: onPageChange,
+              current: tableState.page,
+            }}
+          />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

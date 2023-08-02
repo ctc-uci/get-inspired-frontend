@@ -30,25 +30,23 @@ const DeleteColumnModal = ({ isOpen, setIsOpen, tableName, columnName }) => {
   };
 
   return (
-    <>
-      <Modal open={isOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
-        <div className={styles.container}>
-          <Title level={5} className={styles.confirmation}>
-            Are you sure you want to delete the column &apos;{columnName}&apos; from the &apos;
-            {tableName.toLowerCase()}&apos; table (This action cannot be undone)?
-          </Title>
-          <Button
-            type="primary"
-            form="edit-user-form"
-            key="submit"
-            htmlType="submit"
-            onClick={handleSubmit}
-          >
-            Delete Column
-          </Button>
-        </div>
-      </Modal>
-    </>
+    <Modal open={isOpen} okText="Submit" onOk={handleOk} onCancel={handleCancel} footer={[]}>
+      <div className={styles.container}>
+        <Title level={5} className={styles.confirmation}>
+          Are you sure you want to delete the column &apos;{columnName}&apos; from the &apos;
+          {tableName.toLowerCase()}&apos; table (This action cannot be undone)?
+        </Title>
+        <Button
+          type="primary"
+          form="edit-user-form"
+          key="submit"
+          htmlType="submit"
+          onClick={handleSubmit}
+        >
+          Delete Column
+        </Button>
+      </div>
+    </Modal>
   );
 };
 

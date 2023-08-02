@@ -78,11 +78,13 @@ const ReviewForm = ({
     border: 'none',
   };
 
+  const onExpand = ({ isActive }) => <CaretDownOutlined rotate={isActive ? 180 : 0} />;
+
   return (
     <div className={styles.reviewForm}>
       <Collapse
         bordered={false}
-        expandIcon={({ isActive }) => <CaretDownOutlined rotate={isActive ? 180 : 0} />}
+        expandIcon={onExpand}
         expandIconPosition="start"
         style={{ background: token.colorBgContainer }}
       >
