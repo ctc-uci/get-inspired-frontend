@@ -112,7 +112,7 @@ const ManageAttributes = () => {
   };
 
   useEffect(() => {
-    document.title = 'Manage Columns - Get Inspired: Prismo Clam Database';
+    document.title = 'Manage Columns - Get Inspired: Pismo Clam Database';
   }, []);
 
   // Update table with columns every time a modal is opened/closed or selected table is changed

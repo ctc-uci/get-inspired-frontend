@@ -187,7 +187,7 @@ const ManageData = () => {
 
   // Load dropdown survey options on page load
   useEffect(async () => {
-    document.title = 'Manage Data - Get Inspired: Prismo Clam Database';
+    document.title = 'Manage Data - Get Inspired: Pismo Clam Database';
     const map = await GSPBackend.get('/surveys/existingSurveyOptions');
     setSurveyOptions(map.data);
 

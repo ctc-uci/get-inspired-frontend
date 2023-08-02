@@ -54,7 +54,7 @@ const ManageUsers = () => {
   };
 
   useEffect(() => {
-    document.title = 'Manage Users - Get Inspired: Prismo Clam Database';
+    document.title = 'Manage Users - Get Inspired: Pismo Clam Database';
     const fetchUsers = async () => {
       await fetchUsersFromDB();
       setIsLoading(false);
