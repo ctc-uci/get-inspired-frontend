@@ -10,7 +10,10 @@ import {
   UsergroupAddOutlined,
   SearchOutlined,
   LogoutOutlined,
+  UserOutlined,
+  LockOutlined,
 } from '@ant-design/icons';
+import { useAuthContext } from '../../common/AuthContext';
 import LogoutModal from './LogoutModal/LogoutModal';
 
 import GSPLogo from '../../assets/images/GSPLogo.svg';
@@ -36,6 +39,7 @@ const Navbar = ({ hasLoaded, isAdmin }) => {
 
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState(PATH_TO_KEYS[path]);
+  const { currentUser } = useAuthContext();
 
   useEffect(() => {
     setSelectedKeys(PATH_TO_KEYS[path]);
@@ -53,7 +57,7 @@ const Navbar = ({ hasLoaded, isAdmin }) => {
             </Title>
           </div>
           <Menu
-            mode="inline"
+            mode="vertical"
             selectedKeys={selectedKeys}
             style={{ height: '100%', borderRight: 0 }}
           >
@@ -81,18 +85,34 @@ const Navbar = ({ hasLoaded, isAdmin }) => {
             )}
           </Menu>
           <Menu
-            className={styles['logout-menu']}
-            mode="inline"
-            selectedKeys={isLogoutModalOpen ? ['logout'] : []}
+            className={styles['profile-menu']}
+            mode="vertical"
+            theme="light"
+            selectable="false"
+            selectedKeys={isLogoutModalOpen ? ['profile-submenu'] : []}
           >
-            <Menu.Item
-              key="logout"
-              icon={<LogoutOutlined />}
-              danger
-              onClick={() => setIsLogoutModalOpen(true)}
+            <Menu.SubMenu
+              icon={<UserOutlined />}
+              title={`${currentUser.firstName} ${currentUser.lastName}`}
+              key="profile-submenu"
+              className={styles['profile-submenu']}
             >
-              Logout
-            </Menu.Item>
+              {isAdmin && (
+                <Menu.Item icon={<LockOutlined />} key="reset-password">
+                  <Link to="manage-users" state={{ userIdToEdit: currentUser.id }}>
+                    Reset Password
+                  </Link>
+                </Menu.Item>
+              )}
+              <Menu.Item
+                key="logout"
+                icon={<LogoutOutlined />}
+                danger
+                onClick={() => setIsLogoutModalOpen(true)}
+              >
+                Logout
+              </Menu.Item>
+            </Menu.SubMenu>
           </Menu>
         </div>
       </Sider>

@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Space, Button } from 'antd';
+import { useLocation } from 'react-router-dom';
 import EditUserModal from './EditUserModal/EditUserModal';
 import AddUserModal from './AddUserModal/AddUserModal';
 import DeleteUserModal from './DeleteUserModal/DeleteUserModal';
 import LoadingScreen from '../../common/LoadingScreen/LoadingScreen';
 
 import styles from './ManageUsers.module.css';
-import { GSPBackend } from '../../utils/utils';
+import { GSPBackend, capitalizeString } from '../../utils/utils';
 
 const { Column } = Table;
 
 const ManageUsers = () => {
+  const routeLocation = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
@@ -20,6 +22,7 @@ const ManageUsers = () => {
   const getUsersFromDB = async () => {
     const res = (await GSPBackend.get('/users')).data.map(user => ({
       ...user,
+      role: `${capitalizeString(user.role)}`,
       fullName: `${user.firstName} ${user.lastName}`,
     }));
     return res;
@@ -51,13 +54,22 @@ const ManageUsers = () => {
   };
 
   useEffect(() => {
-    document.title = 'Manage Users';
+    document.title = 'Manage Users - Get Inspired: Prismo Clam Database';
     const fetchUsers = async () => {
       await fetchUsersFromDB();
       setIsLoading(false);
     };
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (routeLocation.state && routeLocation.state.userIdToEdit) {
+      setIdToEditOrDelete(routeLocation.state.userIdToEdit);
+      setIsEditUserModalOpen(true);
+      routeLocation.state.userIdToEdit = '';
+    }
+  }, [routeLocation.state]);
+
   if (isLoading) {
     return <LoadingScreen />;
   }

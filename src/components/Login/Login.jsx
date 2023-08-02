@@ -37,7 +37,7 @@ const Login = ({ roles, cookies }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(async () => {
-    document.title = 'Log In';
+    document.title = 'Log In - Get Inspired: Prismo Clam Database';
     const authenticated = await userIsAuthenticated(roles, cookies);
     setIsAuthenticated(authenticated);
     setIsLoading(false);

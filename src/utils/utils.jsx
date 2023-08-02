@@ -12,7 +12,26 @@ const GSPBackend = axios.create({
   withCredentials: true,
 });
 
-// toCamel, isArray, and isObject are helper functions
+// =~=~=~=~=~=~=~=~=~= //
+//  HELPER FUNCTIONS   //
+// =~=~=~=~=~=~=~=~=~= //
+
+/**
+ * Splits a string on the given parameter, then capitalizes each token
+ * and rejoins them.
+ */
+const capitalizeString = (str, splitOn = ' ', joinWith = ' ') => {
+  if (!str) return str;
+  return str
+    .split(splitOn)
+    .map(token => {
+      if (token.length === 0) return token;
+      if (token.length === 1) return token.toUpperCase;
+      return token[0].toUpperCase() + token.substr(1);
+    })
+    .join(joinWith);
+};
+
 const toCamel = s => {
   if (!s) return s;
   return s.replace(/([-_][a-zA-Z])/g, $1 => {
@@ -37,6 +56,41 @@ const isArray = a => {
 
 const isObject = o => {
   return o === Object(o) && !isArray(o) && typeof o !== 'function' && !isISODate(o);
+};
+
+const isIsoDate = str => {
+  if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
+  const d = new Date(str);
+  return d instanceof Date && !Number.isNaN(d) && d.toISOString() === str; // valid date
+};
+
+const fullDateOptions = {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+};
+
+const shortDateOptions = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  timeZone: 'UTC',
+};
+
+export const getUTCDateString = (date, shorten = false) => {
+  return new Date(date).toLocaleDateString(undefined, shorten ? shortDateOptions : fullDateOptions);
+};
+
+export const humanizeCell = (text, columnType) => {
+  if (isIsoDate(text)) {
+    return getUTCDateString(text);
+  }
+  if (columnType === 'tinyint') {
+    return Boolean(text).toString();
+  }
+  return text;
 };
 
 // Database columns are in snake case. JavaScript is suppose to be in camel case
@@ -157,42 +211,8 @@ export {
   NotiIcon,
   TABLE_PRIMARY_KEYS,
   notify,
+  capitalizeString,
   keysToCamel,
   toCamel,
   getSorterCompareFn,
-};
-
-const fullDateOptions = {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  timeZone: 'UTC',
-};
-
-const shortDateOptions = {
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric',
-  timeZone: 'UTC',
-};
-
-export const getUTCDateString = (date, shorten = false) => {
-  return new Date(date).toLocaleDateString(undefined, shorten ? shortDateOptions : fullDateOptions);
-};
-
-export const humanizeCell = (text, columnType) => {
-  const isIsoDate = str => {
-    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
-    const d = new Date(str);
-    return d instanceof Date && !Number.isNaN(d) && d.toISOString() === str; // valid date
-  };
-  if (isIsoDate(text)) {
-    // (TODO andrew): fix eventually: js time is funky
-    return getUTCDateString(text);
-  }
-  if (columnType === 'tinyint') {
-    return Boolean(text).toString();
-  }
-  return text;
 };

@@ -100,7 +100,9 @@ const ManageAttributes = () => {
 
   const onTableChange = e => {
     setIsTableLoading(true);
-    setTableState({ ...tableState, table: e.target.value, page: 1 });
+    setTableState({ ...tableState, table: e.target.value, page: 1 }, () => {
+      setIsTableLoading(false);
+    });
   };
 
   const onPageChange = pageNum => {
@@ -110,7 +112,7 @@ const ManageAttributes = () => {
   };
 
   useEffect(() => {
-    document.title = 'Manage Columns';
+    document.title = 'Manage Columns - Get Inspired: Prismo Clam Database';
   }, []);
 
   // Update table with columns every time a modal is opened/closed or selected table is changed

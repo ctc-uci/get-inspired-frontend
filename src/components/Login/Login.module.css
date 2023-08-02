@@ -29,7 +29,7 @@
   max-width: 300px;
 }
 
-.error-message{
+.error-message {
   width: 48ch;
   max-width: calc(300px + 8ch);
   margin-bottom: 1em;
@@ -41,7 +41,7 @@
   line-height: 1.3em;
 }
 
-.login-buttons{
+.login-buttons {
   width: 100%;
 }
 
