@@ -1,6 +1,6 @@
 # Get Inspired
 <p align="center">
-<img width=200 height=200 src="https://github.com/ctc-uci/get-inspired-frontend/blob/13a35ad183b5420b2db7255b068640b03ddc3f84/src/assets/images/GSPLogo.svg" alt="Get Inspired Logo" />
+<img width=200 height=200 src="public/logo512.png" alt="Get Inspired Logo" />
 </p>
 
 <p align="center">
@@ -20,13 +20,13 @@
 
 *Nancy, the director of Get Inspired, has been maintaining Pismo clam data using spreadsheets. However, as the volume of data grows, efficiently collecting and displaying the information has become increasingly challenging.*
 
-🆙 We built a web application and database to store and display a variety of information about Pismo clams, including their color, location, date and time of survey, and other key characteristics. Our interface allows Nancy to easily input, view, and query the data as necessary. The dashboard shows each survey's automatically calculated statistics, which will be used to identify ways to restore the clam population.    
+🆙 We built a web application and database to store and display a variety of information about Pismo clams, including their color, location, date and time of survey, and other key characteristics. Our interface allows Nancy to easily input, view, and query the data as necessary. The dashboard shows each survey's automatically calculated statistics, which will be used to identify ways to restore the clam population.
 
 <p align="center">
-<img src="./public/readme-images/dashboard-popup.png" alt="Dashboard Popup Page"/>
-<img src="./public/readme-images/upload-data.png" alt="Upload Data Page"/>
-<!-- insert manage data pic here -->
-<img src="./public/readme-images/query-data.png" alt="Query Data Page"/>
+<img src="public/readme-images/dashboard-popup.png" alt="A modal that shows more information about one survey on the Dashboard Page"/>
+<img src="public/readme-images/add-data.png" alt="Adding a .csv file for clam data on the Add Data page"/>
+<img src="public/readme-images/manage-data.png" alt="Using the Manage Data Page to edit clam data"/>
+<img src="public/readme-images/query-data.png" alt="Using the Advanced Search function on the Query Data Page to search for particular clams"/>
 </p>
 
 ### Tech Stack
